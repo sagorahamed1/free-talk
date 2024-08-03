@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "265455404120",
+    "project_id": "free-talk-cca8f",
+    "storage_bucket": "free-talk-cca8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265455404120:android:49aa74d86d1e247c39362d",
+        "android_client_info": {
+          "package_name": "com.sagor.freetalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdKaL7x1WJk16JSbCfeJEaN_gMHnCvN4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
