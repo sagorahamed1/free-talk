@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 BoxDecoration gradientBoxDecorationCustom() {
   return  BoxDecoration(
       borderRadius: BorderRadius.circular(16.r),
-    gradient: LinearGradient(
+    gradient: const LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
