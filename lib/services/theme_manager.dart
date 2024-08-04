@@ -1,14 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ThemeManager with ChangeNotifier{
-  ThemeMode _themeMode = ThemeMode.light;
+class ThemeController extends GetxController {
+  var isDarkTheme = false.obs;
 
-  ThemeMode get themeData => _themeMode;
-
-  toggleThme(bool isDark){
-    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-
-    notifyListeners();
+  void toggleTheme() {
+    isDarkTheme.value = !isDarkTheme.value;
+    Get.changeThemeMode(
+      isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
+    );
   }
 }

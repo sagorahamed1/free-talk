@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:free_talk/views/base/custom_text.dart';
 
 class CustomListTile extends StatelessWidget {
   final String title;
@@ -16,13 +17,10 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h),
+      padding: EdgeInsets.symmetric(vertical: 0.h),
       child: ListTile(
         leading: icon,
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        title: CustomText(text: title, textAlign: TextAlign.start,),
         onTap: onTap,
       ),
     );

@@ -7,51 +7,31 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 
-ThemeManager themeManager = ThemeManager();
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+class MyApp extends StatelessWidget {
+   MyApp({super.key});
 
-class _MyAppState extends State<MyApp> {
-
-  @override
-  void initState() {
-    themeManager.addListener(themeLister);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    themeManager.removeListener(themeLister);
-    super.dispose();
-  }
-
-  themeLister(){
-    if(mounted){
-      setState(() {});
-    }
-  }
-
+  ThemeController themeController = Get.put(ThemeController());
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        builder: (context, child) => GetMaterialApp(
+      builder: (context, child) => Obx(()=>
+        GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'House Home Rent',
+          title: 'Free Talk',
           theme: lightTheme,
           darkTheme: darkTheme,
-          themeMode: themeManager.themeData,
+          themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
           initialRoute: AppRoutes.splashScreen,
           getPages: AppRoutes.routes,
           home: SplashScreen(),
         ),
-        designSize: const Size(393, 852));
+      ),
+      designSize: const Size(393, 852),
+    );
   }
 }
