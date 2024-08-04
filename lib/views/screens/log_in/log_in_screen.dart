@@ -43,7 +43,9 @@ class LogInScreen extends StatelessWidget {
 
 
               ///===========log in button======>
-              CustomBotton(title: 'Log In', onpress: (){}),
+              CustomBotton(title: 'Log In', onpress: (){
+                Get.toNamed(AppRoutes.bottomNavBar);
+              }),
 
 
 
