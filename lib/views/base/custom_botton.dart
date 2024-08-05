@@ -14,6 +14,7 @@ class CustomBotton extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final bool loading;
+  // final bool isDark;
 
   CustomBotton({
     super.key,
@@ -37,7 +38,7 @@ class CustomBotton extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius:BorderRadius.circular(50.r),
-            color: Colors.red
+            color: Colors.lightBlue
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

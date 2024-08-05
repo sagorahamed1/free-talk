@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ThemeData darkTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.black87,
+  scaffoldBackgroundColor: const Color(0xff0D222B),
   brightness: Brightness.dark,
   primaryColor: CupertinoColors.secondaryLabel,
 
@@ -16,13 +16,15 @@ ThemeData darkTheme = ThemeData(
   textTheme: TextTheme(
     titleSmall: TextStyle(color: Colors.white, fontSize: 14.h),
     titleMedium: TextStyle(color: Colors.white, fontSize: 16.h),
-    titleLarge: TextStyle(color: Colors.white, fontSize: 21.h),
+    titleLarge: TextStyle(color: Colors.white, fontSize: 19.h),
   ),
 
 
-  buttonBarTheme: ButtonBarThemeData(
-
-  )
+    inputDecorationTheme: const InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.black26,
+      hintStyle: TextStyle(color: Colors.white24)
+    )
 );
 
 ThemeData lightTheme = ThemeData(
@@ -39,7 +41,14 @@ ThemeData lightTheme = ThemeData(
     textTheme: TextTheme(
       titleSmall: TextStyle(color: Colors.black, fontSize: 14.h),
       titleMedium: TextStyle(color: Colors.black, fontSize: 16.h),
-      titleLarge: TextStyle(color: Colors.black, fontSize: 21.h),
-    )
+      titleLarge: TextStyle(color: Colors.black, fontSize: 19.h),
+    ),
+
+
+  inputDecorationTheme: const InputDecorationTheme(
+    filled: true,
+    fillColor: Colors.white,
+    hintStyle: TextStyle(color: Colors.black)
+  )
 
 );

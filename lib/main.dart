@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:free_talk/routes/app_routes.dart';
+import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/services/theme_manager.dart';
 import 'package:free_talk/themes/themes.dart';
 import 'package:free_talk/views/screens/splash/splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseService.setUpFirebase();
   runApp( MyApp());
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
+import '../../services/theme_manager.dart';
 import '../../utils/app_constants.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -23,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool? isEmail;
   final bool? readOnly;
+  final bool isDark;
   final double? borderRadio;
 
   const CustomTextField(
@@ -46,7 +49,7 @@ class CustomTextField extends StatefulWidget {
       this.labelText,
       this.isPassword = false,
       this.readOnly = false,
-      this.borderRadio});
+      this.borderRadio, required this.isDark,});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -94,18 +97,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
             return null;
           },
 
-      cursorColor: Colors.white,
+      cursorColor: widget.isDark ? Colors.white : Colors.black,
       obscureText: widget.isPassword ? obscureText : false,
       style: TextStyle(
-          color: widget.hintextColor ?? Colors.black,
+          color:  widget.isDark ? Colors.white : Colors.black,
           fontSize: widget.hintextSize ?? 12.h),
 
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               horizontal: widget.contentPaddingHorizontal ?? 20.w,
               vertical: widget.contentPaddingVertical ?? 20.h),
-          fillColor: const Color(0xfff2f6fa),
-          filled: true,
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.isPassword
               ? GestureDetector(
@@ -119,11 +120,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               BoxConstraints(minHeight: 24.w, minWidth: 24.w),
           labelText: widget.labelText,
           hintText: widget.hintText,
-          hintStyle: TextStyle(
-              color: widget.hintextColor ?? Colors.black,
-              fontSize: widget.hintextSize ?? 12.h,
-              fontWeight: FontWeight.w400),
+          // hintStyle: TextStyle(
+          //     color: widget.hintextColor ?? Colors.black,
+          //     fontSize: widget.hintextSize ?? 12.h,
+          //     fontWeight: FontWeight.w400),
           focusedBorder: focusedBorder(),
+          errorBorder: focusedBorder(),
           enabledBorder: enabledBorder()),
     );
   }
@@ -131,20 +133,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
   _suffixIcon(IconData icon) {
     return Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Icon(icon, color: Colors.red));
+        child: Icon(icon, color: widget.isDark ? Colors.white24 : Colors.black87));
   }
 
   OutlineInputBorder focusedBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 16.r),
-      borderSide: BorderSide(color: widget.borderColor ?? Colors.red),
+      borderSide: BorderSide(color:  widget.isDark ? Colors.white24 : Colors.black87),
     );
   }
 
   OutlineInputBorder enabledBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 16.r),
-      borderSide: BorderSide(color: widget.borderColor ?? Colors.red),
+      borderSide: BorderSide(color:  widget.isDark ? Colors.white24 : Colors.black87),
     );
   }
 }
