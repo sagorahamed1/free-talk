@@ -45,6 +45,7 @@ dependencies:
   cached_network_image: ^3.3.1
   shimmer: ^3.0.0
   provider: ^6.0.3
+  fluttertoast: ^8.2.6
 #  zego_uikit_signaling_plugin:
 #  zego_uikit_prebuilt_call:
 

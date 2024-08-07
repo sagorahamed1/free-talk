@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/services/firebase_services.dart';
+import 'package:free_talk/utils/app_constants.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController{
@@ -21,8 +23,10 @@ class AuthController extends GetxController{
      'coin' : '',
      'total_talk_time' : '',
      'total_call' : '',
-     'image' : ''
+     'image' : '',
+     'total_review' : ''
    };
+   await PrefsHelper.setString(AppConstants.currentUser, userData?.uid);
    var data = firebaseService.postData(userData?.uid ?? '', body);
 
    Get.toNamed(AppRoutes.logInScreen);

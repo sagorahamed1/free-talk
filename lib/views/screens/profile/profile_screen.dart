@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:free_talk/controllers/profile_controller.dart';
 import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:free_talk/views/base/custom_text.dart';
@@ -14,9 +15,11 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   ThemeController themeController = Get.put(ThemeController());
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
+    profileController.getProfileData();
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
