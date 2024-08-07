@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:free_talk/controllers/auth_controller.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
 import 'package:get/get.dart';
@@ -20,10 +21,12 @@ class SignUpScreen extends StatelessWidget {
   TextEditingController genderController = TextEditingController();
   TextEditingController countryController = TextEditingController();
    ThemeController themeController = Get.put(ThemeController());
+   AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -100,7 +103,7 @@ class SignUpScreen extends StatelessWidget {
                     isDark: themeController.isDarkTheme.value,
                     controller: passWordController,
                     isPassword: true,
-                    hintText: 'Enter your email',
+                    hintText: 'Enter your password',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your password";
@@ -117,6 +120,13 @@ class SignUpScreen extends StatelessWidget {
                   CustomBotton(title: 'Sign Up', onpress: (){
                     if(_formKey.currentState!.validate()){
                       /// sign up handle
+                      authController.signUp(
+                          email : emailController.text,
+                          password:  passWordController.text.trim(),
+                          name: nameController.text,
+                          gender: genderController.text,
+                          country: countryController.text
+                      );
                     }
                   }),
 

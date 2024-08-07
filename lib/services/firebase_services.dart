@@ -7,7 +7,7 @@ import '../firebase_options.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   ///======Firebase Initialization=======>
   static Future<void> setUpFirebase() async {
@@ -16,7 +16,7 @@ class FirebaseService {
   }
 
   ///=====Sign Up=====>
-  static Future<User?> registerWithEmailPassword(String email, String password) async {
+   Future<User?> registerWithEmailPassword(String email, String password) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -33,7 +33,7 @@ class FirebaseService {
 
 
   ///======Log In======>
-  static Future<User?> signInWithEmailPassword(String email, String password) async {
+   Future<User?> signInWithEmailPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -47,23 +47,23 @@ class FirebaseService {
   }
 
   ///=====Sign Out====>
-  static Future<void> signOut() async {
+   Future<void> signOut() async {
     await _auth.signOut();
   }
 
   ///=======Store Data======>
-  static Future<void> postData(String userId, Map<String, dynamic> data) async {
+   Future<void> postData(String userId, Map<String, dynamic> data) async {
     try {
-      await _fireStore.collection('users').doc(userId).set(data);
+      await fireStore.collection('users').doc(userId).set(data);
     } catch (e) {
       debugPrint("Save Data Error: $e");
     }
   }
 
   ///==========Get Data======>
-  static Future<DocumentSnapshot> getData({required String id,required String collection }) async {
+   Future<DocumentSnapshot> getData({required String id,required String collection }) async {
     try {
-      return await _fireStore.collection(collection).doc(id).get();
+      return await fireStore.collection(collection).doc(id).get();
     } catch (e) {
       debugPrint("Get Data Error: $e");
       rethrow;
@@ -71,10 +71,10 @@ class FirebaseService {
   }
 
   ///=======Update Data======>
-  static Future<void> updateData(
+   Future<void> updateData(
       {required String userId,required String collection, required Map<String, dynamic> updatedData}) async {
     try {
-      await _fireStore.collection(collection).doc(userId).update(updatedData);
+      await fireStore.collection(collection).doc(userId).update(updatedData);
       debugPrint('Data updated successfully!');
     } catch (e) {
       debugPrint("Update Data Error: $e");
@@ -83,9 +83,9 @@ class FirebaseService {
 
 
   ///=======Delete Data======>
-  static Future<void> deleteData({required String userId,required String collection}) async {
+   Future<void> deleteData({required String userId,required String collection}) async {
     try {
-      await _fireStore.collection(collection).doc(userId).delete();
+      await fireStore.collection(collection).doc(userId).delete();
       debugPrint('Data deleted successfully!');
     } catch (e) {
       debugPrint("Delete Data Error: $e");
