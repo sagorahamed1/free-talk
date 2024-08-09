@@ -1,4 +1,5 @@
-class UserProfile {
+class UserProfileModel {
+  final String id;
   final String aboutMe;
   final String coin;
   final String country;
@@ -11,7 +12,8 @@ class UserProfile {
   final String totalTalkTime;
   final String totalReviews;
 
-  UserProfile({
+  UserProfileModel({
+    this.id = '',
     this.aboutMe = '',
     this.coin = '',
     this.country = '',
@@ -25,8 +27,9 @@ class UserProfile {
     this.totalReviews = '',
   });
 
-  factory UserProfile.fromMap(Map<String, dynamic> map) {
-    return UserProfile(
+  factory UserProfileModel.fromMap(Map<String, dynamic> map) {
+    return UserProfileModel(
+      id: map['id'] ?? '',
       aboutMe: map['about_me'] ?? '',
       coin: map['coin'] ?? '',
       country: map['country'] ?? '',
@@ -43,6 +46,7 @@ class UserProfile {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'about_me': aboutMe,
       'coin': coin,
       'country': country,

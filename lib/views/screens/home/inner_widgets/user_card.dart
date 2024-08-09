@@ -8,8 +8,13 @@ import '../../../base/custom_text.dart';
 class UserCard extends StatelessWidget {
   final VoidCallback? viewProfileOnTap;
   final bool isDark;
+  final String name;
+  final String aboutMe;
+  final String totalMinute;
+  final String totalCall;
+  final String totalReviews;
 
-  const UserCard({super.key, required this.isDark, this.viewProfileOnTap});
+  const UserCard({super.key, required this.isDark, this.viewProfileOnTap, required this.name, required this.aboutMe, required this.totalMinute, required this.totalCall, required this.totalReviews});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class UserCard extends StatelessWidget {
                 children: [
                   CustomNetworkImage(
                       boxShape: BoxShape.circle,
-                      imageUrl: 'imageUrl',
+                      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaDL5AkQCUbh7QLz5mF5-TgDXHnMMYmvWiiw&s',
                       height: 80.h,
                       width: 80.w),
                   Column(
@@ -49,7 +54,7 @@ class UserCard extends StatelessWidget {
                         width: 200.w,
                         child: CustomText(
                             textAlign: TextAlign.start,
-                            text: 'Sagor Ahamed',
+                            text: name,
                             fontsize: 16,
                             left: 13.w,
                             bottom: 7.h),
@@ -58,7 +63,7 @@ class UserCard extends StatelessWidget {
                         width: 200.w,
                         child: CustomText(
                             textAlign: TextAlign.start,
-                            text: 'I am learner here please help me. i am here to help',
+                            text: aboutMe,
                             maxline: 3,
                             left: 13.w,
                             bottom: 7.h),
@@ -70,9 +75,9 @@ class UserCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  _buildStatColumn('15K', 'Minute'),
-                  _buildStatColumn('82', 'Call'),
-                  _buildStatColumn('20', 'Reviews'),
+                  _buildStatColumn(totalMinute, 'Minute'),
+                  _buildStatColumn(totalCall, 'Call'),
+                  _buildStatColumn(totalReviews, 'Reviews'),
                 ],
               ),
               SizedBox(height: 10.h),

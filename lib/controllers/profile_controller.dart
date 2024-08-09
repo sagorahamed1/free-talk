@@ -9,22 +9,38 @@ import 'package:get/get.dart';
 import '../models/user_model.dart';
 
 class ProfileController extends GetxController{
-
-
   FirebaseService firebaseService = FirebaseService();
 
-  var data = '';
+  Rx<UserProfileModel> userData = UserProfileModel().obs;
 
-  ///=====get profile data===>
-  getProfileData({String? userId})async{
-    var currentUser = await PrefsHelper.getString(AppConstants.currentUser);
-    DocumentSnapshot user = await firebaseService.getData(collection: 'user', id: currentUser);
+  @override
+  void onInit() {
+    super.onInit();
+    getProfileData();
+  }
 
+  ///===== Get profile data for current user ===>
+  Future<void> getProfileData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
 
+      if (currentUser != null) {
+        DocumentSnapshot userSnapshot = await firebaseService.getData(
+          collection: 'users',
+          id: currentUser.uid,
+        );
 
-    print("log in done : ${user}  : type : ${user.runtimeType}");
+        var data = userSnapshot.data() as Map<String, dynamic>?;
 
-
-    Get.toNamed(AppRoutes.bottomNavBar);
+        if (data != null) {
+          userData.value = UserProfileModel.fromMap(data);
+          print("User data fetched: ${userData.value}");
+        }
+      } else {
+        print("No user is currently logged in.");
+      }
+    } catch (e) {
+      print("Error fetching profile data: $e");
+    }
   }
 }

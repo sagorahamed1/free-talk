@@ -1,6 +1,7 @@
 class AppConstants{
   ///=======================Prefs Helper data===============================>
   static const String currentUser = "currentUser";
+  static const String isLogged = "isLogged";
 
 
   static RegExp emailValidate = RegExp(

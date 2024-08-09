@@ -36,12 +36,11 @@ class AuthController extends GetxController{
 
   ///=====log in===>
   logIn({String? email, String? password})async{
-    var user = firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
-
-
+    User? user =await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
     print("log in done : $user");
 
-
-    Get.toNamed(AppRoutes.bottomNavBar);
+    await PrefsHelper.setString(AppConstants.currentUser, user?.uid);
+    await PrefsHelper.setBool(AppConstants.isLogged, true);
+    Get.toNamed(AppRoutes.homeScreen);
   }
 }

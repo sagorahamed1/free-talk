@@ -70,6 +70,17 @@ class FirebaseService {
     }
   }
 
+
+  ///========== Get All Data ======>
+  Future<QuerySnapshot> getAllData({required String collection}) async {
+    try {
+      return await fireStore.collection(collection).get();
+    } catch (e) {
+      debugPrint("Get Data Error: $e");
+      rethrow;
+    }
+  }
+
   ///=======Update Data======>
    Future<void> updateData(
       {required String userId,required String collection, required Map<String, dynamic> updatedData}) async {

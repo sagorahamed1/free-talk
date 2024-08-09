@@ -35,6 +35,11 @@ class AllUserScreen extends StatelessWidget {
                   top: index == 0 ? 18.h : 0,
                     bottom: 16.h),
                 child: UserCard(
+                  totalReviews: '',
+                  totalMinute: '',
+                  totalCall: '',
+                  aboutMe: '',
+                  name: '',
                   viewProfileOnTap: () {
                     Get.toNamed(AppRoutes.profileScreen);
                   },
