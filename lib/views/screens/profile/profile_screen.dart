@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:free_talk/controllers/profile_controller.dart';
+import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:free_talk/views/base/custom_text.dart';
@@ -22,152 +23,183 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     profileController.getProfileData();
     return Scaffold(
-      bottomNavigationBar: const BottomMenu(1),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Obx(() {
-            print("====profile Data : ${profileController.userData.value}");
-            return  Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 10.h),
 
-                ///======Profile image====>
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: CustomNetworkImage(
-                    imageUrl: 'imageUrl',
-                    height: 110.h,
-                    width: 110.w,
-                    boxShape: BoxShape.circle,
-                  ),
-                ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: SafeArea(
+              child: Obx(() {
+                print("====profile Data : ${profileController.userData.value}");
+                return  Column(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 10.h),
+            
+                    ///======Profile image====>
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: CustomNetworkImage(
+                        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaDL5AkQCUbh7QLz5mF5-TgDXHnMMYmvWiiw&s',
+                        height: 110.h,
+                        width: 110.w,
+                        boxShape: BoxShape.circle,
+                      ),
+                    ),
 
-                Text(
-                  profileController.userData.value.name,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 22.h,
-                      color: themeController.isDarkTheme.value
-                          ? Colors.white
-                          : Colors.black),
-                ),
-                SizedBox(height: 30.h),
+                    SizedBox(height: 9.h),
 
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _buildStatColumn('${profileController.userData.value.totalTalkTime}', 'Minute', Icon(Icons.call, size: 16.r),),
-                    _buildStatColumn('${profileController.userData.value.totalCall}', 'Call', Icon(Icons.call, size: 16.r),),
-                    _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),),
+                    Text(
+                      profileController.userData.value.name,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22.h,
+                          color: themeController.isDarkTheme.value
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+
+                    SizedBox(height: 15.h),
+
+                    GestureDetector(
+                      onTap: (){
+                        Get.toNamed(AppRoutes.editProfileScreen);
+                      },
+                      child: Container(
+                        width: 130.w,
+                        height: 40.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          color: Colors.lightBlue
+                        ),
+                        child: Center(child: CustomText(text: "Edit Profile",)),
+                      ),
+                    ),
+
+
+                    SizedBox(height: 30.h),
+            
+            
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _buildStatColumn('${profileController.userData.value.totalTalkTime}', 'Minute', Icon(Icons.call, size: 16.r),),
+                        _buildStatColumn('${profileController.userData.value.totalCall}', 'Call', Icon(Icons.call, size: 16.r),),
+                        _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),),
+                      ],
+                    ),
+            
+                    SizedBox(height: 20.h),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20.w),
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Information",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 22.h,
+                                color: themeController.isDarkTheme.value
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+            
+                          SizedBox(height: 13.h),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Email',
+                            subTitle: '${profileController.userData.value.email}',
+                            icon: AppIcons.email,
+                          ),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Country',
+                            subTitle: '${profileController.userData.value.country}',
+                            icon: AppIcons.flag,
+                          ),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Gender',
+                            subTitle: '${profileController.userData.value.gender}',
+                            icon: AppIcons.profile,
+                          ),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Languages',
+                            subTitle: 'Bangle, English',
+                            icon: AppIcons.language,
+                          ),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Label',
+                            subTitle: '${profileController.userData.value.label}',
+                            icon: AppIcons.label,
+                          ),
+                          CustomListTileSvgPic(
+                            isDark: themeController.isDarkTheme.value,
+                            onTap: () {},
+                            title: 'Coin',
+                            subTitle: '${profileController.userData.value.coin}',
+                            icon: AppIcons.coin,
+                          ),
+            
+            
+            
+                          SizedBox(height: 20.h),
+                          Text(
+                            "Top Reviews",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 22.h,
+                                color: themeController.isDarkTheme.value
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                          SizedBox(height: 13.h),
+            
+            
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 14.h),
+                                child:  TopReviewsCardForProfile(
+                                  isDark: themeController.isDarkTheme.value,
+                                  image: '',
+                                  description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
+                                  rathing: "4.5",
+                                  reviewName: "Mahim Rana",
+                                  timeAgo: "1 month ago",
+                                ),
+                              );
+                            },
+                          ),
+            
+            
+                        ],
+                      ),
+                    )
                   ],
-                ),
-
-                SizedBox(height: 20.h),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.w),
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Information",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22.h,
-                            color: themeController.isDarkTheme.value
-                                ? Colors.white
-                                : Colors.black),
-                      ),
-
-                      SizedBox(height: 13.h),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Email',
-                        subTitle: '${profileController.userData.value.email}',
-                        icon: AppIcons.profile,
-                      ),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Country',
-                        subTitle: '${profileController.userData.value.country}',
-                        icon: AppIcons.profile,
-                      ),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Gender',
-                        subTitle: '${profileController.userData.value.gender}',
-                        icon: AppIcons.profile,
-                      ),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Languages',
-                        subTitle: 'Bangle, English',
-                        icon: AppIcons.profile,
-                      ),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Label',
-                        subTitle: '${profileController.userData.value.label}',
-                        icon: AppIcons.profile,
-                      ),
-                      CustomListTileSvgPic(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {},
-                        title: 'Coin',
-                        subTitle: '${profileController.userData.value.coin}',
-                        icon: AppIcons.profile,
-                      ),
-
-
-
-                      SizedBox(height: 20.h),
-                      Text(
-                        "Top Reviews",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22.h,
-                            color: themeController.isDarkTheme.value
-                                ? Colors.white
-                                : Colors.black),
-                      ),
-                      SizedBox(height: 13.h),
-
-
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 14.h),
-                            child:  TopReviewsCardForProfile(
-                              isDark: themeController.isDarkTheme.value,
-                              image: '',
-                              description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
-                              rathing: "4.5",
-                              reviewName: "Mahim Rana",
-                              timeAgo: "1 month ago",
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }
-
+                );
+              }
+            
+              ),
+            ),
           ),
-        ),
+
+
+          const Positioned(child: BottomMenu(1))
+        ],
       ),
     );
   }

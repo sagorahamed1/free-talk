@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:free_talk/routes/app_routes.dart';
+import 'package:free_talk/utils/app_icons.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/theme_manager.dart';
@@ -24,58 +26,77 @@ class _drawerSectionState extends State<drawerSection> {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      width: 270.w,
-      color: widget.isDark ? const Color(0xff0D222B) : Colors.white,
+      width: 260.w,
+      color:  const Color(0xff4f43b4),
       child: Column(
         children: [
-          SizedBox(height: 30.h),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: CustomNetworkImage(
+          SizedBox(height: 41.h),
+
+          Row(
+            children: [
+              SizedBox(width: 10.w),
+              CustomNetworkImage(
                 boxShape: BoxShape.circle,
-                imageUrl: 'll',
+                imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaDL5AkQCUbh7QLz5mF5-TgDXHnMMYmvWiiw&s',
                 height: 50.h,
                 width: 50.w,
               ),
-            ),
-            title: CustomText(text: 'Sagor Ahamed', fontsize: 16,textAlign: TextAlign.start),
-            subtitle: CustomText(
-              textAlign: TextAlign.start,
-                text: "software developer",
-                color: widget.isDark ? Colors.white10 : Colors.black54),
-            trailing: GestureDetector(
-                onTap: widget.onTap,
-                child: Container(
-                    decoration:  BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: widget.isDark ? const Color(0xff192D36) : Colors.lightBlue.shade100),
-                    child: Padding(
-                      padding:  EdgeInsets.all(5.r),
-                      child: const Icon(Icons.close),
-                    ))),
+              SizedBox(width: 10.w),
+
+              Expanded(child: Text('Sagor Ahamed', textAlign: TextAlign.start,
+                  overflow: TextOverflow.ellipsis,
+                  style:  TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18.h))),
+
+
+              GestureDetector(
+                  onTap: widget.onTap,
+                  child: Container(
+                      decoration:  BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: widget.isDark ? const Color(0xff192D36) : Colors.lightBlue.shade100),
+                      child: Padding(
+                        padding:  EdgeInsets.all(5.r),
+                        child: const Icon(Icons.close),
+                      )))
+            ],
           ),
 
-          const Divider(color: Colors.black45),
+          SizedBox(height: 10.h),
+
+          const Divider(color: Colors.white70),
 
           CustomListTile(
             title: 'Change Password',
-            icon: const Icon(Icons.confirmation_num_sharp),
+            icon: AppIcons.lock,
             onTap: () {},
           ),
 
-          CustomListTile(
-            title: 'Setting',
-            icon: const Icon(Icons.settings),
-            onTap: () {},
-          ),
 
           CustomListTile(
             title: 'Bangladesh',
-            icon: const Icon(Icons.co2),
+            icon: AppIcons.flag,
             onTap: () {},
           ),
+
+
+          CustomListTile(
+            title: 'Privacy policy',
+            icon: AppIcons.privacy,
+            onTap: () {
+              // Get.toNamed(AppRoutes.settingScreen);
+            },
+          ),
+
+
+
+          CustomListTile(
+            title: 'Terms & conditions',
+            icon: AppIcons.termConditions,
+            onTap: () {
+              // Get.toNamed(AppRoutes.settingScreen);
+            },
+          ),
+
 
           ///===========theme change====>
           Obx(
@@ -84,8 +105,8 @@ class _drawerSectionState extends State<drawerSection> {
                   ? 'Dark Theme'
                   : 'Light Theme',
               icon: themeController.isDarkTheme.value
-                  ? const Icon(Icons.dark_mode_outlined)
-                  : const Icon(Icons.light_mode),
+                  ?  AppIcons.dark
+                  :  AppIcons.lightTheme,
               onTap: () {
                 themeController.toggleTheme();
               },

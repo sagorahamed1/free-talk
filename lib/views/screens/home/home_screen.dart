@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/controllers/home_controller.dart';
 import 'package:free_talk/routes/app_routes.dart';
@@ -33,10 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: value == 1 ?  const Color(0xff4f43b4) : themeController.isDarkTheme.value ?
+            Colors.black : Colors.white
+      )
+    );
     // homeController.fetchAllUsers();
     print('==========${themeController.isDarkTheme}');
     return Scaffold(
-      bottomNavigationBar: const BottomMenu(0),
+      resizeToAvoidBottomInset: false,
+      // bottomNavigationBar: const BottomMenu(0),
       body: Obx(
         () {
           themeController.isDarkTheme.value;
@@ -47,9 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       ///======background color======>
                       Container(
-                        color: themeController.isDarkTheme.value
-                            ? const Color(0xff0D222B)
-                            : Colors.white,
+                        color:  const Color(0xff4f43b4),
                       ),
 
                       ///====drawer section====>
@@ -62,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
 
-                      ///======drawer & main screen animaition====.
+                      ///======main screen animation====.
                       homeController.userGetLoading.value
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           :  TweenAnimationBuilder(
                         tween: Tween<double>(begin: 0, end: value),
                         duration: const Duration(milliseconds: 600),
@@ -78,17 +84,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               ///========main body====>
                               child: Container(
+                                clipBehavior: value == 0 ?  Clip.none : Clip.antiAlias,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.r),
                                   color: themeController.isDarkTheme.value
-                                          ? const Color(0xff0D222B)
+                                          ? const Color(0xff252c3b)
                                           : Colors.white,
                                 ),
 
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      height: 100.h,
+                                    Expanded(
                                       child: Column(
                                         children: [
                                           SizedBox(height: 50.h),
@@ -186,11 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 }
                                               },
                                             ),
-                                          )
-          ,
+                                          ),
                                         ],
                                       ),
                                     ),
+
+
+                                    BottomMenu(0),
                                   ],
                                 ),
                               ));

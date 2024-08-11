@@ -42,7 +42,7 @@ class CustomListTileSvgPic extends StatelessWidget {
                       ? const Color(0xff192D36)
                       : Colors.lightBlue.withOpacity(0.15),
                 ),
-                child: SvgPicture.asset(AppIcons.profile),
+                child: SvgPicture.asset(icon, color: isDark ? Colors.white : Colors.black),
               ),
 
 
@@ -57,18 +57,6 @@ class CustomListTileSvgPic extends StatelessWidget {
                   ),
                 ],
               )
-
-              // ListTile(
-              //   dense: true,
-              //   contentPadding: EdgeInsets.zero,
-              //   leading: SvgPicture.asset(icon),
-              //   title: CustomText(text: title, textAlign: TextAlign.start, fontsize: 16),
-              //   subtitle: CustomText(
-              //     text: subTitle,
-              //     textAlign: TextAlign.start,
-              //   ),
-              //   onTap: onTap,
-              // ),
             ],
           ),
         )

@@ -75,7 +75,7 @@ class LogInScreen extends StatelessWidget {
                       ///======log in code
                       authController.logIn(
                         email: emailController.text,
-                        password: passWordController.text.trim()
+                        password: passWordController.text.trim(),
                       );
                     }
 
