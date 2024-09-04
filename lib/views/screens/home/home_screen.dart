@@ -1,229 +1,348 @@
-import 'dart:math';
-
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:free_talk/controllers/home_controller.dart';
-import 'package:free_talk/routes/app_routes.dart';
-import 'package:free_talk/services/theme_manager.dart';
-import 'package:free_talk/utils/gradient_box_decoration_custom.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:free_talk/utils/app_colors.dart';
+import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
-import 'package:free_talk/views/base/custom_text.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../utils/app_colors.dart';
-import '../botton_nav_bar/botton_nav_bar.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../routes/app_routes.dart';
 import 'inner_widgets/drawer_section.dart';
-import 'inner_widgets/top_card.dart';
 import 'inner_widgets/user_card.dart';
+import '../botton_nav_bar/botton_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double value = 0;
+  bool _isLoaded = false;
+  BannerAd? _bannerAd;
+  final HomeController homeController = Get.put(HomeController());
+  final bool isDarkMode = Get.isDarkMode;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadBanner();
+  }
 
-  ThemeController themeController = Get.put(ThemeController());
-  HomeController homeController = Get.put(HomeController());
+  void _loadBanner() {
+    final adUnitId = Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/9214589741'
+        : 'ca-app-pub-3940256099942544/9214589741';
+
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd?.load();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: value == 1 ?  const Color(0xff4f43b4) : themeController.isDarkTheme.value ?
-            Colors.black : Colors.white
-      )
-    );
-    // homeController.fetchAllUsers();
-    print('==========${themeController.isDarkTheme}');
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      // bottomNavigationBar: const BottomMenu(0),
-      body: Obx(
-        () {
-          themeController.isDarkTheme.value;
-          print("=======> home controller ${homeController.users.value}");
-          return Container(
-                  height: Get.height,
-                  child: Stack(
+      backgroundColor:
+          isDarkMode ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
+      key: _scaffoldKey,
+      endDrawer: DrawerSection(
+        isDark: isDarkMode,
+        onTap: () {
+          Navigator.of(context)
+              .pop(); // Close the drawer when the close button is tapped
+        },
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ///======background color======>
-                      Container(
-                        color:  const Color(0xff4f43b4),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hello Vani,',
+                            style: TextStyle(
+                              fontSize: 16.h,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
+                          ),
+                          Text(
+                            'Welcome!!',
+                            style: TextStyle(
+                              fontSize: 20.h,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
+                          ),
+                        ],
                       ),
 
-                      ///====drawer section====>
-                      drawerSection(
-                        isDark: themeController.isDarkTheme.value,
-                        onTap: () {
-                          setState(() {
-                            value == 0 ? value = 1 : value = 0;
-                          });
-                        },
-                      ),
-
-                      ///======main screen animation====.
-                      homeController.userGetLoading.value
-                          ? const CircularProgressIndicator()
-                          :  TweenAnimationBuilder(
-                        tween: Tween<double>(begin: 0, end: value),
-                        duration: const Duration(milliseconds: 600),
-                        builder: (context, x, child) {
-                          return Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.identity()
-                                ..setEntry(3, 2, 0.001)
-                                ..setEntry(0, 3, 230 * x)
-                                ..rotateY((pi / 6) * x),
-
-                              ///========main body====>
-                              child: Container(
-                                clipBehavior: value == 0 ?  Clip.none : Clip.antiAlias,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  color: themeController.isDarkTheme.value
-                                          ? const Color(0xff252c3b)
-                                          : Colors.white,
-                                ),
-
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 50.h),
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 20.w),
-                                              value != 0
-                                                  ? const SizedBox()
-                                                  : GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          value == 0
-                                                              ? value = 1
-                                                              : value = 0;
-                                                        });
-                                                      },
-                                                      child: const Icon(
-                                                          Icons.menu)),
-                                              SizedBox(width: 100.w),
-                                              Text(
-                                                "Sagor ddkfj;a",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w700,
-                                                    fontSize: 22.h,
-                                                    color: themeController
-                                                            .isDarkTheme.value
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    ///====top card===>
-                                    const TopCard(),
-
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20.w),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 20.h),
-
-                                          ///====ads======.
-                                          Container(
-                                            height: 150.h,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: const Color(
-                                                        0xff0D222B)),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.r),
-                                                color:
-                                                    const Color(0xff192D36)),
-                                          ),
-                                          SizedBox(height: 12.h),
-
-                                          _SeeAll('Expert', 'See All', () {
-                                            Get.toNamed(
-                                                AppRoutes.allUserScreen);
-                                          }),
-
-                                          SizedBox(
-                                            height: 230.h,
-                                            child: ListView.builder(
-                                              itemCount: homeController.users.length,
-                                              scrollDirection: Axis.horizontal,
-                                              shrinkWrap: true,
-                                              itemBuilder: (context, index) {
-                                                var user = homeController.users[index];
-                                                if (homeController.currectUser != user.id) {
-                                                 print("==${homeController.currectUser.value} = ${user.id}");
-
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(right: index != 10 - 1 ? 16.w : 0),
-                                                    child: UserCard(
-                                                      name: user.name,
-                                                      aboutMe: user.aboutMe,
-                                                      totalCall: user.totalCall,
-                                                      totalMinute: user.totalTalkTime,
-                                                      totalReviews: user.totalReviews,
-                                                      viewProfileOnTap: () {
-                                                        Get.toNamed(AppRoutes.profileScreen);
-                                                      },
-                                                      isDark: themeController.isDarkTheme.value,
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return const SizedBox.shrink(); // No widget displayed for matching users
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-
-                                    BottomMenu(0),
-                                  ],
-                                ),
-                              ));
-                        },
-                      ),
+                      // when check on this bottom drawer is work
+                      GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: const Icon(Icons.menu))
                     ],
                   ),
-                );
-        },
+                  SizedBox(height: 20.h),
+
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        color: isDarkMode ? AppColors.cardDark : Colors.white70),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 100.h,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: homeController.availeGenderList.value.length,
+                              itemBuilder: (context, index) {
+                                var data = homeController.availeGenderList[index];
+                                return Container(
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 12.w),
+                                  decoration:  BoxDecoration(
+                                      color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                                      shape: BoxShape.circle),
+                                  padding: EdgeInsetsDirectional.all(20.r),
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset("${data['icon']}",
+                                            height: 32.h,
+                                            width: 32.w,
+                                            fit: BoxFit.cover,
+                                            color: homeController
+                                                        .availeGenderSelectedIndex ==
+                                                    index
+                                                ? AppColors.textColorGreen
+                                                : Colors.white),
+                                        SizedBox(height: 10.h),
+                                        Text(
+                                          '${data['title']}',
+                                          style: TextStyle(
+                                              fontSize: 10.h,
+                                              color: homeController
+                                                          .availeGenderSelectedIndex ==
+                                                      index
+                                                  ? AppColors.textColorGreen
+                                                  : Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                          // SizedBox(height: 16.h),
+
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color:  isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                                borderRadius: BorderRadius.circular(8.r)),
+                            padding: EdgeInsetsDirectional.all(12.r),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.call,
+                                    color: AppColors.textColorGreen),
+                                SizedBox(width: 10.w),
+                                Text(
+                                  'call your expert person',
+                                  style: TextStyle(
+                                    fontSize: 14.h,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textColorGreen,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // _buildBalanceCard(),
+                  _seeAll('Expert', 'See All', () {
+                    Get.toNamed(AppRoutes.allUserScreen);
+                  }),
+
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                      return  Padding(
+                        padding:  EdgeInsets.only(bottom: 10.h),
+                        child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(9.r),
+                                color: isDarkMode
+                                    ? AppColors.cardDark
+                                    : Colors.white70),
+                            child: Padding(
+                              padding: EdgeInsets.all(12.r),
+                              child: Row(
+                                children: [
+                                  CustomNetworkImage(
+                                      imageUrl: '',
+                                      height: 60.h,
+                                      width: 44.w,
+                                      boxShape: BoxShape.circle),
+                                  SizedBox(width: 10.w),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Sagor Ahamed',
+                                        style: TextStyle(
+                                          fontSize: 16.h,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        'laval : Expert',
+                                        style: TextStyle(
+                                          fontSize: 12.h,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  Container(
+                                      decoration:  BoxDecoration(
+                                          color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                                          shape: BoxShape.circle),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(6.r),
+                                        child: const Icon(Icons.call,
+                                            color: AppColors.textColorGreen),
+                                      ))
+                                ],
+                              ),
+                            ),
+                          ),
+                      );
+                      })
+
+                  // Obx(() {
+                  //   return SizedBox(
+                  //     height: 230.h,
+                  //     child: ListView.builder(
+                  //       itemCount: 3,
+                  //       scrollDirection: Axis.horizontal,
+                  //       itemBuilder: (context, index) {
+                  //         var user = homeController.users[index];
+                  //         if (homeController.currectUser != user.id) {
+                  //           return Padding(
+                  //             padding: EdgeInsets.only(
+                  //               right: index != homeController.users.length - 1
+                  //                   ? 16.w
+                  //                   : 0,
+                  //             ),
+                  //             child: UserCard(
+                  //               name: user.name,
+                  //               aboutMe: user.aboutMe,
+                  //               totalCall: user.totalCall,
+                  //               totalMinute: user.totalTalkTime,
+                  //               totalReviews: user.totalReviews,
+                  //               viewProfileOnTap: () {
+                  //                 Get.toNamed(AppRoutes.profileScreen);
+                  //               },
+                  //               isDark: isDarkMode,
+                  //             ),
+                  //           );
+                  //         } else {
+                  //           return const SizedBox.shrink();
+                  //         }
+                  //       },
+                  //     ),
+                  //   );
+                  // }),
+                ],
+              ),
+            ),
+            BottomMenu(0),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _SeeAll(String leftText, seeAllText, VoidCallback ontap) {
+  Widget _seeAll(String leftText, String seeAllText, VoidCallback onTap) {
     return Column(
       children: [
         SizedBox(height: 16.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomText(left: 7.w, text: leftText, fontsize: 20),
+            Text(
+              leftText,
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+            ),
             GestureDetector(
-              onTap: ontap,
-              child: CustomText(right: 6.w, text: seeAllText, fontsize: 20),
+              onTap: onTap,
+              child: Text(
+                seeAllText,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: isDarkMode ? Colors.blue : Colors.blueAccent,
+                ),
+              ),
             ),
           ],
         ),
@@ -232,3 +351,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+///ads
+///                if (_isLoaded)
+//                   Container(
+//                     width: 350.w,
+//                     height: 100,
+//                     child: AdWidget(ad: _bannerAd!),
+//                   ),
+//                 SizedBox(height: 12.h),

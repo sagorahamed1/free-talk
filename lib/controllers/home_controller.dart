@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_constants.dart';
+import 'package:free_talk/utils/app_icons.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import '../services/firebase_services.dart';
@@ -34,4 +35,21 @@ class HomeController extends GetxController {
       print("Error fetching users: $e");
     }
   }
+
+
+  RxInt availeGenderSelectedIndex = 0.obs;
+  RxList availeGenderList = [
+    {
+      'title' : 'any',
+      'icon' : AppIcons.manWoman
+    },
+    {
+      'title' : 'girl',
+      'icon' : AppIcons.girl
+    },
+    {
+      'title' : 'boy',
+      'icon' : AppIcons.man
+    }
+  ].obs;
 }

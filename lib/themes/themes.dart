@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ThemeData darkTheme = ThemeData(
-  scaffoldBackgroundColor: const Color(0xff0D222B),
+  scaffoldBackgroundColor: const Color(0xff1d1b32),
   brightness: Brightness.dark,
   primaryColor: CupertinoColors.secondaryLabel,
 
@@ -28,7 +28,7 @@ ThemeData darkTheme = ThemeData(
 );
 
 ThemeData lightTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color(0xffdae5ef),
     brightness: Brightness.light,
     primaryColor: CupertinoColors.secondaryLabel,
 

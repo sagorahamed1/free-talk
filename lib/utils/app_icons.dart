@@ -14,4 +14,7 @@ class AppIcons{
   static const String language = "$path/language.svg";
   static const String coin = "$path/coin.svg";
   static const String label = "$path/label.svg";
+  static const String girl = "$path/girl.svg";
+  static const String man = "$path/man.svg";
+  static const String manWoman = "$path/Man-and-woman-icon.svg";
 }

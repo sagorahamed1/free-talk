@@ -3,8 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'custom_text.dart';
 
-
-
 class CustomBotton extends StatelessWidget {
   final VoidCallback onpress;
   final String title;
@@ -14,6 +12,7 @@ class CustomBotton extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final bool loading;
+
   // final bool isDark;
 
   CustomBotton({
@@ -25,37 +24,40 @@ class CustomBotton extends StatelessWidget {
     this.width,
     this.fontSize,
     this.titlecolor,
-    this.loading=false,
+    this.loading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:loading?(){} :onpress,
+      onTap: loading ? () {} : onpress,
       child: Container(
-        width:width?? 345.w,
+        width: width ?? 345.w,
         height: height ?? 58.h,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            borderRadius:BorderRadius.circular(50.r),
-            color: Colors.lightBlue
-        ),
+            borderRadius: BorderRadius.circular(50.r),
+            color: Colors.lightBlueAccent),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            loading?  SizedBox(
-              height: 20.h,
-              width: 20.h,
-              child: const CircularProgressIndicator(color: Colors.white,),
-            ):
-            CustomText(
-              text: title,
-              fontsize: fontSize ?? 18.h,
-              color: titlecolor ?? Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
+            loading
+                ? SizedBox(
+                    height: 20.h,
+                    width: 20.h,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                : Text(
+                    title,
+                    style: TextStyle(
+                        fontSize: 18.h,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  )
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
@@ -15,8 +16,8 @@ class LogInScreen extends StatelessWidget {
   LogInScreen({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passWordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: kDebugMode ? 'sagorahammed002@gmail.com': '');
+  TextEditingController passWordController = TextEditingController(text: kDebugMode ? 'q12345678': '');
   ThemeController themeController = Get.put(ThemeController());
   AuthController authController = Get.put(AuthController());
 
