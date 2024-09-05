@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../routes/app_routes.dart';
 import '../../../services/theme_manager.dart';
+import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_text.dart';
@@ -34,7 +35,34 @@ class LogInScreen extends StatelessWidget {
               child: Column(
                 children: [
 
-                  SizedBox(height: 50.h),
+                  SizedBox(height: 64.h),
+
+                  SizedBox(
+                      height: 90.h,
+                      child: Image.asset('assets/images/logo.png')),
+
+
+                  SizedBox(height: 90.h),
+                  // Sign In Text
+                  Text(
+                    "Sign In",
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    "Welcome Back! Please enter your details.",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54,
+                    ),
+                  ),
+                  SizedBox(height: 30.h),
+
+
                   ///========email========
                   CustomTextField(
                     isDark: themeController.isDarkTheme.value,
@@ -67,8 +95,21 @@ class LogInScreen extends StatelessWidget {
                       return null;
                     },
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 20.h),
 
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      'Forget Password?',
+                      style: TextStyle(
+                        fontSize: 16.h,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlueAccent,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
 
                   ///===========log in button======>
                   CustomBotton(title: 'Log In', onpress: (){
@@ -85,18 +126,65 @@ class LogInScreen extends StatelessWidget {
 
 
                   SizedBox(height: 24.h),
+
+
+
+
+
+                  // Divider with OR
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomText(text: AppStrings.nohaveAcout),
-                      GestureDetector(
-                        onTap: () {
-                          Get.offNamed(AppRoutes.signUpScreen);
-                        },
-                        child: CustomText(
-                            text: AppStrings.signUp),
+                      Expanded(
+                        child: Divider(
+                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                          thickness: 1.2,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        child: Text(
+                          "Or",
+                          style: TextStyle(
+                            color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                          thickness: 1.2,
+                        ),
                       ),
                     ],
+                  ),
+                  SizedBox(height: 20.h),
+
+
+
+
+                  // Register Button
+                  OutlinedButton(
+                    onPressed: () {
+                      Get.offNamed(AppRoutes.signUpScreen);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      side:  const BorderSide(
+                        color: Colors.lightBlueAccent,
+                        width: 0.9,
+                      ),
+                      minimumSize: Size(double.infinity, 50.h),
+                    ),
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color:  Colors.lightBlueAccent,
+                      ),
+                    ),
                   ),
 
 

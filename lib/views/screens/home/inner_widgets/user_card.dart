@@ -75,15 +75,4 @@ class UserCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildStatColumn(String count, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CustomText(text: count, fontsize: 16),
-        CustomText(text: label)
-      ],
-    );
-  }
 }

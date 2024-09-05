@@ -17,4 +17,5 @@ class AppIcons{
   static const String girl = "$path/girl.svg";
   static const String man = "$path/man.svg";
   static const String manWoman = "$path/Man-and-woman-icon.svg";
+  static const String logOut = "$path/logOut.svg";
 }

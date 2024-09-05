@@ -23,6 +23,8 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     profileController.getProfileData();
     return Scaffold(
+      backgroundColor:
+      themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
 
       body: Stack(
         children: [
@@ -83,9 +85,9 @@ class ProfileScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        _buildStatColumn('${profileController.userData.value.totalTalkTime}', 'Minute', Icon(Icons.call, size: 16.r),),
-                        _buildStatColumn('${profileController.userData.value.totalCall}', 'Call', Icon(Icons.call, size: 16.r),),
-                        _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),),
+                        _buildStatColumn('${profileController.userData.value.totalTalkTime}', 'Minute', Icon(Icons.call, size: 16.r), context),
+                        _buildStatColumn('${profileController.userData.value.totalCall}', 'Call', Icon(Icons.call, size: 16.r),context),
+                        _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),context),
                       ],
                     ),
             
@@ -97,15 +99,16 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+
                           Text(
-                            "Information",
+                            'Information',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 22.h,
-                                color: themeController.isDarkTheme.value
-                                    ? Colors.white
-                                    : Colors.black),
+                              fontSize: 20.h,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
                           ),
+
             
                           SizedBox(height: 13.h),
                           CustomListTileSvgPic(
@@ -155,17 +158,16 @@ class ProfileScreen extends StatelessWidget {
             
                           SizedBox(height: 20.h),
                           Text(
-                            "Top Reviews",
+                            'Top Reviews',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 22.h,
-                                color: themeController.isDarkTheme.value
-                                    ? Colors.white
-                                    : Colors.black),
+                              fontSize: 20.h,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
                           ),
+
                           SizedBox(height: 13.h),
-            
-            
+
                           ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -204,14 +206,14 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatColumn(String count, String label, Icon icon) {
+  Widget _buildStatColumn(String? count, String label, Icon icon, context) {
     return Container(
-      width: 100.w,
+      width: 110.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
        color:  themeController.isDarkTheme.value
-            ? const Color(0xff192D36)
-            : Colors.lightBlue.withOpacity(0.15),
+           ? AppColors.cardDark
+          : Colors.white70
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -219,7 +221,14 @@ class ProfileScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CustomText(text: count, fontsize: 16),
+
+            Text(
+              count ?? '0',
+              style: TextStyle(
+                fontSize: 15.h,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+            ),
             Row(
              mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -259,9 +268,9 @@ class TopReviewsCardForProfile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
-        color: isDark
-            ? const Color(0xff192D36)
-            : Colors.lightBlue.withOpacity(0.15),
+          color: isDark
+              ? AppColors.cardDark
+              : Colors.white70
       ),
       child: Padding(
         padding:  EdgeInsets.all(12.r),

@@ -27,13 +27,15 @@ class _DrawerSectionState extends State<DrawerSection> {
     final isDarkMode = themeController.isDarkTheme.value;
 
     return Drawer(
-      backgroundColor: isDarkMode ? const Color(0xff192D36) : const Color(0xff4f43b4),
+      backgroundColor:
+      isDarkMode ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: isDarkMode ? const Color(0xff192D36) : const Color(0xff4f43b4),
+              color:
+          isDarkMode ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
             ),
             child: Row(
               children: [
@@ -43,47 +45,30 @@ class _DrawerSectionState extends State<DrawerSection> {
                   height: 50.h,
                   width: 50.w,
                 ),
-                SizedBox(width: 10.w),
+                SizedBox(width: 12.w),
                 Expanded(
-                  child: Text(
-                    'Sagor Ahamed',
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
+                  child:  Text(
+                    'Sagor Ahamed dkdkk',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.h,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: widget.onTap,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isDarkMode ? const Color(0xff192D36) : Colors.lightBlue.shade100,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(5.r),
-                      child: const Icon(Icons.close, color: Colors.white),
+                      fontSize: 20.h,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onBackground,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(color: Colors.white70),
+
           CustomListTile(
+            isDark: isDarkMode,
             title: 'Change Password',
             icon: AppIcons.lock,
             onTap: () {},
           ),
+
           CustomListTile(
-            title: 'Bangladesh',
-            icon: AppIcons.flag,
-            onTap: () {},
-          ),
-          CustomListTile(
+            isDark: isDarkMode,
             title: 'Privacy Policy',
             icon: AppIcons.privacy,
             onTap: () {
@@ -92,6 +77,7 @@ class _DrawerSectionState extends State<DrawerSection> {
             },
           ),
           CustomListTile(
+            isDark: isDarkMode,
             title: 'Terms & Conditions',
             icon: AppIcons.termConditions,
             onTap: () {
@@ -102,12 +88,25 @@ class _DrawerSectionState extends State<DrawerSection> {
           // Theme toggle
           Obx(
                 () => CustomListTile(
+                  isDark: isDarkMode,
               title: themeController.isDarkTheme.value ? 'Dark Theme' : 'Light Theme',
               icon: themeController.isDarkTheme.value ? AppIcons.dark : AppIcons.lightTheme,
               onTap: () {
                 themeController.toggleTheme();
               },
             ),
+          ),
+
+
+          SizedBox(height: 150.h),
+           Divider(height: 0.1.h, color: Colors.grey),
+          CustomListTile(
+            isDark: isDarkMode,
+            title: 'Log Out',
+            icon: AppIcons.logOut,
+            onTap: () {
+              Get.toNamed(AppRoutes.logInScreen);
+            },
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:free_talk/utils/app_icons.dart';
 
+import '../../../../utils/app_colors.dart';
 import '../../../base/custom_text.dart';
 
 class CustomListTileSvgPic extends StatelessWidget {
@@ -26,9 +27,9 @@ class CustomListTileSvgPic extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-          color: isDark
-              ? const Color(0xff192D36)
-              : Colors.lightBlue.withOpacity(0.15),
+            color: isDark
+                ? AppColors.cardDark
+                : Colors.white70
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -36,25 +37,40 @@ class CustomListTileSvgPic extends StatelessWidget {
             children: [
 
               Container(
+                margin: EdgeInsets.only(right: 12.w),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isDark
                       ? const Color(0xff192D36)
                       : Colors.lightBlue.withOpacity(0.15),
                 ),
-                child: SvgPicture.asset(icon, color: isDark ? Colors.white : Colors.black),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(icon, color: isDark ? Colors.white : Colors.black),
+                ),
               ),
 
 
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomText(text: title, textAlign: TextAlign.start, fontsize: 20, left: 12.w),
-                  CustomText(
-                    text: subTitle,
-                    textAlign: TextAlign.start,
-                    left: 12.w,
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 17.h,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
+
+                  Text(
+                    subTitle,
+                    style: TextStyle(
+                      fontSize: 15.h,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+                  ),
+
                 ],
               )
             ],
