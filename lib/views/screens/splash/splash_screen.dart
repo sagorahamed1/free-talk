@@ -31,9 +31,13 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ///========logo======
 
+            SizedBox(
+                child: Image.asset('assets/images/logo.png')),
           ],
         ),
       ),

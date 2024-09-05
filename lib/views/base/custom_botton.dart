@@ -33,10 +33,10 @@ class CustomBotton extends StatelessWidget {
       onTap: loading ? () {} : onpress,
       child: Container(
         width: width ?? 345.w,
-        height: height ?? 58.h,
+        height: height ?? 48.h,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50.r),
+            borderRadius: BorderRadius.circular(8.r),
             color: Colors.lightBlueAccent),
         child: Row(
           mainAxisSize: MainAxisSize.min,

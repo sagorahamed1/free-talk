@@ -35,7 +35,40 @@ class SignUpScreen extends StatelessWidget {
             child: Column(
                 children: [
 
+
+                  SizedBox(height: 40.h),
+
+                  SizedBox(
+                      height: 90.h,
+                      child: Image.asset('assets/images/logo.png')),
+
+
                   SizedBox(height: 50.h),
+                  // Sign In Text
+                  Text(
+                    "Sign In",
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    "Welcome Back! Please enter your details.",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54,
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+
+
+
+
+
+
+
                   ///=======name======.
                   CustomTextField(
                     isDark: themeController.isDarkTheme.value,
@@ -141,8 +174,15 @@ class SignUpScreen extends StatelessWidget {
                         onTap: () {
                           Get.offNamed(AppRoutes.logInScreen);
                         },
-                        child: CustomText(
-                            text: AppStrings.login),
+                        child:
+                        Text(
+                          " ${AppStrings.login}",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color:  Colors.blueAccent,
+                          ),
+                        ),
+
                       ),
                     ],
                   ),
