@@ -4,6 +4,7 @@ import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/utils/app_constants.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 
 class AuthController extends GetxController{
 
@@ -34,13 +35,16 @@ class AuthController extends GetxController{
   }
 
 
+  RxBool loginLoading = false.obs;
   ///=====log in===>
   logIn({String? email, String? password})async{
+    loginLoading(true);
     User? user =await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
     print("log in done : $user");
 
     await PrefsHelper.setString(AppConstants.currentUser, user?.uid);
     await PrefsHelper.setBool(AppConstants.isLogged, true);
     Get.toNamed(AppRoutes.homeScreen);
+    loginLoading(false);
   }
 }

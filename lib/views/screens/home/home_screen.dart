@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    homeController.fetchAllUsers();
     return Scaffold(
       backgroundColor:
           isDarkMode ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
@@ -213,70 +214,73 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.toNamed(AppRoutes.allUserScreen);
                   }),
 
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                      return  Padding(
-                        padding:  EdgeInsets.only(bottom: 10.h),
-                        child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(9.r),
-                                color: isDarkMode
-                                    ? AppColors.cardDark
-                                    : Colors.white70),
-                            child: Padding(
-                              padding: EdgeInsets.all(12.r),
-                              child: Row(
-                                children: [
-                                  CustomNetworkImage(
-                                      imageUrl: '',
-                                      height: 60.h,
-                                      width: 44.w,
-                                      boxShape: BoxShape.circle),
-                                  SizedBox(width: 10.w),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Sagor Ahamed',
-                                        style: TextStyle(
-                                          fontSize: 16.h,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
+                  Obx(()=>
+                     ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: homeController.users.length,
+                        itemBuilder: (context, index) {
+                          var user = homeController.users[index];
+                        return  Padding(
+                          padding:  EdgeInsets.only(bottom: 10.h),
+                          child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(9.r),
+                                  color: isDarkMode
+                                      ? AppColors.cardDark
+                                      : Colors.white70),
+                              child: Padding(
+                                padding: EdgeInsets.all(12.r),
+                                child: Row(
+                                  children: [
+                                    CustomNetworkImage(
+                                        imageUrl: '',
+                                        height: 60.h,
+                                        width: 44.w,
+                                        boxShape: BoxShape.circle),
+                                    SizedBox(width: 10.w),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          user.name,
+                                          style: TextStyle(
+                                            fontSize: 16.h,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 5.h),
-                                      Text(
-                                        'laval : Expert',
-                                        style: TextStyle(
-                                          fontSize: 12.h,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          'laval : ${user.label}',
+                                          style: TextStyle(
+                                            fontSize: 12.h,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                      decoration:  BoxDecoration(
-                                          color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
-                                          shape: BoxShape.circle),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(6.r),
-                                        child: const Icon(Icons.call,
-                                            color: AppColors.textColorGreen),
-                                      ))
-                                ],
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Container(
+                                        decoration:  BoxDecoration(
+                                            color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                                            shape: BoxShape.circle),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(6.r),
+                                          child: const Icon(Icons.call,
+                                              color: AppColors.textColorGreen),
+                                        ))
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                      );
-                      })
+                        );
+                        }),
+                  )
 
                   // Obx(() {
                   //   return SizedBox(

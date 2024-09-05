@@ -112,7 +112,9 @@ class LogInScreen extends StatelessWidget {
                   SizedBox(height: 20.h),
 
                   ///===========log in button======>
-                  CustomBotton(title: 'Log In', onpress: (){
+                  CustomBotton(
+                    loading: authController.loginLoading.value,
+                      title: 'Log In', onpress: (){
                     if(_formKey.currentState!.validate()){
                       ///======log in code
                       authController.logIn(
