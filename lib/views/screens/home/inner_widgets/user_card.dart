@@ -10,12 +10,10 @@ class UserCard extends StatelessWidget {
   final VoidCallback? viewProfileOnTap;
   final bool isDarkMode;
   final String name;
-  final String aboutMe;
-  final String totalMinute;
-  final String totalCall;
-  final String totalReviews;
+  final String labal;
 
-  const UserCard({super.key, required this.isDarkMode, this.viewProfileOnTap, required this.name, required this.aboutMe, required this.totalMinute, required this.totalCall, required this.totalReviews});
+
+  const UserCard({super.key, required this.isDarkMode, this.viewProfileOnTap, required this.name, required this.labal});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sagor Ahamed',
+                  '$name',
                   style: TextStyle(
                     fontSize: 16.h,
                     color: Theme.of(context)
@@ -50,7 +48,7 @@ class UserCard extends StatelessWidget {
                 ),
                 SizedBox(height: 5.h),
                 Text(
-                  'laval : Expert',
+                  'laval : $labal',
                   style: TextStyle(
                     fontSize: 12.h,
                     color: Theme.of(context)
