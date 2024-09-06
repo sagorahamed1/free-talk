@@ -11,6 +11,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../controllers/home_controller.dart';
 import '../../../routes/app_routes.dart';
+import '../../../services/theme_manager.dart';
+import '../../../utils/app_images.dart';
+import '../../base/custom_text.dart';
 import 'inner_widgets/drawer_section.dart';
 import 'inner_widgets/user_card.dart';
 import '../botton_nav_bar/botton_nav_bar.dart';
@@ -23,57 +26,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isLoaded = false;
-  BannerAd? _bannerAd;
   final HomeController homeController = Get.put(HomeController());
+  final ThemeController themeController = Get.put(ThemeController());
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadBanner();
-  }
+  // bool _isLoaded = false;
+  // BannerAd? _bannerAd;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadBanner();
+  // }
 
-  void _loadBanner() {
-    final adUnitId = Platform.isAndroid
-        ? 'ca-app-pub-3940256099942544/9214589741'
-        : 'ca-app-pub-3940256099942544/9214589741';
+  // void _loadBanner() {
+  //   final adUnitId = Platform.isAndroid
+  //       ? 'ca-app-pub-3940256099942544/9214589741'
+  //       : 'ca-app-pub-3940256099942544/9214589741';
+  //
+  //   _bannerAd = BannerAd(
+  //     adUnitId: adUnitId,
+  //     request: const AdRequest(),
+  //     size: AdSize.banner,
+  //     listener: BannerAdListener(
+  //       onAdLoaded: (_) {
+  //         setState(() {
+  //           _isLoaded = true;
+  //         });
+  //       },
+  //       onAdFailedToLoad: (ad, err) {
+  //         ad.dispose();
+  //       },
+  //     ),
+  //   );
+  //
+  //   _bannerAd?.load();
+  // }
 
-    _bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          ad.dispose();
-        },
-      ),
-    );
-
-    _bannerAd?.load();
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _bannerAd?.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     homeController.fetchAllUsers();
     return Scaffold(
-      backgroundColor:
-          isDarkMode ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
+      backgroundColor: themeController.isDarkTheme.value
+          ? const Color(0xff1d1b32)
+          : const Color(0xffdae5ef),
       key: _scaffoldKey,
-      endDrawer: DrawerSection(
-        isDark: isDarkMode,
+      drawer: DrawerSection(
+        isDark: themeController.isDarkTheme.value,
         onTap: () {
           Navigator.of(context)
               .pop(); // Close the drawer when the close button is tapped
@@ -126,7 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
-                        color: isDarkMode ? AppColors.cardDark : Colors.white70),
+                        color: themeController.isDarkTheme.value
+                            ? AppColors.cardDark
+                            : Colors.white70),
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Column(
@@ -138,40 +145,117 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.horizontal,
-                              itemCount: homeController.availeGenderList.value.length,
+                              itemCount:
+                                  homeController.availeGenderList.value.length,
                               itemBuilder: (context, index) {
-                                var data = homeController.availeGenderList[index];
-                                return Container(
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 12.w),
-                                  decoration:  BoxDecoration(
-                                      color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
-                                      shape: BoxShape.circle),
-                                  padding: EdgeInsetsDirectional.all(20.r),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SvgPicture.asset("${data['icon']}",
-                                            height: 32.h,
-                                            width: 32.w,
-                                            fit: BoxFit.cover,
-                                            color: homeController
-                                                        .availeGenderSelectedIndex ==
-                                                    index
-                                                ? AppColors.textColorGreen
-                                                : Colors.white),
-                                        SizedBox(height: 10.h),
-                                        Text(
-                                          '${data['title']}',
-                                          style: TextStyle(
-                                              fontSize: 10.h,
+                                var data =
+                                    homeController.availeGenderList[index];
+                                return GestureDetector(
+                                  onTap: () {
+
+
+
+
+                                    index == 0 ? const SizedBox() :
+
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                              contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.w, vertical: 10.h),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+
+
+                                                  Row(
+                                                    children: [
+                                                      const Spacer(),
+                                                      Container(
+
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(color: Colors.blueAccent)
+                                                        ),
+                                                        child: Icon(Icons.close),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  SizedBox(height :16.h),
+
+
+                                                  Text(
+                                                   "Talk for 100 minutes to chat with a lovely girl. Keep talking, you're close! 😆😆",
+                                                    // 'Congrats! You\'ve crossed 100 talk minutes! You\'re now eligible to connect with female participants. Keep chatting and enjoy!',
+                                                    style: TextStyle(
+                                                      fontSize: 16.h,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Theme.of(context).colorScheme.onBackground,
+                                                    ),
+                                                  ),
+
+                                                  SizedBox(height :24.h),
+
+                                                ],
+                                              ),
+                                              elevation: 12.0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12.r),
+                                                  side: BorderSide(
+                                                      width: 1.w, color: Colors.blueAccent)));
+                                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  },
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 12.w),
+                                    decoration: BoxDecoration(
+                                        color: themeController.isDarkTheme.value
+                                            ? AppColors.backGroundDark
+                                            : AppColors.backGroundLight,
+                                        shape: BoxShape.circle),
+                                    padding: EdgeInsetsDirectional.all(20.r),
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          SvgPicture.asset("${data['icon']}",
+                                              height: 32.h,
+                                              width: 32.w,
+                                              fit: BoxFit.cover,
                                               color: homeController
                                                           .availeGenderSelectedIndex ==
                                                       index
                                                   ? AppColors.textColorGreen
                                                   : Colors.white),
-                                        ),
-                                      ],
+                                          SizedBox(height: 10.h),
+                                          Text(
+                                            '${data['title']}',
+                                            style: TextStyle(
+                                                fontSize: 10.h,
+                                                color: homeController
+                                                            .availeGenderSelectedIndex ==
+                                                        index
+                                                    ? AppColors.textColorGreen
+                                                    : Colors.white),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
@@ -184,7 +268,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color:  isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                                color: themeController.isDarkTheme.value
+                                    ? AppColors.backGroundDark
+                                    : AppColors.backGroundLight,
                                 borderRadius: BorderRadius.circular(8.r)),
                             padding: EdgeInsetsDirectional.all(12.r),
                             child: Row(
@@ -214,71 +300,82 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.toNamed(AppRoutes.allUserScreen);
                   }),
 
-                  Obx(()=>
-                     ListView.builder(
+                  Obx(
+                    () => ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: homeController.users.length,
                         itemBuilder: (context, index) {
                           var user = homeController.users[index];
-                        return  Padding(
-                          padding:  EdgeInsets.only(bottom: 10.h),
-                          child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(9.r),
-                                  color: isDarkMode
-                                      ? AppColors.cardDark
-                                      : Colors.white70),
-                              child: Padding(
-                                padding: EdgeInsets.all(12.r),
-                                child: Row(
-                                  children: [
-                                    CustomNetworkImage(
-                                        imageUrl: '',
-                                        height: 60.h,
-                                        width: 44.w,
-                                        boxShape: BoxShape.circle),
-                                    SizedBox(width: 10.w),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          user.name,
-                                          style: TextStyle(
-                                            fontSize: 16.h,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            child: GestureDetector(
+                              onTap: (){
+                                Get.toNamed(AppRoutes.profileScreen, parameters: {
+                                  "screenType" : 'home'
+                                });
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(9.r),
+                                    color: themeController.isDarkTheme.value
+                                        ? AppColors.cardDark
+                                        : Colors.white70),
+                                child: Padding(
+                                  padding: EdgeInsets.all(12.r),
+                                  child: Row(
+                                    children: [
+                                      CustomNetworkImage(
+                                          imageUrl: "${AppImages.man2}",
+                                          height: 60.h,
+                                          width: 44.w,
+                                          boxShape: BoxShape.circle),
+                                      SizedBox(width: 10.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            user.name,
+                                            style: TextStyle(
+                                              fontSize: 16.h,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                          'laval : ${user.label}',
-                                          style: TextStyle(
-                                            fontSize: 12.h,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            'laval : ${user.label}',
+                                            style: TextStyle(
+                                              fontSize: 12.h,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                        decoration:  BoxDecoration(
-                                            color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
-                                            shape: BoxShape.circle),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(6.r),
-                                          child: const Icon(Icons.call,
-                                              color: AppColors.textColorGreen),
-                                        ))
-                                  ],
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Container(
+                                          decoration: BoxDecoration(
+                                              color: themeController
+                                                      .isDarkTheme.value
+                                                  ? AppColors.backGroundDark
+                                                  : AppColors.backGroundLight,
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(6.r),
+                                            child: const Icon(Icons.call,
+                                                color: AppColors.textColorGreen),
+                                          ))
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                        );
+                          );
                         }),
                   )
 
@@ -344,7 +441,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
-                  color: isDarkMode ? Colors.blue : Colors.blueAccent,
+                  color: themeController.isDarkTheme.value
+                      ? Colors.blue
+                      : Colors.blueAccent,
                 ),
               ),
             ),

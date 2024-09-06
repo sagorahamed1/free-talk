@@ -24,7 +24,8 @@ ThemeData darkTheme = ThemeData(
         filled: true,
         fillColor: Colors.black26,
       hintStyle: TextStyle(color: Colors.white24)
-    )
+    ),
+
 );
 
 ThemeData lightTheme = ThemeData(
@@ -49,6 +50,7 @@ ThemeData lightTheme = ThemeData(
     filled: true,
     fillColor: Colors.white,
     hintStyle: TextStyle(color: Colors.black)
-  )
+  ),
+
 
 );

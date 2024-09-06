@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_icons.dart';
+import 'package:free_talk/utils/app_strings.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/theme_manager.dart';
+import '../../../../utils/app_colors.dart';
+import '../../../base/CustomButton.dart';
 import '../../../base/custom_network_image.dart';
 import '../../../base/custom_text.dart';
 import 'custom_list_tile.dart';
@@ -64,7 +67,9 @@ class _DrawerSectionState extends State<DrawerSection> {
             isDark: isDarkMode,
             title: 'Change Password',
             icon: AppIcons.lock,
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(AppRoutes.changePasswordScreen);
+            },
           ),
 
           CustomListTile(
@@ -72,8 +77,9 @@ class _DrawerSectionState extends State<DrawerSection> {
             title: 'Privacy Policy',
             icon: AppIcons.privacy,
             onTap: () {
-              // Uncomment to navigate
-              // Get.toNamed(AppRoutes.settingScreen);
+              Get.toNamed(AppRoutes.privacyPolicyAllScreen, parameters: {
+                'screenType' : AppStrings.privacyPolicy
+              });
             },
           ),
           CustomListTile(
@@ -81,8 +87,9 @@ class _DrawerSectionState extends State<DrawerSection> {
             title: 'Terms & Conditions',
             icon: AppIcons.termConditions,
             onTap: () {
-              // Uncomment to navigate
-              // Get.toNamed(AppRoutes.settingScreen);
+              Get.toNamed(AppRoutes.privacyPolicyAllScreen, parameters: {
+                'screenType' : AppStrings.termsConditions
+              });
             },
           ),
           // Theme toggle
@@ -105,7 +112,64 @@ class _DrawerSectionState extends State<DrawerSection> {
             title: 'Log Out',
             icon: AppIcons.logOut,
             onTap: () {
-              Get.toNamed(AppRoutes.logInScreen);
+
+
+
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 24.w, vertical: 26.h),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomText(
+                              text: "Are You Sure To Logout Your \n Profile",
+                              fontsize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              maxline: 2,
+                            ),
+                            SizedBox(height: 24.h),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                    width: 120.w,
+                                    height: 40.h,
+                                    child: CustomButton(
+                                      color: Colors.transparent,
+                                      onTap: () {
+                                        Get.back();
+                                      }, text: 'No',
+                                    )),
+                                SizedBox(
+                                    width: 120.w,
+                                    height: 40.h,
+                                    child: CustomButton(
+                                      color: Colors.blueAccent,
+                                      text: "yes",
+                                      onTap: (){
+                                         Get.toNamed(AppRoutes.logInScreen);
+                                      },
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                        elevation: 12.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            side: BorderSide(
+                                width: 1.w, color: Colors.blueAccent)));
+                  });
+
+
+
+
+
+
             },
           ),
         ],
@@ -113,3 +177,6 @@ class _DrawerSectionState extends State<DrawerSection> {
     );
   }
 }
+
+
+

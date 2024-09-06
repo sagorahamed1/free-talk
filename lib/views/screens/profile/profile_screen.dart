@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:free_talk/controllers/profile_controller.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_icons.dart';
+import 'package:free_talk/utils/app_images.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:free_talk/views/base/custom_text.dart';
 import 'package:get/get.dart';
@@ -23,9 +24,9 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     profileController.getProfileData();
     return Scaffold(
-      backgroundColor:
-      themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
+      backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
 
+      appBar: Get.parameters['screenType'] == 'home' ? AppBar(backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef)) : null,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -63,24 +64,24 @@ class ProfileScreen extends StatelessWidget {
 
                     SizedBox(height: 15.h),
 
-                    GestureDetector(
-                      onTap: (){
-                        Get.toNamed(AppRoutes.editProfileScreen);
-                      },
-                      child: Container(
-                        width: 130.w,
-                        height: 40.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          color: Colors.lightBlue
-                        ),
-                        child: Center(child: CustomText(text: "Edit Profile",)),
-                      ),
-                    ),
-
-
-                    SizedBox(height: 30.h),
-            
+                    // GestureDetector(
+                    //   onTap: (){
+                    //     Get.toNamed(AppRoutes.editProfileScreen);
+                    //   },
+                    //   child: Container(
+                    //     width: 130.w,
+                    //     height: 40.h,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(16.r),
+                    //       color: Colors.lightBlue
+                    //     ),
+                    //     child: Center(child: CustomText(text: "Edit Profile",)),
+                    //   ),
+                    // ),
+                    //
+                    //
+                    // SizedBox(height: 30.h),
+                    //
             
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -177,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(bottom: 14.h),
                                 child:  TopReviewsCardForProfile(
                                   isDark: themeController.isDarkTheme.value,
-                                  image: '',
+                                  image: '${AppImages.man2}',
                                   description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
                                   rathing: "4.5",
                                   reviewName: "Mahim Rana",
@@ -200,7 +201,7 @@ class ProfileScreen extends StatelessWidget {
           ),
 
 
-          const Positioned(child: BottomMenu(1))
+         Get.parameters['screenType'] == 'home' ? const SizedBox() :  const Positioned(child: BottomMenu(1))
         ],
       ),
     );
@@ -289,7 +290,7 @@ class TopReviewsCardForProfile extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         child: CustomNetworkImage(
-                         imageUrl:  '$image',
+                         imageUrl:'$image',
                           height: 90.h,
                           width: 90.w,
                           boxShape: BoxShape.circle,

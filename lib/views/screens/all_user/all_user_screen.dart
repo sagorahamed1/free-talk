@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/theme_manager.dart';
+import '../../../utils/app_images.dart';
 import '../home/inner_widgets/user_card.dart';
 
 class AllUserScreen extends StatelessWidget {
@@ -44,8 +45,9 @@ class AllUserScreen extends StatelessWidget {
                       top: index == 0 ? 18.h : 0,
                         bottom: 16.h),
                     child: UserCard(
-                      labal: '${user.name}',
-                      name: user.label,
+                      image:  "${AppImages.man2}",
+                      labal: '${user.label}',
+                      name: user.name,
                       viewProfileOnTap: () {
                         Get.toNamed(AppRoutes.profileScreen);
                       },

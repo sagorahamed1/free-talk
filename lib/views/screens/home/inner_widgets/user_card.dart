@@ -10,10 +10,11 @@ class UserCard extends StatelessWidget {
   final VoidCallback? viewProfileOnTap;
   final bool isDarkMode;
   final String name;
+  final String image;
   final String labal;
 
 
-  const UserCard({super.key, required this.isDarkMode, this.viewProfileOnTap, required this.name, required this.labal});
+  const UserCard({super.key, required this.isDarkMode, this.viewProfileOnTap, required this.name, required this.labal, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class UserCard extends StatelessWidget {
         child: Row(
           children: [
             CustomNetworkImage(
-                imageUrl: '',
+                imageUrl: '$image',
                 height: 60.h,
                 width: 44.w,
                 boxShape: BoxShape.circle),
