@@ -42,9 +42,23 @@ class AuthController extends GetxController{
     User? user =await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
     print("log in done : $user");
 
-    await PrefsHelper.setString(AppConstants.currentUser, user?.uid);
+    await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
+    await PrefsHelper.setString(AppConstants.email, email);
     await PrefsHelper.setBool(AppConstants.isLogged, true);
     Get.toNamed(AppRoutes.homeScreen);
     loginLoading(false);
+  }
+
+
+
+
+  forgotPassword(String email)async{
+    firebaseService.sendPasswordResetEmail(email);
+  }
+
+
+
+  changePassword(String email, oldPassword, newPassword)async{
+    firebaseService.changePassword(email, oldPassword, newPassword);
   }
 }

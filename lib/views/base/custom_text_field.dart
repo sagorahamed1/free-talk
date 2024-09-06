@@ -126,6 +126,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           //     fontWeight: FontWeight.w400),
           focusedBorder: focusedBorder(),
           errorBorder: focusedBorder(),
+          border: focusedBorder(),
           enabledBorder: enabledBorder()),
     );
   }

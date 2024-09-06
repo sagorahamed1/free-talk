@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:free_talk/helpers/toast_message_helper.dart';
 import '../firebase_options.dart';
 
 
@@ -102,4 +103,64 @@ class FirebaseService {
       debugPrint("Delete Data Error: $e");
     }
   }
+
+
+  ///=====Forgot Password=====>
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      debugPrint('Password reset email sent to $email');
+    } catch (e) {
+      debugPrint("Forgot Password Error: $e");
+    }
+  }
+
+
+
+  // ///=====Change Password=====>
+  // Future<void> changePassword(String newPassword) async {
+  //   try {
+  //     User? user = _auth.currentUser;
+  //     if (user != null) {
+  //       await user.updatePassword(newPassword);
+  //       ToastMessageHelper.showToastMessage("Password changed successfully!");
+  //       debugPrint('Password changed successfully!');
+  //     } else {
+  //       debugPrint("No user is currently signed in.");
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Change Password Error: $e");
+  //   }
+  // }
+
+
+
+  ///=====Change Password with Old Password Verification=====>
+  Future<void> changePassword(String email, String oldPassword, String newPassword) async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        // Re-authenticate the user with the old password
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: oldPassword,
+        );
+
+        // Re-authenticate the user
+        await user.reauthenticateWithCredential(credential);
+
+        // After successful re-authentication, update the password
+        await user.updatePassword(newPassword);
+        ToastMessageHelper.showToastMessage("Password changed successfully!");
+        debugPrint('Password changed successfully!');
+      } else {
+        debugPrint("No user is currently signed in.");
+      }
+    } catch (e) {
+      ToastMessageHelper.showToastMessage("Change Password Error: $e");
+      debugPrint("Change Password Error: $e");
+    }
+  }
+
 }

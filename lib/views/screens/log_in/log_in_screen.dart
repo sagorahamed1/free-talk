@@ -98,14 +98,19 @@ class LogInScreen extends StatelessWidget {
                   SizedBox(height: 20.h),
 
 
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Forget Password?',
-                      style: TextStyle(
-                        fontSize: 16.h,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.lightBlueAccent,
+                  GestureDetector(
+                    onTap: (){
+                      authController.forgotPassword(emailController.text);
+                    },
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Forget Password?',
+                        style: TextStyle(
+                          fontSize: 16.h,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.lightBlueAccent,
+                        ),
                       ),
                     ),
                   ),

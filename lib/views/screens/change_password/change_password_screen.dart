@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
+import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
 import 'package:get/get.dart';
 
+import '../../../helpers/toast_message_helper.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/theme_manager.dart';
 import '../../../utils/app_constants.dart';
@@ -17,7 +19,6 @@ class ChangePasswordScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController currectPassCtrl = TextEditingController();
   TextEditingController newPassCtrl = TextEditingController();
-  TextEditingController reNewPassCtrl = TextEditingController();
 
   ThemeController themeController = Get.put(ThemeController());
   AuthController authController = Get.put(AuthController());
@@ -57,8 +58,8 @@ class ChangePasswordScreen extends StatelessWidget {
                   controller: currectPassCtrl,
                   hintText: 'Enter your old password',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is required!";
+                    if (value == null || value.isEmpty || value < 6) {
+                      return "Password is required & must six digit!";
                     }
                     return null;
                   },
@@ -71,30 +72,36 @@ class ChangePasswordScreen extends StatelessWidget {
                   controller: newPassCtrl,
                   hintText: 'Enter your new password',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "New password is required!";
-                    } else if (!AppConstants.emailValidate.hasMatch(value)) {
-                      return "";
+                    if (value == null || value.isEmpty || value < 6) {
+                      return "New password is required & must six digit!";
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 16.h),
 
-
-
-                ///========Gender========
-                CustomTextField(
-                  isDark: themeController.isDarkTheme.value,
-                  controller: reNewPassCtrl,
-                  hintText: 'Enter your re-new password',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "re-new password is required!";
-                    }
-                    return null;
+                GestureDetector(
+                  onTap: ()async{
+                    var email = await PrefsHelper.getString(AppConstants.email);
+                    authController.forgotPassword("$email");
+                    ToastMessageHelper.showToastMessage("Please check your email and change your password");
                   },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      'Forget Password?',
+                      style: TextStyle(
+                        fontSize: 16.h,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlueAccent,
+                      ),
+                    ),
+                  ),
                 ),
+                SizedBox(height: 20.h),
+
+
+
                 SizedBox(height: 60.h),
 
 
@@ -102,9 +109,10 @@ class ChangePasswordScreen extends StatelessWidget {
 
 
                 ///========Update Password========
-                CustomBotton(title: 'Update Password', onpress: (){
+                CustomBotton(title: 'Update Password', onpress: ()async{
+                  var email = await PrefsHelper.getString(AppConstants.email);
                   if(_formKey.currentState!.validate()){
-
+                    authController.changePassword(email, currectPassCtrl.text, newPassCtrl.text);
                   }
                 }),
 
