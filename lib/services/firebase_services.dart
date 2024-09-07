@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import '../firebase_options.dart';
+import '../utils/Config.dart';
 
 
 class FirebaseService {
@@ -117,24 +120,6 @@ class FirebaseService {
 
 
 
-  // ///=====Change Password=====>
-  // Future<void> changePassword(String newPassword) async {
-  //   try {
-  //     User? user = _auth.currentUser;
-  //     if (user != null) {
-  //       await user.updatePassword(newPassword);
-  //       ToastMessageHelper.showToastMessage("Password changed successfully!");
-  //       debugPrint('Password changed successfully!');
-  //     } else {
-  //       debugPrint("No user is currently signed in.");
-  //     }
-  //   } catch (e) {
-  //     debugPrint("Change Password Error: $e");
-  //   }
-  // }
-
-
-
   ///=====Change Password with Old Password Verification=====>
   Future<void> changePassword(String email, String oldPassword, String newPassword) async {
     try {
@@ -163,4 +148,223 @@ class FirebaseService {
     }
   }
 
+
+
+  Future<void> startGroupCall(BuildContext context, String currentUserId) async {
+    // Fetch the latest room ID from Firestore
+    debugPrint('Fetching the latest room ID...');
+    QuerySnapshot roomQuery = await fireStore.collection('rooms')
+        .orderBy('roomId', descending: true)
+        .limit(1)
+        .get();
+
+    String newRoomId;
+    int userCount;
+
+    if (roomQuery.docs.isNotEmpty) {
+      var latestRoom = roomQuery.docs.first;
+      newRoomId = latestRoom['roomId'];
+      userCount = latestRoom['userCount'];
+
+      debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
+
+      // If the room is full (2 users), create a new room
+      if (userCount >= 2) {
+        newRoomId = (int.parse(newRoomId) + 1).toString();
+        userCount = 0;
+        debugPrint('Room is full. Creating a new room with ID: $newRoomId');
+      } else {
+        debugPrint('Adding to the existing room with ID: $newRoomId');
+      }
+    } else {
+      // Start with roomId 1 if no rooms exist
+      newRoomId = '1';
+      userCount = 0;
+      debugPrint('No rooms found. Starting with room ID: $newRoomId');
+    }
+
+    // Update room data
+    await fireStore.collection('rooms').doc(newRoomId).set({
+      'roomId': newRoomId,
+      'userCount': userCount + 1,
+    });
+
+    debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
+
+    // Only start the call if the room has 2 users
+    if (userCount + 1 == 2) {
+      debugPrint('Room is ready. Starting call in room $newRoomId');
+
+      // Navigate to the call screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ZegoUIKitPrebuiltCall(
+            appID: Config.appId,
+            appSign: Config.appSign,
+            userID: currentUserId,  // Use currectUser as userID
+            userName: currentUserId, // Use currectUser as userName
+            plugins: [ZegoUIKitSignalingPlugin()],
+            callID: newRoomId,
+            config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+          ),
+        ),
+      );
+    } else {
+      debugPrint('Waiting for more users to join room $newRoomId');
+      // Optional: Show a waiting message or UI
+    }
+  }
+
+
+
+//
+  // ///========== Room ID and Group Call Handling ==========>
+  // Future<void> startGroupCall(BuildContext context, String userName) async {
+  //   // Fetch the latest room ID from Firestore
+  //   debugPrint('Fetching the latest room ID...');
+  //   QuerySnapshot roomQuery = await fireStore.collection('rooms')
+  //       .orderBy('roomId', descending: true)
+  //       .limit(1)
+  //       .get();
+  //
+  //   String newRoomId;
+  //   int userCount;
+  //
+  //   if (roomQuery.docs.isNotEmpty) {
+  //     var latestRoom = roomQuery.docs.first;
+  //     newRoomId = latestRoom['roomId'];
+  //     userCount = latestRoom['userCount'];
+  //
+  //     debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
+  //
+  //     // If the room is full (2 users), create a new room
+  //     if (userCount >= 2) {
+  //       newRoomId = (int.parse(newRoomId) + 1).toString();
+  //       userCount = 0;
+  //       debugPrint('Room is full. Creating a new room with ID: $newRoomId');
+  //     } else {
+  //       debugPrint('Adding to the existing room with ID: $newRoomId');
+  //     }
+  //   } else {
+  //     // Start with roomId 1 if no rooms exist
+  //     newRoomId = '1';
+  //     userCount = 0;
+  //     debugPrint('No rooms found. Starting with room ID: $newRoomId');
+  //   }
+  //
+  //   // Update room data
+  //   await fireStore.collection('rooms').doc(newRoomId).set({
+  //     'roomId': newRoomId,
+  //     'userCount': userCount + 1,
+  //   });
+  //
+  //   debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
+  //
+  //   // Only start the call if the room has 2 users
+  //   if (userCount + 1 == 2) {
+  //     debugPrint('Room is ready. Starting call in room $newRoomId');
+  //
+  //     // Navigate to the call screen
+  //     Navigator.of(context).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => ZegoUIKitPrebuiltCall(
+  //           appID: Config.appId,
+  //           appSign: Config.appSign,
+  //           userID: userName,
+  //           userName: userName,
+  //           plugins: [ZegoUIKitSignalingPlugin()],
+  //           callID: newRoomId,
+  //           config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     debugPrint('Waiting for more users to join room $newRoomId');
+  //     // Optional: Show a waiting message or UI
+  //   }
+  // }
+
+
+
+
+
+
+// ///========== Room ID and Group Call Handling ==========>
+  // Future<void> startGroupCall(BuildContext context, String userName) async {
+  //   // Fetch the latest room ID from Firestore
+  //   debugPrint('Fetching the latest room ID...');
+  //   QuerySnapshot roomQuery = await fireStore.collection('rooms')
+  //       .orderBy('roomId', descending: true)
+  //       .limit(1)
+  //       .get();
+  //
+  //   String newRoomId;
+  //   int userCount;
+  //
+  //   if (roomQuery.docs.isNotEmpty) {
+  //     var latestRoom = roomQuery.docs.first;
+  //     newRoomId = latestRoom['roomId'];
+  //     userCount = latestRoom['userCount'];
+  //
+  //     debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
+  //
+  //     // If the room is full (2 users), create a new room
+  //     if (userCount >= 2) {
+  //       newRoomId = (int.parse(newRoomId) + 1).toString();
+  //       userCount = 0;
+  //       debugPrint('Room is full. Creating a new room with ID: $newRoomId');
+  //     } else {
+  //       debugPrint('Adding to the existing room with ID: $newRoomId');
+  //     }
+  //   } else {
+  //     // Start with roomId 1 if no rooms exist
+  //     newRoomId = '1';
+  //     userCount = 0;
+  //     debugPrint('No rooms found. Starting with room ID: $newRoomId');
+  //   }
+  //
+  //   // Update room data
+  //   await fireStore.collection('rooms').doc(newRoomId).set({
+  //     'roomId': newRoomId,
+  //     'userCount': userCount + 1,
+  //   });
+  //
+  //   debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
+  //
+  //   // Proceed with starting the group call
+  //   debugPrint('Starting call in room $newRoomId');
+  //
+  //   // Navigate to the call screen
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (context) => ZegoUIKitPrebuiltCall(
+  //         appID: Config.appId,
+  //         appSign: Config.appSign,
+  //         userID: userName,
+  //         userName: userName,
+  //         plugins: [ZegoUIKitSignalingPlugin()],
+  //         callID: newRoomId,
+  //         config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
 }
+
+
+
+// void startGroupCall(BuildContext context, String roomId, String userName) {
+//   Navigator.of(context).push(
+//     MaterialPageRoute(
+//       builder: (context) => ZegoUIKitPrebuiltCall(
+//         appID: Config.appId,
+//         appSign: Config.appSign,
+//         userID: userName,
+//         userName: 'userName',
+//         plugins: [ZegoUIKitSignalingPlugin()], callID: roomId, config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+//       ),
+//     ),
+//   );
+// }

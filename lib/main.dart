@@ -8,25 +8,51 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
+
+
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await FirebaseService.setUpFirebase();
-  runApp( MyApp());
+
+
+  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+
+
+  // call the useSystemCallingUI
+  ZegoUIKit().initLog().then((value) {
+    ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
+      [ZegoUIKitSignalingPlugin()],
+    );
+
+    runApp(MyApp(navigatorKey: navigatorKey));
+  });
 }
 
 
 
-class MyApp extends StatelessWidget {
-   MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+   MyApp({super.key, required this.navigatorKey});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   ThemeController themeController = Get.put(ThemeController());
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       builder: (context, child) => Obx(()=>
         GetMaterialApp(
+          navigatorKey: widget.navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'Free Talk',
           theme: ThemeData(

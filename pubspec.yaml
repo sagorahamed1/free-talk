@@ -47,8 +47,9 @@ dependencies:
   provider: ^6.0.3
   fluttertoast: ^8.2.6
   google_fonts: ^6.2.1
-#  zego_uikit_signaling_plugin:
-#  zego_uikit_prebuilt_call:
+
+  zego_uikit_signaling_plugin:
+  zego_uikit_prebuilt_call:
 
   firebase_core: ^3.3.0
   cloud_firestore: ^5.2.0
