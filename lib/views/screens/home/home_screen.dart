@@ -13,10 +13,12 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../../../controllers/home_controller.dart';
+import '../../../helpers/prefs_helper.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/firebase_services.dart';
 import '../../../services/theme_manager.dart';
 import '../../../utils/Config.dart';
+import '../../../utils/app_constants.dart';
 import '../../../utils/app_images.dart';
 import '../../base/custom_text.dart';
 import 'inner_widgets/drawer_section.dart';
@@ -35,7 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
   final ThemeController themeController = Get.put(ThemeController());
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String? currectUser;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUserId();
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    String? userId = await PrefsHelper.getString(AppConstants.currentUser);
+    setState(() {
+      currectUser = userId;
+    });
+  }
   // bool _isLoaded = false;
   // BannerAd? _bannerAd;
   // @override
@@ -77,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     homeController.fetchAllUsers();
-    print('=========================================== current userid : ${homeController.currectUser}');
+    print('=========================================== current userid : ${currectUser}');
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value
           ? const Color(0xff1d1b32)
@@ -91,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: CallInvitation(
-        userName: "${homeController.currectUser}",
+        userName: "${currectUser}",
         child: SafeArea(
           child: Stack(
             children: [
@@ -265,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             GestureDetector(
                               onTap : (){
-                                FirebaseService().startGroupCall(context, '${homeController.currectUser}');
+                                FirebaseService().startGroupCall(context, '${currectUser}');
                                 // startGroupCall(context, roomIdController.text, userNameController.text);
                               },
                               child: Container(
@@ -312,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             var user = homeController.users[index];
 
-                            if (homeController.currectUser != user.id){
+                            if (currectUser != user.id){
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 10.h),
                                 child: GestureDetector(

@@ -150,6 +150,14 @@ class FirebaseService {
 
 
 
+
+
+
+
+
+
+
+
   Future<void> startGroupCall(BuildContext context, String currentUserId) async {
     // Fetch the latest room ID from Firestore
     debugPrint('Fetching the latest room ID...');
@@ -183,37 +191,57 @@ class FirebaseService {
       debugPrint('No rooms found. Starting with room ID: $newRoomId');
     }
 
-    // Update room data
-    await fireStore.collection('rooms').doc(newRoomId).set({
+    // Update room data with real-time Firestore listener
+    DocumentReference roomDoc = fireStore.collection('rooms').doc(newRoomId);
+
+    // Update room data for the current user
+    await roomDoc.set({
       'roomId': newRoomId,
       'userCount': userCount + 1,
-    });
+      'isActive': true,  // Mark the room as active
+    }, SetOptions(merge: true));
 
     debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
 
-    // Only start the call if the room has 2 users
-    if (userCount + 1 == 2) {
-      debugPrint('Room is ready. Starting call in room $newRoomId');
+    // Listen to changes in the room's userCount in real-time
+    roomDoc.snapshots().listen((snapshot) {
+      if (snapshot.exists) {
+        int updatedUserCount = snapshot['userCount'];
+        bool isActive = snapshot['isActive'] ?? true;
 
-      // Navigate to the call screen
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ZegoUIKitPrebuiltCall(
-            appID: Config.appId,
-            appSign: Config.appSign,
-            userID: currentUserId,  // Use currectUser as userID
-            userName: currentUserId, // Use currectUser as userName
-            plugins: [ZegoUIKitSignalingPlugin()],
-            callID: newRoomId,
-            config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
-          ),
-        ),
-      );
-    } else {
-      debugPrint('Waiting for more users to join room $newRoomId');
-      // Optional: Show a waiting message or UI
-    }
+        debugPrint('Real-time update: Room $newRoomId has $updatedUserCount user(s)');
+
+        // Handle call when 2 users are present and room is active
+        if (updatedUserCount == 2 && isActive) {
+          debugPrint('Room is ready. Starting call in room $newRoomId');
+          debugPrint('------------------------------------------------$currentUserId');
+
+          // Navigate to the call screen for a 2-person group call
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ZegoUIKitPrebuiltCall(
+                appID: Config.appId,
+                appSign: Config.appSign,
+                userID: currentUserId,  // Use currentUser as userID
+                userName: currentUserId, // Use currentUser as userName
+                plugins: [ZegoUIKitSignalingPlugin()],
+                callID: newRoomId,
+                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),  // Use groupVoiceCall instead of oneOnOneVoiceCall
+              ),
+            ),
+          );
+        }
+        // Handle the case where a user leaves the room
+        else if (updatedUserCount < 2 && isActive) {
+          debugPrint('One user left the room $newRoomId. Waiting for another user to join.');
+
+          // Do not redirect to ExampleScreen. Just wait for another user to join.
+        }
+      }
+    });
   }
+
+
 
 
 
@@ -368,3 +396,13 @@ class FirebaseService {
 //     ),
 //   );
 // }
+
+
+class ExampleScreen extends StatelessWidget {
+  const ExampleScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
+}

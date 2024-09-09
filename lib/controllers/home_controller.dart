@@ -11,7 +11,7 @@ class HomeController extends GetxController {
   FirebaseService firebaseService = FirebaseService();
   var users = <UserProfileModel>[].obs;
   RxBool userGetLoading = false.obs;
-  RxString currectUser = ''.obs;
+  // RxString currectUser = ''.obs;
 
   @override
   void onInit() {
@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   ///===== Fetch all users data ===>
   Future<void> fetchAllUsers() async {
     userGetLoading(true);
-    currectUser.value = await PrefsHelper.getString(AppConstants.currentUser);
+    // currectUser.value = await PrefsHelper.getString(AppConstants.currentUser);
     try {
       QuerySnapshot snapshot = await firebaseService.getAllData(collection: 'users');
 
