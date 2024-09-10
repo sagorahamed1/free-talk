@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? currectUser;
+  String? currectName;
 
   @override
   void initState() {
@@ -47,8 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadCurrentUserId() async {
     String? userId = await PrefsHelper.getString(AppConstants.currentUser);
+    String? userName = await PrefsHelper.getString(AppConstants.name);
     setState(() {
       currectUser = userId;
+      currectName = userName;
     });
   }
   // bool _isLoaded = false;
@@ -100,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       drawer: DrawerSection(
         isDark: themeController.isDarkTheme.value,
+        name: "$currectName",
         onTap: () {
           Navigator.of(context)
               .pop(); // Close the drawer when the close button is tapped
@@ -123,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello Vani,',
+                              'Hello ${currectName},',
                               style: TextStyle(
                                 fontSize: 16.h,
                                 color: Theme.of(context).colorScheme.onBackground,

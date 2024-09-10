@@ -45,6 +45,7 @@ class AuthController extends GetxController{
     if(user?.uid != null){
       await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
       await PrefsHelper.setString(AppConstants.email, email);
+      await PrefsHelper.setString(AppConstants.name, user?.displayName);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.toNamed(AppRoutes.homeScreen);
       loginLoading(false);

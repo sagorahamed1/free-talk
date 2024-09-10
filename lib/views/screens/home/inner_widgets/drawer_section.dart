@@ -14,9 +14,10 @@ import 'custom_list_tile.dart';
 
 class DrawerSection extends StatefulWidget {
   final bool isDark;
+  final String name;
   final VoidCallback onTap;
 
-  const DrawerSection({super.key, required this.onTap, required this.isDark});
+  const DrawerSection({super.key, required this.onTap, required this.isDark, required this.name});
 
   @override
   State<DrawerSection> createState() => _DrawerSectionState();
@@ -51,7 +52,7 @@ class _DrawerSectionState extends State<DrawerSection> {
                 SizedBox(width: 12.w),
                 Expanded(
                   child:  Text(
-                    'Sagor Ahamed dkdkk',
+                    '${widget.name}',
                     style: TextStyle(
                       fontSize: 20.h,
                       fontWeight: FontWeight.bold,
