@@ -44,8 +44,9 @@ class FirebaseService {
         password: password,
       );
       return userCredential.user;
-    } catch (e) {
+    } catch (e,s) {
       debugPrint("Sign-in Error: $e");
+      debugPrint("Sign-in Error s: $s");
       return null;
     }
   }

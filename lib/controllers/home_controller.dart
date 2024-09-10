@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
@@ -13,11 +15,7 @@ class HomeController extends GetxController {
   RxBool userGetLoading = false.obs;
   // RxString currectUser = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // fetchAllUsers();
-  }
+
 
   ///===== Fetch all users data ===>
   Future<void> fetchAllUsers() async {
@@ -52,4 +50,48 @@ class HomeController extends GetxController {
       'icon' : AppIcons.man
     }
   ].obs;
+
+
+
+
+
+
+
+
+  var secondsRemaining = 30.obs;  // Observable for the timer
+  var buttonLabel = "Start Call".obs;  // Observable for the button label
+  late Timer _timer;
+  var isCalling = false.obs; // Track call state
+
+  @override
+  void onInit() {
+    super.onInit();
+    buttonLabel.value = "Start Call";  // Initial button label
+  }
+
+  void startTimer() {
+    if (!isCalling.value) {
+      // Start the call
+      isCalling.value = true;
+      buttonLabel.value = "Calling";  // Change button label to "Calling"
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (secondsRemaining.value > 0) {
+          secondsRemaining.value--;
+        } else {
+          // Reset after 50 seconds
+          buttonLabel.value = "Start Call";  // Reset button label
+          isCalling.value = false;  // Reset call state
+          secondsRemaining.value = 50;  // Reset the timer
+          _timer.cancel();
+        }
+      });
+    }
+  }
+
+  @override
+  void onClose() {
+    _timer.cancel();
+    super.onClose();
+  }
 }

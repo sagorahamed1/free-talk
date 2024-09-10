@@ -11,7 +11,7 @@ class AuthController extends GetxController{
 
   FirebaseService firebaseService = FirebaseService();
   signUp({String? email,String? password, String? name,String? gender, String? country})async{
-   User? userData =await firebaseService.registerWithEmailPassword(email!, password!);
+   User? userData = await firebaseService.registerWithEmailPassword(email!, password!);
 
    print('=====> user Create : ${userData?.uid}');
    Map <String, dynamic> body = {
@@ -39,13 +39,17 @@ class AuthController extends GetxController{
   ///=====log in===>
   logIn({String? email, String? password})async{
     loginLoading(true);
-    User? user =await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
-    print("log in done : $user");
+    User? user = await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
+    print("=================================================log in done : ${user?.uid} \n ${user?.email}");
 
-    await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
-    await PrefsHelper.setString(AppConstants.email, email);
-    await PrefsHelper.setBool(AppConstants.isLogged, true);
-    Get.toNamed(AppRoutes.homeScreen);
+    if(user?.uid != null){
+      await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
+      await PrefsHelper.setString(AppConstants.email, email);
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
+      Get.toNamed(AppRoutes.homeScreen);
+      loginLoading(false);
+    }
+
     loginLoading(false);
   }
 

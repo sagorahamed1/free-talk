@@ -278,34 +278,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             // SizedBox(height: 16.h),
 
-                            GestureDetector(
-                              onTap : (){
-                                FirebaseService().startGroupCall(context, '${currectUser}');
-                                // startGroupCall(context, roomIdController.text, userNameController.text);
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    color: themeController.isDarkTheme.value
-                                        ? AppColors.backGroundDark
-                                        : AppColors.backGroundLight,
-                                    borderRadius: BorderRadius.circular(8.r)),
-                                padding: EdgeInsetsDirectional.all(12.r),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.call,
-                                        color: AppColors.textColorGreen),
-                                    SizedBox(width: 10.w),
-                                    Text(
-                                      'call your expert person',
-                                      style: TextStyle(
-                                        fontSize: 14.h,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textColorGreen,
+                            Obx(()=>
+                               GestureDetector(
+                                onTap : (){
+                                  homeController.startTimer();
+                                  if(homeController.isCalling.value){
+                                     FirebaseService().startGroupCall(context, '${currectUser}');
+                                     homeController.isCalling(true);
+                                  }
+
+
+                                  // startGroupCall(context, roomIdController.text, userNameController.text);
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: themeController.isDarkTheme.value
+                                          ? AppColors.backGroundDark
+                                          : AppColors.backGroundLight,
+                                      borderRadius: BorderRadius.circular(8.r)),
+                                  padding: EdgeInsetsDirectional.all(12.r),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.call,
+                                          color: AppColors.textColorGreen),
+                                      SizedBox(width: 10.w),
+                                      Text(
+                                        '${homeController.buttonLabel.value}',
+                                        style: TextStyle(
+                                          fontSize: 14.h,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textColorGreen,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             )

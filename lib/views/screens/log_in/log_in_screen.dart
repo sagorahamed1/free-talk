@@ -18,7 +18,7 @@ class LogInScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController(text: kDebugMode ? 'sagorahammed002@gmail.com': '');
-  TextEditingController passWordController = TextEditingController(text: kDebugMode ? 'q12345678': '');
+  TextEditingController passWordController = TextEditingController(text: kDebugMode ? '1qazxsw2': '');
   ThemeController themeController = Get.put(ThemeController());
   AuthController authController = Get.put(AuthController());
 
