@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap : (){
                                   homeController.startTimer();
                                   if(homeController.isCalling.value){
-                                     FirebaseService().startGroupCall(context, '${currectUser}');
+                                     FirebaseService().startGroupCall(context, '${currectUser}', currectName);
                                      homeController.isCalling(true);
                                   }
 
@@ -345,7 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: GestureDetector(
                                   onTap: (){
                                     Get.toNamed(AppRoutes.profileScreen, parameters: {
-                                      "screenType" : 'home'
+                                      "screenType" : 'home',
+                                      "id" : user.id
                                     });
                                   },
                                   child: Container(
@@ -415,41 +416,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           }),
                     )
-
-                    // Obx(() {
-                    //   return SizedBox(
-                    //     height: 230.h,
-                    //     child: ListView.builder(
-                    //       itemCount: 3,
-                    //       scrollDirection: Axis.horizontal,
-                    //       itemBuilder: (context, index) {
-                    //         var user = homeController.users[index];
-                    //         if (homeController.currectUser != user.id) {
-                    //           return Padding(
-                    //             padding: EdgeInsets.only(
-                    //               right: index != homeController.users.length - 1
-                    //                   ? 16.w
-                    //                   : 0,
-                    //             ),
-                    //             child: UserCard(
-                    //               name: user.name,
-                    //               aboutMe: user.aboutMe,
-                    //               totalCall: user.totalCall,
-                    //               totalMinute: user.totalTalkTime,
-                    //               totalReviews: user.totalReviews,
-                    //               viewProfileOnTap: () {
-                    //                 Get.toNamed(AppRoutes.profileScreen);
-                    //               },
-                    //               isDark: isDarkMode,
-                    //             ),
-                    //           );
-                    //         } else {
-                    //           return const SizedBox.shrink();
-                    //         }
-                    //       },
-                    //     ),
-                    //   );
-                    // }),
                   ],
                 ),
               ),

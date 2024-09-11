@@ -123,7 +123,7 @@ class LogInScreen extends StatelessWidget {
                     if(_formKey.currentState!.validate()){
                       ///======log in code
                       authController.logIn(
-                        email: emailController.text,
+                        email: emailController.text.trim(),
                         password: passWordController.text.trim(),
                       );
                     }

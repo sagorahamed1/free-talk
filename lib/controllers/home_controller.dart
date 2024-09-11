@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_constants.dart';
@@ -33,6 +34,25 @@ class HomeController extends GetxController {
       print("Error fetching users: $e");
     }
   }
+
+
+
+
+
+  review({required String senderId, receverId, description, reviewerName, rating, feeling, })async{
+    var body = {
+      "description" : "$description",
+      "reviewName" : "$reviewerName",
+      "rating" : "$rating",
+      "feeling" : "$feeling",
+      "reviewId" : "$senderId"
+    };
+    firebaseService.postData("$receverId", body, collectionName: "reviews");
+
+    Get.offNamed(AppRoutes.homeScreen);
+  }
+
+
 
 
   RxInt availeGenderSelectedIndex = 0.obs;

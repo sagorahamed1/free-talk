@@ -3,10 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
+import 'package:free_talk/routes/app_routes.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import '../firebase_options.dart';
 import '../utils/Config.dart';
+import '../views/screens/review/review_screen.dart';
 
 
 class FirebaseService {
@@ -44,11 +48,18 @@ class FirebaseService {
         password: password,
       );
       return userCredential.user;
-    } catch (e,s) {
-      debugPrint("Sign-in Error: $e");
-      debugPrint("Sign-in Error s: $s");
-      return null;
+    } on FirebaseAuthException catch (e) {
+      if(e.code == "user-not-found"){
+        ToastMessageHelper.showToastMessage('User not found!');
+      }else if(e.code == "wrong-password"){
+        ToastMessageHelper.showToastMessage('Your Password is Wrong!');
+      }
     }
+    // catch (e,s) {
+    //   debugPrint("Sign-in Error: $e");
+    //   debugPrint("Sign-in Error s: $s");
+    //   return null;
+    // }
   }
 
   ///=====Sign Out====>
@@ -57,9 +68,9 @@ class FirebaseService {
   }
 
   ///=======Store Data======>
-   Future<void> postData(String userId, Map<String, dynamic> data) async {
+   Future<void> postData(String userId, Map<String, dynamic> data, {String? collectionName}) async {
     try {
-      await fireStore.collection('users').doc(userId).set(data);
+      await fireStore.collection(collectionName ?? 'users').doc(userId).set(data);
     } catch (e) {
       debugPrint("Save Data Error: $e");
     }
@@ -158,22 +169,24 @@ class FirebaseService {
 
 
 
-
-  Future<void> startGroupCall(BuildContext context, String currentUserId) async {
+  Future<void> startGroupCall(BuildContext context, String currentUserId, name) async {
     // Fetch the latest room ID from Firestore
     debugPrint('Fetching the latest room ID...');
-    QuerySnapshot roomQuery = await fireStore.collection('rooms')
+    QuerySnapshot roomQuery = await fireStore
+        .collection('rooms')
         .orderBy('roomId', descending: true)
         .limit(1)
         .get();
 
     String newRoomId;
     int userCount;
+    List<String> userIds = [];
 
     if (roomQuery.docs.isNotEmpty) {
       var latestRoom = roomQuery.docs.first;
       newRoomId = latestRoom['roomId'];
       userCount = latestRoom['userCount'];
+      userIds = List<String>.from(latestRoom['userIds'] ?? []);
 
       debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
 
@@ -181,6 +194,7 @@ class FirebaseService {
       if (userCount >= 2) {
         newRoomId = (int.parse(newRoomId) + 1).toString();
         userCount = 0;
+        userIds = [];
         debugPrint('Room is full. Creating a new room with ID: $newRoomId');
       } else {
         debugPrint('Adding to the existing room with ID: $newRoomId');
@@ -189,17 +203,22 @@ class FirebaseService {
       // Start with roomId 1 if no rooms exist
       newRoomId = '1';
       userCount = 0;
+      userIds = [];
       debugPrint('No rooms found. Starting with room ID: $newRoomId');
     }
 
-    // Update room data with real-time Firestore listener
-    DocumentReference roomDoc = fireStore.collection('rooms').doc(newRoomId);
+    // Add currentUserId to the list of userIds if it's not already present
+    if (!userIds.contains(currentUserId)) {
+      userIds.add(currentUserId);
+    }
 
-    // Update room data for the current user
+    // Update room data with the current user
+    DocumentReference roomDoc = fireStore.collection('rooms').doc(newRoomId);
     await roomDoc.set({
       'roomId': newRoomId,
       'userCount': userCount + 1,
-      'isActive': true,  // Mark the room as active
+      'isActive': true, // Mark the room as active
+      'userIds': userIds, // Save the list of user IDs
     }, SetOptions(merge: true));
 
     debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
@@ -209,13 +228,29 @@ class FirebaseService {
       if (snapshot.exists) {
         int updatedUserCount = snapshot['userCount'];
         bool isActive = snapshot['isActive'] ?? true;
+        List<String> fetchedUserIds = List<String>.from(snapshot['userIds'] ?? []);
 
         debugPrint('Real-time update: Room $newRoomId has $updatedUserCount user(s)');
+        debugPrint('Fetched User IDs: $fetchedUserIds');
+
+        // Determine sender and receiver based on currentUserId
+        String senderId = '';
+        String receiverId = '';
+
+        if (fetchedUserIds.isNotEmpty) {
+          for (var userId in fetchedUserIds) {
+            if (userId == currentUserId) {
+              senderId = userId;
+            } else {
+              receiverId = userId;
+            }
+          }
+        }
 
         // Handle call when 2 users are present and room is active
         if (updatedUserCount == 2 && isActive) {
           debugPrint('Room is ready. Starting call in room $newRoomId');
-          debugPrint('------------------------------------------------$currentUserId');
+          debugPrint('Sender ID: $senderId, Receiver ID: $receiverId');
 
           // Navigate to the call screen for a 2-person group call
           Navigator.of(context).push(
@@ -223,11 +258,20 @@ class FirebaseService {
               builder: (context) => ZegoUIKitPrebuiltCall(
                 appID: Config.appId,
                 appSign: Config.appSign,
-                userID: currentUserId,  // Use currentUser as userID
-                userName: currentUserId, // Use currentUser as userName
+                userID: currentUserId,
+                userName: currentUserId,
                 plugins: [ZegoUIKitSignalingPlugin()],
                 callID: newRoomId,
-                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),  // Use groupVoiceCall instead of oneOnOneVoiceCall
+                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+                onDispose: () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    Get.toNamed(AppRoutes.reviewScreen, arguments: {
+                      'senderId': senderId,
+                      'receiverId': receiverId,
+                      'name' : name
+                    });
+                  });
+                },
               ),
             ),
           );
@@ -235,13 +279,10 @@ class FirebaseService {
         // Handle the case where a user leaves the room
         else if (updatedUserCount < 2 && isActive) {
           debugPrint('One user left the room $newRoomId. Waiting for another user to join.');
-
-          // Do not redirect to ExampleScreen. Just wait for another user to join.
         }
       }
     });
   }
-
 
 
 
@@ -318,85 +359,12 @@ class FirebaseService {
 
 
 
-// ///========== Room ID and Group Call Handling ==========>
-  // Future<void> startGroupCall(BuildContext context, String userName) async {
-  //   // Fetch the latest room ID from Firestore
-  //   debugPrint('Fetching the latest room ID...');
-  //   QuerySnapshot roomQuery = await fireStore.collection('rooms')
-  //       .orderBy('roomId', descending: true)
-  //       .limit(1)
-  //       .get();
-  //
-  //   String newRoomId;
-  //   int userCount;
-  //
-  //   if (roomQuery.docs.isNotEmpty) {
-  //     var latestRoom = roomQuery.docs.first;
-  //     newRoomId = latestRoom['roomId'];
-  //     userCount = latestRoom['userCount'];
-  //
-  //     debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
-  //
-  //     // If the room is full (2 users), create a new room
-  //     if (userCount >= 2) {
-  //       newRoomId = (int.parse(newRoomId) + 1).toString();
-  //       userCount = 0;
-  //       debugPrint('Room is full. Creating a new room with ID: $newRoomId');
-  //     } else {
-  //       debugPrint('Adding to the existing room with ID: $newRoomId');
-  //     }
-  //   } else {
-  //     // Start with roomId 1 if no rooms exist
-  //     newRoomId = '1';
-  //     userCount = 0;
-  //     debugPrint('No rooms found. Starting with room ID: $newRoomId');
-  //   }
-  //
-  //   // Update room data
-  //   await fireStore.collection('rooms').doc(newRoomId).set({
-  //     'roomId': newRoomId,
-  //     'userCount': userCount + 1,
-  //   });
-  //
-  //   debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
-  //
-  //   // Proceed with starting the group call
-  //   debugPrint('Starting call in room $newRoomId');
-  //
-  //   // Navigate to the call screen
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (context) => ZegoUIKitPrebuiltCall(
-  //         appID: Config.appId,
-  //         appSign: Config.appSign,
-  //         userID: userName,
-  //         userName: userName,
-  //         plugins: [ZegoUIKitSignalingPlugin()],
-  //         callID: newRoomId,
-  //         config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
 
 }
 
 
 
-// void startGroupCall(BuildContext context, String roomId, String userName) {
-//   Navigator.of(context).push(
-//     MaterialPageRoute(
-//       builder: (context) => ZegoUIKitPrebuiltCall(
-//         appID: Config.appId,
-//         appSign: Config.appSign,
-//         userID: userName,
-//         userName: 'userName',
-//         plugins: [ZegoUIKitSignalingPlugin()], callID: roomId, config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
-//       ),
-//     ),
-//   );
-// }
+
 
 
 class ExampleScreen extends StatelessWidget {

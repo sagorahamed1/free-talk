@@ -155,7 +155,7 @@ class SignUpScreen extends StatelessWidget {
                       if(_formKey.currentState!.validate()){
                         /// sign up handle
                         authController.signUp(
-                            email : emailController.text,
+                            email : emailController.text.trim(),
                             password:  passWordController.text.trim(),
                             name: nameController.text,
                             gender: genderController.text,

@@ -20,12 +20,12 @@ class AuthController extends GetxController{
      'gender' : gender,
      'country' : country,
      'about_me' : 'I am search new friend for practice languages',
-     'label' : '',
-     'coin' : '',
-     'total_talk_time' : '',
-     'total_call' : '',
+     'label' : 'Basic',
+     'coin' : '0',
+     'total_talk_time' : '0',
+     'total_call' : '0',
      'image' : '',
-     'total_review' : ''
+     'total_review' : '0'
    };
    await PrefsHelper.setString(AppConstants.currentUser, userData?.uid);
    var data = firebaseService.postData(userData?.uid ?? '', body);
@@ -45,10 +45,12 @@ class AuthController extends GetxController{
     if(user?.uid != null){
       await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
       await PrefsHelper.setString(AppConstants.email, email);
-      await PrefsHelper.setString(AppConstants.name, user?.displayName);
+
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.toNamed(AppRoutes.homeScreen);
+      await PrefsHelper.setString(AppConstants.name, user?.displayName);
       loginLoading(false);
+
     }
 
     loginLoading(false);

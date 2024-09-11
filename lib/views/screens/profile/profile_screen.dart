@@ -23,6 +23,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     profileController.getProfileData();
+    profileController.reviewData("${Get.parameters['id']}");
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
 

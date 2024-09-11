@@ -1,43 +1,41 @@
 class ReviewModel {
-  String? id;
-  String name;
+  String? description;
+  String feeling;
   String image;
-  double rating;
-  String reviewMessage;
-  DateTime time;
-  int like;
+  String rating;
+  String reviewId;
+  DateTime reviewName;
+
 
   ReviewModel({
-    this.id,
-    required this.name,
+    this.description,
+    required this.feeling,
     required this.image,
     required this.rating,
-    required this.reviewMessage,
-    required this.time,
-    required this.like,
+    required this.reviewId,
+    required this.reviewName,
+
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
+      'description': description,
+      'feeling': feeling,
       'image': image,
       'rating': rating,
-      'reviewMessage': reviewMessage,
-      'time': time.toIso8601String(),
-      'like': like,
+      'reviewId': reviewId,
+      'reviewName': reviewName,
     };
   }
 
   factory ReviewModel.fromMap(Map<String, dynamic> map) {
     return ReviewModel(
-      id: map['id'],
-      name: map['name'],
+      description: map['description'],
+      feeling: map['feeling'],
       image: map['image'],
       rating: map['rating'],
-      reviewMessage: map['reviewMessage'],
-      time: DateTime.parse(map['time']),
-      like: map['like'],
+      reviewId: map['reviewId'],
+      reviewName: map['reviewName'],
     );
   }
 }
