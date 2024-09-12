@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/routes/app_routes.dart';
+import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/utils/app_constants.dart';
 import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/utils/app_strings.dart';
@@ -154,10 +155,12 @@ class _DrawerSectionState extends State<DrawerSection> {
                                       color: Colors.blueAccent,
                                       text: "yes",
                                       onTap: ()async{
+
                                         await PrefsHelper.remove(AppConstants.currentUser);
                                         await PrefsHelper.remove(AppConstants.name);
                                         await PrefsHelper.remove(AppConstants.email);
                                         await PrefsHelper.remove(AppConstants.isLogged);
+                                        FirebaseService().signOut();
                                          Get.toNamed(AppRoutes.logInScreen);
                                       },
                                     )),

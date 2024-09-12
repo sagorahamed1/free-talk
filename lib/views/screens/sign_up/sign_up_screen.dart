@@ -141,8 +141,8 @@ class SignUpScreen extends StatelessWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter your password";
-                        } else if (value.length < 8 || !AppConstants.validatePassword(value)) {
-                          return "Password: 8 characters min, letters & digits \nrequired";
+                        } else if (value.length < 6) {
+                          return "Password must be 6 characters or letter!";
                         }
                         return null;
                       },

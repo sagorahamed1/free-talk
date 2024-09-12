@@ -33,13 +33,13 @@ class AuthController extends GetxController{
    };
 
 
-
+    signUpLoading(false);
    await PrefsHelper.setString(AppConstants.currentUser, userData?.uid);
    await PrefsHelper.setString(AppConstants.name, "$name");
    var data = firebaseService.postData(userData?.uid ?? '', body);
 
    Get.toNamed(AppRoutes.logInScreen);
-    signUpLoading(false);
+
    print("====data : $data");
   }
 

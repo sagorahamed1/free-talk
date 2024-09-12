@@ -25,42 +25,54 @@ class FirebaseService {
 
   ///=====Sign Up=====>
    Future<User?> registerWithEmailPassword(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      debugPrint('===> ${userCredential.user}');
-      return userCredential.user;
-    } catch (e) {
-      debugPrint("Registration Error: $e");
-      return null;
-    }
+     try {
+       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+         email: email,
+         password: password,
+       );
+       debugPrint('===> ${userCredential.user}');
+       return userCredential.user;
+     } on FirebaseAuthException catch (e) {
+       if (e.code == 'email-already-in-use') {
+         ToastMessageHelper.showToastMessage('The email address is already in use by another account.');
+         debugPrint("The email address is already in use by another account.");
+         // You can show a message to the user here
+       } else {
+         debugPrint("Registration Error: $e");
+       }
+       return null;
+     } catch (e) {
+       debugPrint("Registration Error: $e");
+       return null;
+     }
   }
 
 
-  ///======Log In======>
-   Future<User?> signInWithEmailPassword(String email, String password) async {
+
+  Future<User?> signInWithEmailPassword(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      if(e.code == "user-not-found"){
+      if (e.code == 'user-not-found') {
         ToastMessageHelper.showToastMessage('User not found!');
-      }else if(e.code == "wrong-password"){
-        ToastMessageHelper.showToastMessage('Your Password is Wrong!');
+      } else if (e.code == 'wrong-password') {
+        ToastMessageHelper.showToastMessage('Incorrect password!');
+      } else {
+        ToastMessageHelper.showToastMessage('User not found! $e');
       }
+    } catch (e) {
+      ToastMessageHelper.showToastMessage('An unexpected error occurred: $e');
     }
-    // catch (e,s) {
-    //   debugPrint("Sign-in Error: $e");
-    //   debugPrint("Sign-in Error s: $s");
-    //   return null;
-    // }
+    return null;
   }
+
+
+
+
 
   ///=====Sign Out====>
    Future<void> signOut() async {

@@ -48,7 +48,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
+  void dispose() {
+    profileController.reviews.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     // profileController.getProfileData("");
     if(Get.parameters["screenType"] ==  'home'){
       profileController.getProfileData("${Get.parameters['id']}");

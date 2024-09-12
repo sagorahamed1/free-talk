@@ -396,6 +396,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ],
                                           ),
                                           const Spacer(),
+
+
+                                          Container(
+                                            width: 70.w,
+                                            decoration: BoxDecoration(
+                                                color: themeController.isDarkTheme.value
+                                                    ? AppColors.backGroundDark
+                                                    : AppColors.backGroundLight,
+                                                borderRadius: BorderRadius.circular(24.r)),
+                                            padding: EdgeInsetsDirectional.all(10.r),
+                                            child: Center(
+                                              child: Text(
+                                                'View',
+                                                style: TextStyle(
+                                                  fontSize: 14.h,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors.textColorGreen,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 10.w),
+
                                           Container(
                                               decoration: BoxDecoration(
                                                   color: themeController
