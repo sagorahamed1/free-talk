@@ -7,6 +7,7 @@ import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/utils/app_constants.dart';
 import 'package:get/get.dart';
 
+import '../models/review_model.dart';
 import '../models/user_model.dart';
 
 class ProfileController extends GetxController{
@@ -14,21 +15,22 @@ class ProfileController extends GetxController{
 
   Rx<UserProfileModel> userData = UserProfileModel().obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getProfileData();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getProfileData();
+  // }
 
   ///===== Get profile data for current user ===>
-  Future<void> getProfileData() async {
+  Future<void> getProfileData(String userId) async {
+    print("============================================================userId $userId");
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
 
-      if (currentUser != null) {
+      if (currentUser?.uid != null) {
         DocumentSnapshot userSnapshot = await firebaseService.getData(
           collection: 'users',
-          id: currentUser.uid,
+          id: userId,
         );
 
         var data = userSnapshot.data() as Map<String, dynamic>?;
@@ -40,8 +42,9 @@ class ProfileController extends GetxController{
       } else {
         print("No user is currently logged in.");
       }
-    } catch (e) {
+    } catch (e, s) {
       print("Error fetching profile data: $e");
+      print("Error fetching profile data: $s");
     }
   }
 
@@ -49,42 +52,38 @@ class ProfileController extends GetxController{
 
 
 
-
-
-
-
-
-  var reviews = <UserProfileModel>[].obs;
-  RxBool reviewsLoading = false.obs;
+  var reviews = <ReviewModel>[].obs;  // Observable list for storing review data
+  RxBool reviewsLoading = false.obs;       // Observable for loading state
 
   /// Function to fetch review data based on user ID
   Future<void> reviewData(String id) async {
     reviewsLoading(true); // Start loading state
     try {
       // Fetch the document from the 'reviews' collection using the document ID
-      DocumentSnapshot snapshot = await firebaseService.getData(id: id, collection: "reviews");
+      DocumentSnapshot snapshot = await firebaseService.getData(id: "receverId", collection: "reviews");
 
       // Check if the document exists
       if (snapshot.exists) {
-        // Get the data from the document as a map
+        // Get the data from the document
         var data = snapshot.data() as Map<String, dynamic>;
 
-        // Assuming the document contains a list of user IDs under the key 'userIds'
-        List<dynamic> userIds = data['userIds'] ?? [];
+        // Assuming the document contains a list of reviews (e.g., under 'reviewsList')
+        List<dynamic> reviewsList = data['reviewsList'] ?? [];
 
-        // Check if the given ID matches any of the user IDs in the list
-        if (userIds.contains(id)) {
-          // Add the data to the reviews list if the user ID matches
-          reviews.add(UserProfileModel.fromMap(data));
+        print("========>> ${reviewsList}");
+        // Iterate over the list and convert each review to UserProfileModel
+        for (var reviewData in reviewsList) {
+          reviews.add(ReviewModel.fromMap(reviewData));
         }
       } else {
         debugPrint("Document with ID $id does not exist.");
       }
 
       reviewsLoading(false); // Stop loading state
-    } catch (e) {
+    } catch (e, s) {
       reviewsLoading(false); // Stop loading state on error
-      debugPrint("Error fetching users: $e");
+      debugPrint("Error fetching reviews: $e");
+      debugPrint("Error fetching reviews: $s");
     }
   }
 

@@ -76,6 +76,35 @@ class FirebaseService {
     }
   }
 
+
+
+
+  /// Store Data: Update list in Firestore
+  Future<void> appendReviewToList(String userId, Map<String, dynamic> newReview, {String? collectionName}) async {
+    try {
+      DocumentReference docRef = fireStore.collection(collectionName ?? 'reviews').doc(userId);
+
+      await fireStore.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(docRef);
+        if (!snapshot.exists) {
+          // If no document exists, create it with an initial review list
+          transaction.set(docRef, {
+            'reviewsList': [newReview],
+          });
+        } else {
+          // Append new review to the existing list
+          List<dynamic> reviewsList = snapshot.get('reviewsList') as List<dynamic>;
+          reviewsList.add(newReview);
+          transaction.update(docRef, {'reviewsList': reviewsList});
+        }
+      });
+    } catch (e) {
+      debugPrint("Error saving review to list: $e");
+    }
+  }
+
+
+
   ///==========Get Data======>
    Future<DocumentSnapshot> getData({required String id,required String collection }) async {
     try {
@@ -159,12 +188,6 @@ class FirebaseService {
       debugPrint("Change Password Error: $e");
     }
   }
-
-
-
-
-
-
 
 
 

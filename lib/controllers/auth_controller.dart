@@ -10,14 +10,18 @@ class AuthController extends GetxController{
 
 
   FirebaseService firebaseService = FirebaseService();
+  RxBool signUpLoading = false.obs;
   signUp({String? email,String? password, String? name,String? gender, String? country})async{
+    signUpLoading(true);
    User? userData = await firebaseService.registerWithEmailPassword(email!, password!);
+
 
    print('=====> user Create : ${userData?.uid}');
    Map <String, dynamic> body = {
      'name' : "$name",
      'email' : email,
      'gender' : gender,
+     'id' : "${userData?.uid}",
      'country' : country,
      'about_me' : 'I am search new friend for practice languages',
      'label' : 'Basic',
@@ -27,10 +31,15 @@ class AuthController extends GetxController{
      'image' : '',
      'total_review' : '0'
    };
+
+
+
    await PrefsHelper.setString(AppConstants.currentUser, userData?.uid);
+   await PrefsHelper.setString(AppConstants.name, "$name");
    var data = firebaseService.postData(userData?.uid ?? '', body);
 
    Get.toNamed(AppRoutes.logInScreen);
+    signUpLoading(false);
    print("====data : $data");
   }
 
@@ -48,9 +57,11 @@ class AuthController extends GetxController{
 
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.toNamed(AppRoutes.homeScreen);
-      await PrefsHelper.setString(AppConstants.name, user?.displayName);
       loginLoading(false);
 
+
+    }else{
+      loginLoading(false);
     }
 
     loginLoading(false);

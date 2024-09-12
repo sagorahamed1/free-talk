@@ -54,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
       currectName = userName;
     });
   }
+
   // bool _isLoaded = false;
   // BannerAd? _bannerAd;
   // @override
@@ -95,7 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     homeController.fetchAllUsers();
-    print('=========================================== current userid : ${currectUser}');
+    print(
+        '=========================================== current userid : ${currectUser}');
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value
           ? const Color(0xff1d1b32)
@@ -130,7 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Hello ${currectName},',
                               style: TextStyle(
                                 fontSize: 16.h,
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
                             ),
                             Text(
@@ -138,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 20.h,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onBackground,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
                             ),
                           ],
@@ -172,80 +176,78 @@ class _HomeScreenState extends State<HomeScreen> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
-                                itemCount:
-                                    homeController.availeGenderList.value.length,
+                                itemCount: homeController
+                                    .availeGenderList.value.length,
                                 itemBuilder: (context, index) {
                                   var data =
                                       homeController.availeGenderList[index];
                                   return GestureDetector(
                                     onTap: () {
-
-
-
-
-                                      index == 0 ? const SizedBox() :
-
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                                contentPadding: EdgeInsets.symmetric(
-                                                    horizontal: 16.w, vertical: 10.h),
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-
-
-                                                    Row(
+                                      index == 0
+                                          ? const SizedBox()
+                                          : showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 16.w,
+                                                            vertical: 10.h),
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
                                                       children: [
-                                                        const Spacer(),
-                                                        Container(
-
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            border: Border.all(color: Colors.blueAccent)
-                                                          ),
-                                                          child: Icon(Icons.close),
+                                                        Row(
+                                                          children: [
+                                                            const Spacer(),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .blueAccent)),
+                                                              child: const Icon(
+                                                                  Icons.close),
+                                                            ),
+                                                          ],
                                                         ),
+                                                        SizedBox(height: 16.h),
+                                                        Text(
+                                                          "Talk for 100 minutes to chat with a lovely girl. Keep talking, you're close! 😆😆",
+                                                          // 'Congrats! You\'ve crossed 100 talk minutes! You\'re now eligible to connect with female participants. Keep chatting and enjoy!',
+                                                          style: TextStyle(
+                                                            fontSize: 16.h,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onBackground,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 24.h),
                                                       ],
                                                     ),
-
-                                                    SizedBox(height :16.h),
-
-
-                                                    Text(
-                                                     "Talk for 100 minutes to chat with a lovely girl. Keep talking, you're close! 😆😆",
-                                                      // 'Congrats! You\'ve crossed 100 talk minutes! You\'re now eligible to connect with female participants. Keep chatting and enjoy!',
-                                                      style: TextStyle(
-                                                        fontSize: 16.h,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Theme.of(context).colorScheme.onBackground,
-                                                      ),
-                                                    ),
-
-                                                    SizedBox(height :24.h),
-
-                                                  ],
-                                                ),
-                                                elevation: 12.0,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(12.r),
-                                                    side: BorderSide(
-                                                        width: 1.w, color: Colors.blueAccent)));
-                                          });
-
-
-
-
-
+                                                    elevation: 12.0,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12.r),
+                                                        side: BorderSide(
+                                                            width: 1.w,
+                                                            color: Colors
+                                                                .blueAccent)));
+                                              });
                                     },
                                     child: Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 12.w),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 12.w),
                                       decoration: BoxDecoration(
-                                          color: themeController.isDarkTheme.value
-                                              ? AppColors.backGroundDark
-                                              : AppColors.backGroundLight,
+                                          color:
+                                              themeController.isDarkTheme.value
+                                                  ? AppColors.backGroundDark
+                                                  : AppColors.backGroundLight,
                                           shape: BoxShape.circle),
                                       padding: EdgeInsetsDirectional.all(20.r),
                                       child: Center(
@@ -282,15 +284,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             // SizedBox(height: 16.h),
 
-                            Obx(()=>
-                               GestureDetector(
-                                onTap : (){
+                            Obx(
+                              () => GestureDetector(
+                                onTap: () {
                                   homeController.startTimer();
-                                  if(homeController.isCalling.value){
-                                     FirebaseService().startGroupCall(context, '${currectUser}', currectName);
-                                     homeController.isCalling(true);
+                                  if (homeController.isCalling.value) {
+                                    FirebaseService().startGroupCall(
+                                        context, '${currectUser}', currectName);
+                                    homeController.isCalling(true);
                                   }
-
 
                                   // startGroupCall(context, roomIdController.text, userNameController.text);
                                 },
@@ -339,20 +341,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             var user = homeController.users[index];
 
-                            if (currectUser != user.id){
+                            if (currectUser != user.id) {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 10.h),
                                 child: GestureDetector(
-                                  onTap: (){
-                                    Get.toNamed(AppRoutes.profileScreen, parameters: {
-                                      "screenType" : 'home',
-                                      "id" : user.id
-                                    });
+                                  onTap: () {
+                                    Get.toNamed(AppRoutes.profileScreen,
+                                        parameters: {
+                                          "screenType": 'home',
+                                          "id": user.id,
+                                        });
                                   },
                                   child: Container(
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(9.r),
+                                        borderRadius:
+                                            BorderRadius.circular(9.r),
                                         color: themeController.isDarkTheme.value
                                             ? AppColors.cardDark
                                             : Colors.white70),
@@ -368,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           SizedBox(width: 10.w),
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 user.name,
@@ -395,14 +399,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Container(
                                               decoration: BoxDecoration(
                                                   color: themeController
-                                                      .isDarkTheme.value
+                                                          .isDarkTheme.value
                                                       ? AppColors.backGroundDark
-                                                      : AppColors.backGroundLight,
+                                                      : AppColors
+                                                          .backGroundLight,
                                                   shape: BoxShape.circle),
                                               child: Padding(
                                                 padding: EdgeInsets.all(6.r),
                                                 child: const Icon(Icons.call,
-                                                    color: AppColors.textColorGreen),
+                                                    color: AppColors
+                                                        .textColorGreen),
                                               ))
                                         ],
                                       ),
@@ -410,10 +416,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               );
-                            }else{
-                               return const SizedBox.shrink();
+                            } else {
+                              return const SizedBox.shrink();
                             }
-
                           }),
                     )
                   ],
@@ -457,13 +462,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
-
-
-
-
-
-
 }
 
 ///ads

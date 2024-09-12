@@ -151,7 +151,9 @@ class SignUpScreen extends StatelessWidget {
               
               
                     ///========sign up button========
-                    CustomBotton(title: 'Sign Up', onpress: (){
+                    CustomBotton(
+                        loading: authController.signUpLoading.value,
+                        title: 'Sign Up', onpress: (){
                       if(_formKey.currentState!.validate()){
                         /// sign up handle
                         authController.signUp(

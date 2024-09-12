@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:free_talk/routes/app_routes.dart';
+import 'package:free_talk/utils/app_constants.dart';
 import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/utils/app_strings.dart';
 import 'package:get/get.dart';
 
+import '../../../../helpers/prefs_helper.dart';
 import '../../../../services/theme_manager.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../base/CustomButton.dart';
@@ -151,7 +153,11 @@ class _DrawerSectionState extends State<DrawerSection> {
                                     child: CustomButton(
                                       color: Colors.blueAccent,
                                       text: "yes",
-                                      onTap: (){
+                                      onTap: ()async{
+                                        await PrefsHelper.remove(AppConstants.currentUser);
+                                        await PrefsHelper.remove(AppConstants.name);
+                                        await PrefsHelper.remove(AppConstants.email);
+                                        await PrefsHelper.remove(AppConstants.isLogged);
                                          Get.toNamed(AppRoutes.logInScreen);
                                       },
                                     )),

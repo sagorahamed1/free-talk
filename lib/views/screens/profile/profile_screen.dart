@@ -9,21 +9,55 @@ import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:free_talk/views/base/custom_text.dart';
 import 'package:get/get.dart';
 
+import '../../../helpers/prefs_helper.dart';
+import '../../../models/user_model.dart';
 import '../../../services/theme_manager.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../botton_nav_bar/botton_nav_bar.dart';
 import 'inner_widgets/custom_list_tile_svg_pic.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
 
   ThemeController themeController = Get.put(ThemeController());
   ProfileController profileController = Get.put(ProfileController());
 
+
+  String? currectUser;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUserId();
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    String? userId = await PrefsHelper.getString(AppConstants.currentUser);
+
+    setState(() {
+      currectUser = userId;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    profileController.getProfileData();
-    profileController.reviewData("${Get.parameters['id']}");
+    // profileController.getProfileData("");
+    if(Get.parameters["screenType"] ==  'home'){
+      profileController.getProfileData("${Get.parameters['id']}");
+    }else{
+      profileController.getProfileData("$currectUser");
+    }
+
+    profileController.reviewData("receverId");//demo
+    print("===========================================dddd====${Get.parameters['id']}");
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
 
@@ -38,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 10.h),
-            
+
                     ///======Profile image====>
                     Align(
                       alignment: Alignment.topCenter,
@@ -83,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                     //
                     // SizedBox(height: 30.h),
                     //
-            
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -92,7 +126,7 @@ class ProfileScreen extends StatelessWidget {
                         _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),context),
                       ],
                     ),
-            
+
                     SizedBox(height: 20.h),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -111,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
 
-            
+
                           SizedBox(height: 13.h),
                           CustomListTileSvgPic(
                             isDark: themeController.isDarkTheme.value,
@@ -138,7 +172,7 @@ class ProfileScreen extends StatelessWidget {
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Languages',
-                            subTitle: 'Bangle, English',
+                            subTitle: 'English',
                             icon: AppIcons.language,
                           ),
                           CustomListTileSvgPic(
@@ -155,9 +189,9 @@ class ProfileScreen extends StatelessWidget {
                             subTitle: '${profileController.userData.value.coin}',
                             icon: AppIcons.coin,
                           ),
-            
-            
-            
+
+
+
                           SizedBox(height: 20.h),
                           Text(
                             'Top Reviews',
@@ -170,33 +204,69 @@ class ProfileScreen extends StatelessWidget {
 
                           SizedBox(height: 13.h),
 
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 14.h),
-                                child:  TopReviewsCardForProfile(
-                                  isDark: themeController.isDarkTheme.value,
-                                  image: '${AppImages.man2}',
-                                  description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
-                                  rathing: "4.5",
-                                  reviewName: "Mahim Rana",
-                                  timeAgo: "1 month ago",
-                                ),
-                              );
-                            },
-                          ),
-            
-            
+                          // ListView.builder(
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   shrinkWrap: true,
+                          //   itemCount: 5,
+                          //   itemBuilder: (context, index) {
+                          //     return Padding(
+                          //       padding: EdgeInsets.only(bottom: 14.h),
+                          //       child:  TopReviewsCardForProfile(
+                          //         isDark: themeController.isDarkTheme.value,
+                          //         image: '${AppImages.man2}',
+                          //         description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
+                          //         rathing: "4.5",
+                          //         reviewName: "Mahim Rana",
+                          //         timeAgo: "1 month ago",
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+
+
+
+                          Obx(() {
+                            if (profileController.reviewsLoading.value) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+
+                            if (profileController.reviews.isEmpty) {
+                              return Center(child: Text("No reviews available."));
+                            }
+
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: profileController. reviews.length,
+                              itemBuilder: (context, index) {
+                                final review = profileController. reviews[index];
+                                return Padding(
+                                  padding:  EdgeInsets.only(bottom: 16.h),
+                                  child: TopReviewsCardForProfile(
+                                              isDark: themeController.isDarkTheme.value,
+                                              image: '${AppImages.man2}',
+                                              description: "${review.description}",
+                                              rathing: "${review.rating}",
+                                              reviewName: "${review.reviewName}",
+                                              timeAgo: "${review.rating} time",
+                                            ),
+                                );
+                              },
+                            );
+                          }),
+
+
+                          SizedBox(height: 100.h)
+
+
+
                         ],
                       ),
                     )
                   ],
                 );
               }
-            
+
               ),
             ),
           ),
