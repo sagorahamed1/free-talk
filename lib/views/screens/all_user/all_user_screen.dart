@@ -12,8 +12,8 @@ import '../home/inner_widgets/user_card.dart';
 class AllUserScreen extends StatelessWidget {
    AllUserScreen({super.key});
 
-  ThemeController themeController = Get.put(ThemeController());
-   final HomeController homeController = Get.put(HomeController());
+  ThemeController themeController = Get.find<ThemeController>();
+   final HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +48,17 @@ class AllUserScreen extends StatelessWidget {
                       image:  "${AppImages.man2}",
                       labal: '${user.label}',
                       name: user.name,
+                      // viewProfileOnTap: () {
+                      //   Get.toNamed(AppRoutes.profileScreen);
+                      // },
                       viewProfileOnTap: () {
-                        Get.toNamed(AppRoutes.profileScreen);
+                        Get.toNamed(AppRoutes.profileScreen,
+                            parameters: {
+                              "screenType": 'home',
+                              "id": user.id,
+                            });
                       },
+
                       isDarkMode: themeController
                           .isDarkTheme.value,
                     ),

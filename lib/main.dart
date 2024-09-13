@@ -11,6 +11,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+import 'helpers/dependancy_injaction.dart';
+import 'helpers/device_utils.dart';
+
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
@@ -30,6 +33,12 @@ void main() async{
       [ZegoUIKitSignalingPlugin()],
     );
 
+
+    DeviceUtils.lockDevicePortrait();
+
+    DependencyInjection di = DependencyInjection();
+    di.dependencies();
+
     runApp(MyApp(navigatorKey: navigatorKey));
   });
 }
@@ -45,7 +54,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeController themeController = Get.put(ThemeController());
+  ThemeController themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {

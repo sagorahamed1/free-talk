@@ -19,8 +19,8 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
-  ThemeController themeController = Get.put(ThemeController());
-  final HomeController homeController = Get.put(HomeController());
+  ThemeController themeController = Get.find<ThemeController>();
+  final HomeController homeController = Get.find<HomeController>();
 
   TextEditingController reviewCtrl = TextEditingController();
 

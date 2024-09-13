@@ -20,8 +20,8 @@ class ChangePasswordScreen extends StatelessWidget {
   TextEditingController currectPassCtrl = TextEditingController();
   TextEditingController newPassCtrl = TextEditingController();
 
-  ThemeController themeController = Get.put(ThemeController());
-  AuthController authController = Get.put(AuthController());
+  ThemeController themeController = Get.find<ThemeController>();
+  AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

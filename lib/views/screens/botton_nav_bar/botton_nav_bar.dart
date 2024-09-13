@@ -39,7 +39,7 @@ class BottomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeController themeController = Get.put(ThemeController());
+    ThemeController themeController = Get.find<ThemeController>();
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
       getItem(0 == menuIndex ? AppIcons.home : AppIcons.home2, 'Home',

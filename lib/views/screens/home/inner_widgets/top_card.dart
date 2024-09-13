@@ -15,7 +15,7 @@ class TopCard extends StatefulWidget {
 }
 
 class _TopCardState extends State<TopCard> {
-  final ThemeController themeController = Get.put(ThemeController());
+  final ThemeController themeController = Get.find<ThemeController>();
   String selectedButton = 'any';
 
   @override

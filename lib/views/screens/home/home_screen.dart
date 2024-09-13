@@ -20,6 +20,7 @@ import '../../../services/theme_manager.dart';
 import '../../../utils/Config.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_images.dart';
+import '../../base/custom_dialog.dart';
 import '../../base/custom_text.dart';
 import 'inner_widgets/drawer_section.dart';
 import 'inner_widgets/user_card.dart';
@@ -33,8 +34,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeController homeController = Get.put(HomeController());
-  final ThemeController themeController = Get.put(ThemeController());
+  final HomeController homeController = Get.find<HomeController>();
+  final ThemeController themeController = Get.find<ThemeController>();
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? currectUser;
@@ -193,42 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         EdgeInsets.symmetric(
                                                             horizontal: 16.w,
                                                             vertical: 10.h),
-                                                    content: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            const Spacer(),
-                                                            Container(
-                                                              decoration: BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .blueAccent)),
-                                                              child: const Icon(
-                                                                  Icons.close),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 16.h),
-                                                        Text(
-                                                          "Talk for 100 minutes to chat with a lovely girl. Keep talking, you're close! 😆😆",
-                                                          // 'Congrats! You\'ve crossed 100 talk minutes! You\'re now eligible to connect with female participants. Keep chatting and enjoy!',
-                                                          style: TextStyle(
-                                                            fontSize: 16.h,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onBackground,
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 24.h),
-                                                      ],
-                                                    ),
+                                                    content: CustomDialog(),
                                                     elevation: 12.0,
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius:
@@ -344,61 +310,61 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (currectUser != user.id) {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 10.h),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(AppRoutes.profileScreen,
-                                        parameters: {
-                                          "screenType": 'home',
-                                          "id": user.id,
-                                        });
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(9.r),
-                                        color: themeController.isDarkTheme.value
-                                            ? AppColors.cardDark
-                                            : Colors.white70),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(12.r),
-                                      child: Row(
-                                        children: [
-                                          CustomNetworkImage(
-                                              imageUrl: "${AppImages.man2}",
-                                              height: 60.h,
-                                              width: 44.w,
-                                              boxShape: BoxShape.circle),
-                                          SizedBox(width: 10.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                user.name,
-                                                style: TextStyle(
-                                                  fontSize: 16.h,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onBackground,
-                                                ),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(9.r),
+                                      color: themeController.isDarkTheme.value
+                                          ? AppColors.cardDark
+                                          : Colors.white70),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(12.r),
+                                    child: Row(
+                                      children: [
+                                        CustomNetworkImage(
+                                            imageUrl: "${AppImages.man2}",
+                                            height: 60.h,
+                                            width: 44.w,
+                                            boxShape: BoxShape.circle),
+                                        SizedBox(width: 10.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              user.name,
+                                              style: TextStyle(
+                                                fontSize: 16.h,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
                                               ),
-                                              SizedBox(height: 5.h),
-                                              Text(
-                                                'laval : ${user.label}',
-                                                style: TextStyle(
-                                                  fontSize: 12.h,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onBackground,
-                                                ),
+                                            ),
+                                            SizedBox(height: 5.h),
+                                            Text(
+                                              'laval : ${user.label}',
+                                              style: TextStyle(
+                                                fontSize: 12.h,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
                                               ),
-                                            ],
-                                          ),
-                                          const Spacer(),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
 
 
-                                          Container(
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(AppRoutes.profileScreen,
+                                                parameters: {
+                                                  "screenType": 'home',
+                                                  "id": user.id,
+                                                });
+                                          },
+                                          child: Container(
                                             width: 70.w,
                                             decoration: BoxDecoration(
                                                 color: themeController.isDarkTheme.value
@@ -417,10 +383,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                             ),
                                           ),
+                                        ),
 
-                                          SizedBox(width: 10.w),
+                                        SizedBox(width: 10.w),
 
-                                          Container(
+                                        GestureDetector(
+                                          onTap: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                      contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 16.w,
+                                                          vertical: 10.h),
+                                                      content: const CustomDialog(),
+                                                      elevation: 12.0,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(12.r),
+                                                          side: BorderSide(
+                                                              width: 1.w,
+                                                              color: Colors
+                                                                  .blueAccent)));
+                                                });
+                                          },
+                                          child: Container(
                                               decoration: BoxDecoration(
                                                   color: themeController
                                                           .isDarkTheme.value
@@ -433,14 +422,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: const Icon(Icons.call,
                                                     color: AppColors
                                                         .textColorGreen),
-                                              ))
-                                        ],
-                                      ),
+                                              )),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
                               );
-                            } else {
+                            } else if(currectUser == user.id) {
+                              saveName(user.name);
                               return const SizedBox.shrink();
                             }
                           }),
@@ -448,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              BottomMenu(0),
+              const BottomMenu(0),
             ],
           ),
         ),
@@ -486,6 +476,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
+  saveName(String name)async{
+    await PrefsHelper.setString(AppConstants.name, name);
+  }
 }
 
 ///ads
@@ -496,3 +490,4 @@ class _HomeScreenState extends State<HomeScreen> {
 //                     child: AdWidget(ad: _bannerAd!),
 //                   ),
 //                 SizedBox(height: 12.h),
+

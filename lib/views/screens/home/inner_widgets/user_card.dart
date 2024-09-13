@@ -1,8 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
+import '../../../../routes/app_routes.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../base/custom_dialog.dart';
 import '../../../base/custom_network_image.dart';
 import '../../../base/custom_text.dart';
 
@@ -60,15 +64,65 @@ class UserCard extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Container(
-                decoration:  BoxDecoration(
-                    color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
-                    shape: BoxShape.circle),
-                child: Padding(
-                  padding: EdgeInsets.all(6.r),
-                  child: const Icon(Icons.call,
-                      color: AppColors.textColorGreen),
-                ))
+
+
+            GestureDetector(
+              onTap: viewProfileOnTap,
+              child: Container(
+                width: 70.w,
+                decoration: BoxDecoration(
+                    color: isDarkMode
+                        ? AppColors.backGroundDark
+                        : AppColors.backGroundLight,
+                    borderRadius: BorderRadius.circular(24.r)),
+                padding: EdgeInsetsDirectional.all(10.r),
+                child: Center(
+                  child: Text(
+                    'View',
+                    style: TextStyle(
+                      fontSize: 14.h,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textColorGreen,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(width: 10.w),
+
+            GestureDetector(
+              onTap: (){
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                          contentPadding:
+                          EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 10.h),
+                          content: CustomDialog(),
+                          elevation: 12.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(12.r),
+                              side: BorderSide(
+                                  width: 1.w,
+                                  color: Colors
+                                      .blueAccent)));
+                    });
+              },
+              child: Container(
+                  decoration:  BoxDecoration(
+                      color: isDarkMode ? AppColors.backGroundDark : AppColors.backGroundLight,
+                      shape: BoxShape.circle),
+                  child: Padding(
+                    padding: EdgeInsets.all(6.r),
+                    child: const Icon(Icons.call,
+                        color: AppColors.textColorGreen),
+                  )),
+            )
           ],
         ),
       ),
