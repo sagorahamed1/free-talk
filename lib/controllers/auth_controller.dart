@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
+import 'package:free_talk/helpers/toast_message_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/utils/app_constants.dart';
@@ -20,7 +21,7 @@ class AuthController extends GetxController{
    Map <String, dynamic> body = {
      'name' : "$name",
      'email' : email,
-     'gender' : gender,
+     'gender' : gender ?? "Male",
      'id' : "${userData?.uid}",
      'country' : country,
      'about_me' : 'I am search new friend for practice languages',
@@ -38,7 +39,8 @@ class AuthController extends GetxController{
    await PrefsHelper.setString(AppConstants.name, "$name");
    var data = firebaseService.postData(userData?.uid ?? '', body);
 
-   Get.toNamed(AppRoutes.logInScreen);
+   ToastMessageHelper.showToastMessage("Your account create successful");
+   Get.offAllNamed(AppRoutes.logInScreen);
 
    print("====data : $data");
   }
@@ -56,7 +58,7 @@ class AuthController extends GetxController{
       await PrefsHelper.setString(AppConstants.email, email);
 
       await PrefsHelper.setBool(AppConstants.isLogged, true);
-      Get.toNamed(AppRoutes.homeScreen);
+      Get.offAllNamed(AppRoutes.homeScreen);
       loginLoading(false);
 
 

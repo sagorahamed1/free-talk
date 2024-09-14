@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
+import 'package:free_talk/helpers/toast_message_helper.dart';
+import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
 import 'package:get/get.dart';
@@ -21,6 +24,7 @@ class LogInScreen extends StatelessWidget {
   TextEditingController passWordController = TextEditingController(text: kDebugMode ? '1qazxsw2': '');
   ThemeController themeController = Get.find<ThemeController>();
   AuthController authController = Get.find<AuthController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +72,10 @@ class LogInScreen extends StatelessWidget {
                     isDark: themeController.isDarkTheme.value,
                     controller: emailController,
                     hintText: 'Enter your email',
+                    prefixIcon: Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                      child: SvgPicture.asset(AppIcons.email),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Email is required!";
@@ -86,6 +94,10 @@ class LogInScreen extends StatelessWidget {
                     controller: passWordController,
                     isPassword: true,
                     hintText: 'Enter your email',
+                    prefixIcon:  Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                      child: SvgPicture.asset(AppIcons.lock),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your password";
@@ -100,6 +112,7 @@ class LogInScreen extends StatelessWidget {
 
                   GestureDetector(
                     onTap: (){
+                      ToastMessageHelper.showToastMessage("Password reset request to ${emailController.text}.");
                       authController.forgotPassword(emailController.text);
                     },
                     child: Align(
@@ -126,6 +139,14 @@ class LogInScreen extends StatelessWidget {
                         email: emailController.text.trim(),
                         password: passWordController.text.trim(),
                       );
+
+
+
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        emailController.clear();
+                        passWordController.clear();
+                      });
+
                     }
 
                   }),

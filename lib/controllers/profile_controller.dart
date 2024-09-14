@@ -15,11 +15,11 @@ class ProfileController extends GetxController{
 
   Rx<UserProfileModel> userData = UserProfileModel().obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   getProfileData();
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    reviewData();
+  }
 
   ///===== Get profile data for current user ===>
   Future<void> getProfileData(String userId) async {
@@ -56,7 +56,7 @@ class ProfileController extends GetxController{
   RxBool reviewsLoading = false.obs;       // Observable for loading state
 
   /// Function to fetch review data based on user ID
-  Future<void> reviewData(String id) async {
+  Future<void> reviewData() async {
     reviewsLoading(true); // Start loading state
     try {
       // Fetch the document from the 'reviews' collection using the document ID
@@ -70,13 +70,11 @@ class ProfileController extends GetxController{
         // Assuming the document contains a list of reviews (e.g., under 'reviewsList')
         List<dynamic> reviewsList = data['reviewsList'] ?? [];
 
-        print("========>> ${reviewsList}");
-        // Iterate over the list and convert each review to UserProfileModel
         for (var reviewData in reviewsList) {
           reviews.add(ReviewModel.fromMap(reviewData));
         }
       } else {
-        debugPrint("Document with ID $id does not exist.");
+        debugPrint("Document with ID does not exist.");
       }
 
       reviewsLoading(false); // Stop loading state

@@ -47,6 +47,7 @@ dependencies:
   provider: ^6.0.3
   fluttertoast: ^8.2.6
   google_fonts: ^6.2.1
+  url_launcher: ^6.1.8
 
   zego_uikit_signaling_plugin:
   zego_uikit_prebuilt_call:

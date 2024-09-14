@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
@@ -8,7 +9,9 @@ import 'package:get/get.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/theme_manager.dart';
 import '../../../utils/app_constants.dart';
+import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
+import '../../base/custom_pupup_menu.dart';
 import '../../base/custom_text.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -22,6 +25,8 @@ class SignUpScreen extends StatelessWidget {
   TextEditingController countryController = TextEditingController();
    ThemeController themeController = Get.find<ThemeController>();
    AuthController authController = Get.find<AuthController>();
+   var popUpLists = ['Male', 'Female'];
+   RxString selectedPopUp = "Male".obs;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +80,10 @@ class SignUpScreen extends StatelessWidget {
                       isDark: themeController.isDarkTheme.value,
                         controller: nameController,
                       hintText: 'Enter your name',
+                      prefixIcon:  Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(AppIcons.profile),
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Name is required!";
@@ -86,6 +95,10 @@ class SignUpScreen extends StatelessWidget {
               
                     ///========email========
                     CustomTextField(
+                      prefixIcon:  Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(AppIcons.email),
+                      ),
                       isDark: themeController.isDarkTheme.value,
                       controller: emailController,
                       hintText: 'Enter your email',
@@ -104,9 +117,25 @@ class SignUpScreen extends StatelessWidget {
               
                     ///========Gender========
                     CustomTextField(
+                      readOnly: true,
+                      prefixIcon:  Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(AppIcons.manWoman, height: 22.h,),
+                      ),
                       isDark: themeController.isDarkTheme.value,
                       controller: genderController,
                       hintText: 'Enter your gender',
+                      suffixIcon: PopUpMenu(
+                        style: const TextStyle(color: Colors.white),
+                        items: popUpLists,
+                        selectedItem: selectedPopUp.value,
+                        onTap: (int index) {
+                          genderController.text = popUpLists[index].toString();
+                          selectedPopUp.value = popUpLists[index].toString();
+                          PopUpMenu.selectedValue.value = selectedPopUp.value;
+                          Future.delayed(const Duration(milliseconds: 300), () => Navigator.pop(context));
+                        },
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Gender is required!";
@@ -119,6 +148,10 @@ class SignUpScreen extends StatelessWidget {
               
                     ///========Country========
                     CustomTextField(
+                      prefixIcon:  Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(AppIcons.flag),
+                      ),
                       isDark: themeController.isDarkTheme.value,
                       controller: countryController,
                       hintText: 'Enter your country',
@@ -134,6 +167,10 @@ class SignUpScreen extends StatelessWidget {
               
                     ///========password========>
                     CustomTextField(
+                      prefixIcon:  Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                        child: SvgPicture.asset(AppIcons.lock),
+                      ),
                       isDark: themeController.isDarkTheme.value,
                       controller: passWordController,
                       isPassword: true,
@@ -163,6 +200,16 @@ class SignUpScreen extends StatelessWidget {
                             gender: genderController.text,
                             country: countryController.text
                         );
+
+
+                        Future.delayed(const Duration(milliseconds: 300), () {
+                          emailController.clear();
+                          passWordController.clear();
+                          nameController.clear();
+                          genderController.clear();
+                          countryController.clear();
+                        });
+
                       }
                     }),
               

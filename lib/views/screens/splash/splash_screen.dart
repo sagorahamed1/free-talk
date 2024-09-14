@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:free_talk/helpers/prefs_helper.dart';
+import 'package:free_talk/utils/app_constants.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_routes.dart';
@@ -21,7 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () async{
-      Get.toNamed(AppRoutes.logInScreen);
+
+      bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
+      if(isLogged){
+        Get.offAllNamed(AppRoutes.homeScreen);
+      }else{
+        Get.offAllNamed(AppRoutes.logInScreen);
+      }
+
     });
     super.initState();
   }

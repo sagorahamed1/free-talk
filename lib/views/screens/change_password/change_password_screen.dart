@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
@@ -10,6 +11,7 @@ import '../../../helpers/toast_message_helper.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/theme_manager.dart';
 import '../../../utils/app_constants.dart';
+import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_text.dart';
 
@@ -56,6 +58,10 @@ class ChangePasswordScreen extends StatelessWidget {
                 CustomTextField(
                   isDark: themeController.isDarkTheme.value,
                   controller: currectPassCtrl,
+                  prefixIcon:  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                    child: SvgPicture.asset(AppIcons.lock),
+                  ),
                   hintText: 'Enter your old password',
                   validator: (value) {
                     if (value == null || value.isEmpty || value < 6) {
@@ -71,6 +77,10 @@ class ChangePasswordScreen extends StatelessWidget {
                   isDark: themeController.isDarkTheme.value,
                   controller: newPassCtrl,
                   hintText: 'Enter your new password',
+                  prefixIcon:  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                    child: SvgPicture.asset(AppIcons.lock),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty || value < 6) {
                       return "New password is required & must six digit!";

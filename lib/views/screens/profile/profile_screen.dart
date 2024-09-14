@@ -25,13 +25,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   ThemeController themeController = Get.find<ThemeController>();
   ProfileController profileController = Get.put(ProfileController());
 
-
   String? currectUser;
-
 
   @override
   void initState() {
@@ -47,35 +44,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    profileController.reviews.clear();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-
-    // profileController.getProfileData("");
-    if(Get.parameters["screenType"] ==  'home'){
+    if (Get.parameters["screenType"] == 'home') {
       profileController.getProfileData("${Get.parameters['id']}");
-    }else{
+    } else {
       profileController.getProfileData("$currectUser");
     }
 
-    profileController.reviewData("receverId");//demo
+
     print("===========================================dddd====${Get.parameters['id']}");
     return Scaffold(
-      backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef),
-
-      appBar: Get.parameters['screenType'] == 'home' ? AppBar(backgroundColor: themeController.isDarkTheme.value ? const Color(0xff1d1b32) : const Color(0xffdae5ef)) : null,
+      backgroundColor: themeController.isDarkTheme.value
+          ? const Color(0xff1d1b32)
+          : const Color(0xffdae5ef),
+      appBar: Get.parameters['screenType'] == 'home'
+          ? AppBar(
+              backgroundColor: themeController.isDarkTheme.value
+                  ? const Color(0xff1d1b32)
+                  : const Color(0xffdae5ef))
+          : null,
       body: Stack(
         children: [
           SingleChildScrollView(
             child: SafeArea(
               child: Obx(() {
                 print("====profile Data : ${profileController.userData.value}");
-                return  Column(
+                return Column(
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 10.h),
@@ -84,7 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: CustomNetworkImage(
-                        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaDL5AkQCUbh7QLz5mF5-TgDXHnMMYmvWiiw&s',
+                        imageUrl:
+                            '${AppImages.female2}',
                         height: 110.h,
                         width: 110.w,
                         boxShape: BoxShape.circle,
@@ -92,7 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
 
                     SizedBox(height: 9.h),
-
 
                     Text(
                       profileController.userData.value.name,
@@ -128,9 +124,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        _buildStatColumn('${profileController.userData.value.totalTalkTime}', 'Minute', Icon(Icons.call, size: 16.r), context),
-                        _buildStatColumn('${profileController.userData.value.totalCall}', 'Call', Icon(Icons.call, size: 16.r),context),
-                        _buildStatColumn('${profileController.userData.value.totalReviews}', 'Reviews',Icon(Icons.star, size: 16.r),context),
+                        _buildStatColumn(
+                            '${profileController.userData.value.totalTalkTime}',
+                            'Minute',
+                            Icon(Icons.call, size: 16.r),
+                            context),
+                        _buildStatColumn(
+                            '${profileController.userData.value.totalCall}',
+                            'Call',
+                            Icon(Icons.call, size: 16.r),
+                            context),
+                        _buildStatColumn(
+                            '${profileController.userData.value.totalReviews}',
+                            'Reviews',
+                            Icon(Icons.star, size: 16.r),
+                            context),
                       ],
                     ),
 
@@ -142,7 +150,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-
                           Text(
                             'Information',
                             style: TextStyle(
@@ -152,27 +159,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
 
-
                           SizedBox(height: 13.h),
                           CustomListTileSvgPic(
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Email',
-                            subTitle: '${profileController.userData.value.email}',
+                            subTitle:
+                                '${profileController.userData.value.email}',
                             icon: AppIcons.email,
                           ),
                           CustomListTileSvgPic(
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Country',
-                            subTitle: '${profileController.userData.value.country}',
+                            subTitle:
+                                '${profileController.userData.value.country}',
                             icon: AppIcons.flag,
                           ),
                           CustomListTileSvgPic(
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Gender',
-                            subTitle: '${profileController.userData.value.gender}',
+                            subTitle:
+                                '${profileController.userData.value.gender}',
                             icon: AppIcons.profile,
                           ),
                           CustomListTileSvgPic(
@@ -186,18 +195,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Label',
-                            subTitle: '${profileController.userData.value.label}',
+                            subTitle:
+                                '${profileController.userData.value.label}',
                             icon: AppIcons.label,
                           ),
                           CustomListTileSvgPic(
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Coin',
-                            subTitle: '${profileController.userData.value.coin}',
+                            subTitle:
+                                '${profileController.userData.value.coin}',
                             icon: AppIcons.coin,
                           ),
-
-
 
                           SizedBox(height: 20.h),
                           Text(
@@ -230,56 +239,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           //   },
                           // ),
 
-
-
                           Obx(() {
                             if (profileController.reviewsLoading.value) {
                               return Center(child: CircularProgressIndicator());
                             }
 
                             if (profileController.reviews.isEmpty) {
-                              return Center(child: Text("No reviews available."));
+                              return const Center(
+                                  child: Text("No reviews available."));
                             }
 
                             return ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: profileController. reviews.length,
+                              itemCount: profileController.reviews.length,
                               itemBuilder: (context, index) {
-                                final review = profileController. reviews[index];
+                                final review = profileController.reviews[index];
                                 return Padding(
-                                  padding:  EdgeInsets.only(bottom: 16.h),
+                                  padding: EdgeInsets.only(bottom: 16.h),
                                   child: TopReviewsCardForProfile(
-                                              isDark: themeController.isDarkTheme.value,
-                                              image: '${AppImages.man2}',
-                                              description: "${review.description}",
-                                              rathing: "${review.rating}",
-                                              reviewName: "${review.reviewName}",
-                                              timeAgo: "${review.rating} time",
-                                            ),
+                                    isDark: themeController.isDarkTheme.value,
+                                    image: '${AppImages.female2}',
+                                    description: "${review.description}",
+                                    rathing: "${review.rating}",
+                                    reviewName: "${review.reviewName}",
+                                    timeAgo: "${review.rating} time",
+                                  ),
                                 );
                               },
                             );
                           }),
 
-
                           SizedBox(height: 100.h)
-
-
-
                         ],
                       ),
                     )
                   ],
                 );
-              }
-
-              ),
+              }),
             ),
           ),
-
-
-         Get.parameters['screenType'] == 'home' ? const SizedBox() :  const Positioned(child: BottomMenu(1))
+          Get.parameters['screenType'] == 'home'
+              ? const SizedBox()
+              : const Positioned(child: BottomMenu(1))
         ],
       ),
     );
@@ -289,18 +291,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       width: 110.w,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-       color:  themeController.isDarkTheme.value
-           ? AppColors.cardDark
-          : Colors.white70
-      ),
+          borderRadius: BorderRadius.circular(24.r),
+          color: themeController.isDarkTheme.value
+              ? AppColors.cardDark
+              : Colors.white70),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-
             Text(
               count ?? '0',
               style: TextStyle(
@@ -309,10 +309,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Row(
-             mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 icon,
-                CustomText(text: label, left: 6.w, right: 6.w,),
+                CustomText(
+                  text: label,
+                  left: 6.w,
+                  right: 6.w,
+                ),
               ],
             )
           ],
@@ -321,10 +325,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-
-
-
 
 class TopReviewsCardForProfile extends StatelessWidget {
   final String? image;
@@ -336,23 +336,21 @@ class TopReviewsCardForProfile extends StatelessWidget {
 
   const TopReviewsCardForProfile(
       {super.key,
-        this.image,
-        this.description,
-        this.timeAgo,
-        this.rathing,
-        this.reviewName, required this.isDark});
+      this.image,
+      this.description,
+      this.timeAgo,
+      this.rathing,
+      this.reviewName,
+      required this.isDark});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
-          color: isDark
-              ? AppColors.cardDark
-              : Colors.white70
-      ),
+          borderRadius: BorderRadius.circular(12.r),
+          color: isDark ? AppColors.cardDark : Colors.white70),
       child: Padding(
-        padding:  EdgeInsets.all(12.r),
+        padding: EdgeInsets.all(12.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -368,7 +366,7 @@ class TopReviewsCardForProfile extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         child: CustomNetworkImage(
-                         imageUrl:'$image',
+                          imageUrl: '$image',
                           height: 90.h,
                           width: 90.w,
                           boxShape: BoxShape.circle,
@@ -385,15 +383,17 @@ class TopReviewsCardForProfile extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: isDark? AppColors.scaffoldBg : Colors.black54)),
+                      border: Border.all(
+                          color:
+                              isDark ? AppColors.scaffoldBg : Colors.black54)),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
                     child: Row(
                       children: [
-                         Icon(Icons.star, size: 16.r),
+                        Icon(Icons.star, size: 16.r),
                         CustomText(
-                            text: "  $rathing",
-                            fontWeight: FontWeight.w600)
+                            text: "  $rathing", fontWeight: FontWeight.w600)
                       ],
                     ),
                   ),
@@ -418,4 +418,3 @@ class TopReviewsCardForProfile extends StatelessWidget {
     );
   }
 }
-

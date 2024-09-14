@@ -8,6 +8,7 @@ import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/call_invitation.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? currectUser;
-  String? currectName;
+  RxString currectName = ''.obs;
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String? userName = await PrefsHelper.getString(AppConstants.name);
     setState(() {
       currectUser = userId;
-      currectName = userName;
+      currectName.value = userName;
     });
   }
 
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       drawer: DrawerSection(
         isDark: themeController.isDarkTheme.value,
-        name: "$currectName",
+        name: "${currectName.value}",
         onTap: () {
           Navigator.of(context)
               .pop(); // Close the drawer when the close button is tapped
@@ -429,7 +430,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               );
-                            } else if(currectUser == user.id) {
+                            } else if(2 == 2) {
+                                currectName.value = user.name;
+
                               saveName(user.name);
                               return const SizedBox.shrink();
                             }
