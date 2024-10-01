@@ -19,6 +19,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
 
 
+
+
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await FirebaseService.setUpFirebase();
