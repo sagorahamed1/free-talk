@@ -1,16 +1,4 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../../../../utils/app_colors.dart';
-import '../../../../utils/app_icons.dart';
-import '../../base/custom_botton.dart';
-import '../../base/custom_text.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -18,181 +6,122 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController firstNameCtrl = TextEditingController();
-  final TextEditingController lastNameCtrl = TextEditingController();
-  final TextEditingController phoneCtrl = TextEditingController();
-  final TextEditingController dateOfBirthCtrl = TextEditingController();
-  final TextEditingController addressCtrl = TextEditingController();
-  final profileData = Get.arguments;
+  final List<String> maleAvatars = [
+    'https://example.com/male_avatar1.png',
+    'https://example.com/male_avatar2.png',
+    'https://example.com/male_avatar3.png',
+    'https://example.com/male_avatar4.png',
+    'https://example.com/male_avatar5.png',
+  ];
 
-  Uint8List? _image;
-  File? selectedImage;
+  final List<String> femaleAvatars = [
+    'https://example.com/female_avatar1.png',
+    'https://example.com/female_avatar2.png',
+    'https://example.com/female_avatar3.png',
+    'https://example.com/female_avatar4.png',
+    'https://example.com/female_avatar5.png',
+  ];
 
-
+  late String selectedAvatarUrl;
+  String selectedGender = 'Male';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title:  CustomText(text: 'Edit Profile'),
+        title: Text('Edit Profile'),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildProfileImage(),
-              Align(
-                alignment: Alignment.center,
-                child: CustomText(
-                  text: "Change Profile Picture",
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w600,
-                  top: 12.h,
-                  bottom: 24.h,
-                ),
-              ),
-              _textField("Enter your first name", AppIcons.flag, firstNameCtrl, TextInputType.text),
-              _textField("Enter your last name", AppIcons.flag, lastNameCtrl, TextInputType.text),
-              _textField("+ 8845632140", AppIcons.flag, phoneCtrl, TextInputType.phone),
-              _textField("Enter your date of birth", AppIcons.flag, dateOfBirthCtrl, TextInputType.datetime),
-              _textField("Address", AppIcons.flag, addressCtrl, TextInputType.text),
-              SizedBox(height: 20.h),
-              CustomBotton(
-                onpress : () {
-
-                },
-                title: "Update Profile"
-              ),
-              SizedBox(height: 250.h),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileImage() {
-    return Container(
-      height: 200.h,
-      child: Center(
-        child: Stack(
-          children: [
-            CircleAvatar(
-              radius: 60.r,
-              backgroundImage: _image != null
-                  ? MemoryImage(_image!)
-                  : '' != null
-                  ? NetworkImage('')
-                  : AssetImage('assets/default_profile.png'),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () => showImagePickerOption(context),
-                child: SvgPicture.asset(AppIcons.flag),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _textField(String hintText, String prefixIcon, TextEditingController controller, TextInputType type) {
-    return Column(
-      children: [
-        TextFormField(
-          keyboardType: type,
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(color: AppColors.primaryColor),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            prefixIcon: Padding(
-              padding: EdgeInsets.all(12.r),
-              child: SvgPicture.asset(
-                prefixIcon,
-                color: AppColors.primaryColor,
-                height: 20.h,
-                width: 20.w,
-                fit: BoxFit.contain,
-              ),
+      body: Column(
+        children: [
+          // Top Image Display
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: selectedAvatarUrl != null
+                ? Image.network(
+              selectedAvatarUrl,
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            )
+                : Container(
+              height: 100,
+              width: 100,
+              color: Colors.grey[300],
+              child: Center(child: Text('Select an Avatar')),
             ),
           ),
-        ),
-        SizedBox(height: 16.h),
-      ],
-    );
-  }
-
-  void showImagePickerOption(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (builder) {
-        return Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 6.2,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickImageFromGallery,
-                    child: Column(
-                      children: [
-                        Icon(Icons.image, size: 50.w),
-                         CustomText(text: 'Gallery'),
-                      ],
+          // Gender Dropdown
+          // Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: DropdownButton<String>(
+          //     value: selectedGender,
+          //     // onChanged: (String newValue) {
+          //     //   setState(() {
+          //     //     selectedGender = newValue;
+          //     //     selectedAvatarUrl = null; // Reset selected avatar
+          //     //   });
+          //     // },
+          //     items: <String>['Male', 'Female']
+          //         .map<DropdownMenuItem<String>>((String value) {
+          //       return DropdownMenuItem<String>(
+          //         value: value,
+          //         child: Text(value),
+          //       );
+          //     }).toList(),
+          //   ),
+          // ),
+          // Avatar Selection Grid
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: selectedGender == 'Male'
+                  ? maleAvatars.length
+                  : femaleAvatars.length,
+              itemBuilder: (context, index) {
+                final avatarUrl = selectedGender == 'Male'
+                    ? maleAvatars[index]
+                    : femaleAvatars[index];
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedAvatarUrl = avatarUrl;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: selectedAvatarUrl == avatarUrl
+                            ? Colors.blue
+                            : Colors.transparent,
+                        width: 3,
+                      ),
+                    ),
+                    child: Image.network(
+                      avatarUrl,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: _pickImageFromCamera,
-                    child: Column(
-                      children: [
-                        Icon(Icons.camera_alt, size: 50.w),
-                         CustomText(text: 'Camera'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
-        );
-      },
+          // Save Profile Button
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Save the selected avatar or other profile details
+                print('Selected Avatar: $selectedAvatarUrl');
+              },
+              child: Text('Save Profile'),
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-  Future<void> _pickImageFromGallery() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        selectedImage = File(pickedFile.path);
-        _image = selectedImage!.readAsBytesSync();
-      });
-      Get.back();
-    }
-  }
-
-  Future<void> _pickImageFromCamera() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      setState(() {
-        selectedImage = File(pickedFile.path);
-        _image = selectedImage!.readAsBytesSync();
-      });
-      Get.back();
-    }
   }
 }
