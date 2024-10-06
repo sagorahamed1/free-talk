@@ -1,30 +1,20 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:free_talk/utils/app_colors.dart';
-import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/call_invitation.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-
 import '../../../controllers/home_controller.dart';
 import '../../../helpers/prefs_helper.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/firebase_services.dart';
 import '../../../services/theme_manager.dart';
-import '../../../utils/Config.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_images.dart';
 import '../../base/custom_dialog.dart';
-import '../../base/custom_text.dart';
 import 'inner_widgets/drawer_section.dart';
-import 'inner_widgets/user_card.dart';
 import '../botton_nav_bar/botton_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -99,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     homeController.fetchAllUsers();
     print(
-        '=========================================== current userid : ${currectUser}');
+        '=========================================== current userid : $currectUser');
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value
           ? const Color(0xff1d1b32)
@@ -107,14 +97,14 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       drawer: DrawerSection(
         isDark: themeController.isDarkTheme.value,
-        name: "${currectName.value}",
+        name: currectName.value,
         onTap: () {
           Navigator.of(context)
               .pop(); // Close the drawer when the close button is tapped
         },
       ),
       body: CallInvitation(
-        userName: "${currectUser}",
+        userName: "$currectUser",
         child: SafeArea(
           child: Stack(
             children: [
@@ -131,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello ${currectName},',
+                              'Hello $currectName,',
                               style: TextStyle(
                                 fontSize: 16.h,
                                 color:
@@ -139,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              'Welcome!!',
+                              'Welcome!',
                               style: TextStyle(
                                 fontSize: 20.h,
                                 fontWeight: FontWeight.bold,
@@ -168,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? AppColors.cardDark
                               : Colors.white70),
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding:  EdgeInsets.all(16.r),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -179,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: homeController
-                                    .availeGenderList.value.length,
+                                    .availeGenderList.length,
                                 itemBuilder: (context, index) {
                                   var data =
                                       homeController.availeGenderList[index];
@@ -195,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         EdgeInsets.symmetric(
                                                             horizontal: 16.w,
                                                             vertical: 10.h),
-                                                    content: CustomDialog(),
+                                                    content: const CustomDialog(),
                                                     elevation: 12.0,
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius:
@@ -257,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   homeController.startTimer();
                                   if (homeController.isCalling.value) {
                                     FirebaseService().startGroupCall(
-                                        context, '${currectUser}', currectName);
+                                        context, '$currectUser', currectName.value);
                                     homeController.isCalling(true);
                                   }
 
@@ -278,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: AppColors.textColorGreen),
                                       SizedBox(width: 10.w),
                                       Text(
-                                        '${homeController.buttonLabel.value}',
+                                        homeController.buttonLabel.value,
                                         style: TextStyle(
                                           fontSize: 14.h,
                                           fontWeight: FontWeight.bold,
@@ -324,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Row(
                                       children: [
                                         CustomNetworkImage(
-                                            imageUrl: "${AppImages.man2}",
+                                            imageUrl: AppImages.man2,
                                             height: 60.h,
                                             width: 44.w,
                                             boxShape: BoxShape.circle),

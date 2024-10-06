@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/services/theme_manager.dart';
-import 'package:free_talk/themes/themes.dart';
 import 'package:free_talk/views/screens/splash/splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,37 +9,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-
 import 'helpers/dependancy_injaction.dart';
 import 'helpers/device_utils.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
-
-
-
-
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await FirebaseService.setUpFirebase();
-
-
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
-
 
   // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {
     ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
       [ZegoUIKitSignalingPlugin()],
     );
-
-
     DeviceUtils.lockDevicePortrait();
-
     DependencyInjection di = DependencyInjection();
     di.dependencies();
-
     runApp(MyApp(navigatorKey: navigatorKey));
   });
 }
@@ -49,7 +36,7 @@ void main() async{
 
 class MyApp extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
-   MyApp({super.key, required this.navigatorKey});
+   const MyApp({super.key, required this.navigatorKey});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -72,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             scaffoldBackgroundColor: Colors.white,
             textTheme: GoogleFonts.poppinsTextTheme(),
             cardColor: Colors.white,
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color(0xFF6200EE),
               onPrimary: Colors.white,
               secondary: Color(0xFF03DAC6),
@@ -86,10 +73,10 @@ class _MyAppState extends State<MyApp> {
           darkTheme: ThemeData(
             brightness: Brightness.dark,
             primaryColor: Colors.blueGrey,
-            scaffoldBackgroundColor: Color(0xFF1D1F33),
+            scaffoldBackgroundColor: const Color(0xFF1D1F33),
             textTheme: GoogleFonts.poppinsTextTheme(ThemeData(brightness: Brightness.dark).textTheme),
-            cardColor: Color(0xFF323548),
-            colorScheme: ColorScheme.dark(
+            cardColor: const Color(0xFF323548),
+            colorScheme: const ColorScheme.dark(
               primary: Color(0xFFBB86FC),
               onPrimary: Colors.black,
               secondary: Color(0xFF03DAC6),
@@ -103,7 +90,7 @@ class _MyAppState extends State<MyApp> {
           themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
           initialRoute: AppRoutes.splashScreen,
           getPages: AppRoutes.routes,
-          home: SplashScreen(),
+          home: const SplashScreen(),
         ),
       ),
       designSize: const Size(393, 852),

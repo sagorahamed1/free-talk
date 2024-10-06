@@ -10,7 +10,7 @@ import 'package:free_talk/views/base/custom_text.dart';
 import 'package:get/get.dart';
 
 import '../../../helpers/prefs_helper.dart';
-import '../../../models/user_model.dart';
+import 'package:timeago/timeago.dart' as TimeAgo;
 import '../../../services/theme_manager.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';
@@ -49,8 +49,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     if (Get.parameters["screenType"] == 'home') {
       profileController.getProfileData("${Get.parameters['id']}");
+      profileController.reviewData("${Get.parameters['id']}");
     } else {
       profileController.getProfileData("$currectUser");
+      profileController.reviewData("$currectUser");
     }
 
 
@@ -102,30 +104,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     SizedBox(height: 15.h),
 
-                    // GestureDetector(
-                    //   onTap: (){
-                    //     Get.toNamed(AppRoutes.editProfileScreen);
-                    //   },
-                    //   child: Container(
-                    //     width: 130.w,
-                    //     height: 40.h,
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(16.r),
-                    //       color: Colors.lightBlue
-                    //     ),
-                    //     child: Center(child: CustomText(text: "Edit Profile",)),
-                    //   ),
-                    // ),
-                    //
-                    //
-                    // SizedBox(height: 30.h),
-                    //
+                    GestureDetector(
+                      onTap: (){
+                        Get.toNamed(AppRoutes.editProfileScreen);
+                      },
+                      child: Container(
+                        width: 130.w,
+                        height: 40.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          color: Colors.lightBlue
+                        ),
+                        child: Center(child: CustomText(text: "Edit Profile",)),
+                      ),
+                    ),
+
+
+                    SizedBox(height: 30.h),
+
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         _buildStatColumn(
-                            '${profileController.userData.value.totalTalkTime}',
+                            profileController.userData.value.totalTalkTime,
                             'Minute',
                             Icon(Icons.call, size: 16.r),
                             context),
@@ -220,28 +222,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           SizedBox(height: 13.h),
 
-                          // ListView.builder(
-                          //   physics: const NeverScrollableScrollPhysics(),
-                          //   shrinkWrap: true,
-                          //   itemCount: 5,
-                          //   itemBuilder: (context, index) {
-                          //     return Padding(
-                          //       padding: EdgeInsets.only(bottom: 14.h),
-                          //       child:  TopReviewsCardForProfile(
-                          //         isDark: themeController.isDarkTheme.value,
-                          //         image: '${AppImages.man2}',
-                          //         description: "You are the Great Speaker. Today i become amazing experience talk to you. Thank you Brother",
-                          //         rathing: "4.5",
-                          //         reviewName: "Mahim Rana",
-                          //         timeAgo: "1 month ago",
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-
                           Obx(() {
                             if (profileController.reviewsLoading.value) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(child: CircularProgressIndicator());
                             }
 
                             if (profileController.reviews.isEmpty) {
@@ -259,11 +242,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   padding: EdgeInsets.only(bottom: 16.h),
                                   child: TopReviewsCardForProfile(
                                     isDark: themeController.isDarkTheme.value,
-                                    image: '${AppImages.female2}',
+                                    image: AppImages.female2,
                                     description: "${review.description}",
-                                    rathing: "${review.rating}",
-                                    reviewName: "${review.reviewName}",
-                                    timeAgo: "${review.rating} time",
+                                    rathing: review.rating,
+                                    reviewName: review.reviewName,
+                                    timeAgo: TimeAgo.format(DateTime.parse(review.time)),
                                   ),
                                 );
                               },

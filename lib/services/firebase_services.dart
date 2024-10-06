@@ -204,9 +204,17 @@ class FirebaseService {
 
 
 
-  Future<void> startGroupCall(BuildContext context, String currentUserId, name) async {
+  Future<void> startGroupCall(BuildContext context, String currentUserId, String name) async {
+    const int roomIdLength = 6; // Define the desired length of roomId with leading zeros
+
+    // Function to format roomId with leading zeros
+    String formatRoomId(int roomId) {
+      return roomId.toString().padLeft(roomIdLength, '0');
+    }
+
     // Fetch the latest room ID from Firestore
     debugPrint('Fetching the latest room ID...');
+
     QuerySnapshot roomQuery = await fireStore
         .collection('rooms')
         .orderBy('roomId', descending: true)
@@ -219,15 +227,26 @@ class FirebaseService {
 
     if (roomQuery.docs.isNotEmpty) {
       var latestRoom = roomQuery.docs.first;
-      newRoomId = latestRoom['roomId'];
+
+      try {
+        newRoomId = latestRoom['roomId'];
+        // Convert the roomId from string to integer and format it
+        int parsedRoomId = int.tryParse(newRoomId) ?? 0;
+        newRoomId = formatRoomId(parsedRoomId);
+      } catch (e) {
+        newRoomId = formatRoomId(1);  // Default roomId if there's an error
+        debugPrint('Error parsing roomId: $e');
+      }
+
       userCount = latestRoom['userCount'];
       userIds = List<String>.from(latestRoom['userIds'] ?? []);
 
-      debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
+      debugPrint('*************************************Latest room ID: $newRoomId with $userCount user(s)');
 
       // If the room is full (2 users), create a new room
       if (userCount >= 2) {
-        newRoomId = (int.parse(newRoomId) + 1).toString();
+        int nextRoomId = int.parse(newRoomId) + 1;
+        newRoomId = formatRoomId(nextRoomId);
         userCount = 0;
         userIds = [];
         debugPrint('Room is full. Creating a new room with ID: $newRoomId');
@@ -235,8 +254,8 @@ class FirebaseService {
         debugPrint('Adding to the existing room with ID: $newRoomId');
       }
     } else {
-      // Start with roomId 1 if no rooms exist
-      newRoomId = '1';
+      // Start with roomId '000001' if no rooms exist
+      newRoomId = formatRoomId(1);
       userCount = 0;
       userIds = [];
       debugPrint('No rooms found. Starting with room ID: $newRoomId');
@@ -319,94 +338,6 @@ class FirebaseService {
     });
   }
 
-
-
-
-//
-  // ///========== Room ID and Group Call Handling ==========>
-  // Future<void> startGroupCall(BuildContext context, String userName) async {
-  //   // Fetch the latest room ID from Firestore
-  //   debugPrint('Fetching the latest room ID...');
-  //   QuerySnapshot roomQuery = await fireStore.collection('rooms')
-  //       .orderBy('roomId', descending: true)
-  //       .limit(1)
-  //       .get();
-  //
-  //   String newRoomId;
-  //   int userCount;
-  //
-  //   if (roomQuery.docs.isNotEmpty) {
-  //     var latestRoom = roomQuery.docs.first;
-  //     newRoomId = latestRoom['roomId'];
-  //     userCount = latestRoom['userCount'];
-  //
-  //     debugPrint('Latest room ID: $newRoomId with $userCount user(s)');
-  //
-  //     // If the room is full (2 users), create a new room
-  //     if (userCount >= 2) {
-  //       newRoomId = (int.parse(newRoomId) + 1).toString();
-  //       userCount = 0;
-  //       debugPrint('Room is full. Creating a new room with ID: $newRoomId');
-  //     } else {
-  //       debugPrint('Adding to the existing room with ID: $newRoomId');
-  //     }
-  //   } else {
-  //     // Start with roomId 1 if no rooms exist
-  //     newRoomId = '1';
-  //     userCount = 0;
-  //     debugPrint('No rooms found. Starting with room ID: $newRoomId');
-  //   }
-  //
-  //   // Update room data
-  //   await fireStore.collection('rooms').doc(newRoomId).set({
-  //     'roomId': newRoomId,
-  //     'userCount': userCount + 1,
-  //   });
-  //
-  //   debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
-  //
-  //   // Only start the call if the room has 2 users
-  //   if (userCount + 1 == 2) {
-  //     debugPrint('Room is ready. Starting call in room $newRoomId');
-  //
-  //     // Navigate to the call screen
-  //     Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder: (context) => ZegoUIKitPrebuiltCall(
-  //           appID: Config.appId,
-  //           appSign: Config.appSign,
-  //           userID: userName,
-  //           userName: userName,
-  //           plugins: [ZegoUIKitSignalingPlugin()],
-  //           callID: newRoomId,
-  //           config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
-  //         ),
-  //       ),
-  //     );
-  //   } else {
-  //     debugPrint('Waiting for more users to join room $newRoomId');
-  //     // Optional: Show a waiting message or UI
-  //   }
-  // }
-
-
-
-
-
-
-
 }
 
 
-
-
-
-
-class ExampleScreen extends StatelessWidget {
-  const ExampleScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}

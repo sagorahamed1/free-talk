@@ -47,7 +47,7 @@ class HomeController extends GetxController {
       "feeling" : "$feeling",
       "reviewId" : "$senderId"
     };
-    firebaseService.appendReviewToList("receverId", body, collectionName: "reviews");
+    firebaseService.appendReviewToList("$receverId", body, collectionName: "reviews");
 
     Get.offNamed(AppRoutes.homeScreen);
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +5,6 @@ import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 
 import '../../../controllers/home_controller.dart';
 import '../../../services/theme_manager.dart';
@@ -140,7 +138,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     senderId: "${data['senderId']}",
                     receverId: "${data['receiverId']}",
                     description: reviewCtrl.text,
-                    feeling: "$selectedButton",
+                    feeling: selectedButton,
                     rating: rating.value,
                     reviewerName: "${data['name']}"
                   );
