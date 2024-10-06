@@ -99,7 +99,6 @@ class FirebaseService {
       await fireStore.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
         if (!snapshot.exists) {
-          // If no document exists, create it with an initial review list
           transaction.set(docRef, {
             'reviewsList': [newReview],
           });

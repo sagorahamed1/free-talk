@@ -182,8 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isDark: themeController.isDarkTheme.value,
                             onTap: () {},
                             title: 'Gender',
-                            subTitle:
-                                '${profileController.userData.value.gender}',
+                            subTitle: '${profileController.userData.value.gender}',
                             icon: AppIcons.profile,
                           ),
                           CustomListTileSvgPic(
