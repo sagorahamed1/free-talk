@@ -30,6 +30,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     print("==============sender : ${data['senderId']}");
     print("==============receiverId : ${data['receiverId']}");
+    print("==============time : ${data['time']}");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -140,7 +141,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     description: reviewCtrl.text,
                     feeling: selectedButton,
                     rating: rating.value,
-                    reviewerName: "${data['name']}"
+                    reviewerName: "${data['name']}",
+                    talkTime: "${data['time']}"
                   );
                   // Get.offNamed(AppRoutes.homeScreen);
                 }),

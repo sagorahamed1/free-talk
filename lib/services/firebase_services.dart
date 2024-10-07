@@ -205,6 +205,8 @@ class FirebaseService {
 
   Future<void> startGroupCall(BuildContext context, String currentUserId, String name) async {
     const int roomIdLength = 6; // Define the desired length of roomId with leading zeros
+    DateTime? callStartTime;
+
 
     // Function to format roomId with leading zeros
     String formatRoomId(int roomId) {
@@ -292,6 +294,7 @@ class FirebaseService {
 
         if (fetchedUserIds.isNotEmpty) {
           for (var userId in fetchedUserIds) {
+            print("**************************************************************users $userId");
             if (userId == currentUserId) {
               senderId = userId;
             } else {
@@ -302,8 +305,10 @@ class FirebaseService {
 
         // Handle call when 2 users are present and room is active
         if (updatedUserCount == 2 && isActive) {
+          callStartTime = DateTime.now();
           debugPrint('Room is ready. Starting call in room $newRoomId');
           debugPrint('Sender ID: $senderId, Receiver ID: $receiverId');
+
 
           // Navigate to the call screen for a 2-person group call
           Navigator.of(context).push(
@@ -317,11 +322,15 @@ class FirebaseService {
                 callID: newRoomId,
                 config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
                 onDispose: () {
+                  DateTime callEndTime = DateTime.now();
+                  Duration callDuration = callEndTime.difference(callStartTime!);
+                  int durationInMinutes = callDuration.inMinutes;
                   Future.delayed(const Duration(milliseconds: 100), () {
                     Get.toNamed(AppRoutes.reviewScreen, arguments: {
                       'senderId': senderId,
                       'receiverId': receiverId,
-                      'name' : name
+                      'name' : name,
+                      "time" : durationInMinutes
                     });
                   });
                 },

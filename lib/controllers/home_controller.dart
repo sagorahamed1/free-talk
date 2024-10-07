@@ -40,7 +40,7 @@ class HomeController extends GetxController {
 
 
 
-  review({required String senderId, receverId, description, reviewerName, rating, feeling, })async{
+  review({required String senderId, receverId, description, reviewerName, rating, feeling, talkTime})async{
     var body = {
       "description" : "$description",
       "reviewName" : "$reviewerName",
@@ -48,7 +48,34 @@ class HomeController extends GetxController {
       "feeling" : "$feeling",
       "reviewId" : "$senderId"
     };
-    firebaseService.appendReviewToList("$receverId", body, collectionName: "reviews");
+    firebaseService.appendReviewToList("$senderId", body, collectionName: "reviews");
+
+
+    // Get the current user data
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(senderId).get();
+    if (userDoc.exists) {
+      var userData = userDoc.data() as Map<String, dynamic>;
+
+      // Calculate updated values
+      int totalTalkTime = (userData['total_talk_time'] as String).isEmpty ? 0 : int.parse(userData['total_talk_time']) + int.parse(talkTime);
+      int totalReview = (userData['total_review'] as String).isEmpty ? 0 : int.parse(userData['total_review']);
+      int totalCall = (userData['total_call'] as String).isEmpty ? 0 : int.parse(userData['total_call']);
+
+      // Create the updated body for Firestore
+      var updatedBody = {
+        "total_talk_time": totalTalkTime.toString(),
+        "total_review": (totalReview+1).toString(),
+        "total_call": (totalCall+1).toString(),
+      };
+
+      // Update user data in Firestore
+      await firebaseService.updateData(
+        userId: senderId,
+        collection: "users",
+        updatedData: updatedBody,
+      );
+    }
+
 
     Get.offNamed(AppRoutes.homeScreen);
   }
