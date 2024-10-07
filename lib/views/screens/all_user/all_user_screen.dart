@@ -45,7 +45,7 @@ class AllUserScreen extends StatelessWidget {
                       top: index == 0 ? 18.h : 0,
                         bottom: 16.h),
                     child: UserCard(
-                      image:  "${AppImages.man2}",
+                      image:  "${user.image}",
                       labal: '${user.label}',
                       name: user.name,
                       // viewProfileOnTap: () {

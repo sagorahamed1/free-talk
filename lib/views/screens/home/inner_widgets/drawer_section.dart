@@ -18,9 +18,10 @@ import 'custom_list_tile.dart';
 class DrawerSection extends StatefulWidget {
   final bool isDark;
   final String name;
+  final String image;
   final VoidCallback onTap;
 
-  const DrawerSection({super.key, required this.onTap, required this.isDark, required this.name});
+  const DrawerSection({super.key, required this.onTap, required this.isDark, required this.name, required this.image});
 
   @override
   State<DrawerSection> createState() => _DrawerSectionState();
@@ -48,14 +49,14 @@ class _DrawerSectionState extends State<DrawerSection> {
               children: [
                 CustomNetworkImage(
                   boxShape: BoxShape.circle,
-                  imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaDL5AkQCUbh7QLz5mF5-TgDXHnMMYmvWiiw&s',
+                  imageUrl: widget.image,
                   height: 50.h,
                   width: 50.w,
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
                   child:  Text(
-                    '${widget.name}',
+                    widget.name,
                     style: TextStyle(
                       fontSize: 20.h,
                       fontWeight: FontWeight.bold,

@@ -5,6 +5,7 @@ class ReviewModel {
   String reviewId;
   String reviewName;
   String time;
+  String image;
 
 
   ReviewModel({
@@ -13,7 +14,8 @@ class ReviewModel {
     required this.rating,
     required this.reviewId,
     required this.reviewName,
-    required this.time
+    required this.time,
+    required this.image
 
   });
 
@@ -25,6 +27,7 @@ class ReviewModel {
       'reviewId': reviewId,
       'reviewName': reviewName,
       'time': time,
+      'image': image,
     };
   }
 
@@ -36,6 +39,7 @@ class ReviewModel {
       reviewId: map['reviewId'],
       reviewName: map['reviewName'],
       time: map['time'],
+      image: map['image'],
     );
   }
 }

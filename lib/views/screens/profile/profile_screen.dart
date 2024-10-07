@@ -83,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       alignment: Alignment.topCenter,
                       child: CustomNetworkImage(
                         imageUrl:
-                            '${AppImages.female2}',
+                            profileController.userData.value.image,
                         height: 110.h,
                         width: 110.w,
                         boxShape: BoxShape.circle,
@@ -104,9 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     SizedBox(height: 15.h),
 
-                    GestureDetector(
+                    Get.parameters["screenType"] == 'home' ? const SizedBox.shrink() :  GestureDetector(
                       onTap: (){
-                        Get.toNamed(AppRoutes.editProfileScreen);
+                        Get.toNamed(AppRoutes.editProfileScreen, arguments:  "$currectUser");
                       },
                       child: Container(
                         width: 130.w,
@@ -241,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   padding: EdgeInsets.only(bottom: 16.h),
                                   child: TopReviewsCardForProfile(
                                     isDark: themeController.isDarkTheme.value,
-                                    image: AppImages.female2,
+                                    image: review.image,
                                     description: "${review.description}",
                                     rathing: review.rating,
                                     reviewName: review.reviewName,

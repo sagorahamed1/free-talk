@@ -16,8 +16,6 @@ class ProfileController extends GetxController{
   FirebaseService firebaseService = FirebaseService();
   Rx<UserProfileModel> userData = UserProfileModel().obs;
 
-
-
   @override
   void onInit() {
     super.onInit();
@@ -40,6 +38,7 @@ class ProfileController extends GetxController{
 
         if (data != null) {
           userData.value = UserProfileModel.fromMap(data);
+          await PrefsHelper.setString(AppConstants.image, userData.value.image);
           print("User data fetched: ${userData.value}");
         }
       } else {

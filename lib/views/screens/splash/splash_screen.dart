@@ -7,6 +7,7 @@ import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/utils/app_constants.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/profile_controller.dart';
 import '../../../routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,19 +18,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  ProfileController profileController = Get.put(ProfileController());
 
 
   @override
   void initState() {
+
     super.initState();
     Timer(const Duration(seconds: 5), () async{
-
       bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
+
       if(isLogged){
         Get.offAllNamed(AppRoutes.homeScreen);
       }else{
         Get.offAllNamed(AppRoutes.logInScreen);
       }
+
+      var userid = await PrefsHelper.getString(AppConstants.currentUser);
+      profileController.getProfileData(userid);
 
     });
     super.initState();

@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final bool isDarkMode = Get.isDarkMode;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? currectUser;
+  String? userImage;
   RxString currectName = ''.obs;
 
   @override
@@ -41,9 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadCurrentUserId() async {
     String? userId = await PrefsHelper.getString(AppConstants.currentUser);
     String? userName = await PrefsHelper.getString(AppConstants.name);
+    String? image = await PrefsHelper.getString(AppConstants.image);
     setState(() {
       currectUser = userId;
       currectName.value = userName;
+      userImage= image;
     });
   }
 
@@ -88,8 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     homeController.fetchAllUsers();
-    print(
-        '=========================================== current userid : $currectUser');
+    print('=========================================== current userid : $currectUser');
     return Scaffold(
       backgroundColor: themeController.isDarkTheme.value
           ? const Color(0xff1d1b32)
@@ -98,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: DrawerSection(
         isDark: themeController.isDarkTheme.value,
         name: currectName.value,
+        image: "$userImage",
         onTap: () {
           Navigator.of(context)
               .pop(); // Close the drawer when the close button is tapped
@@ -314,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Row(
                                       children: [
                                         CustomNetworkImage(
-                                            imageUrl: AppImages.man2,
+                                            imageUrl: user.image,
                                             height: 60.h,
                                             width: 44.w,
                                             boxShape: BoxShape.circle),
