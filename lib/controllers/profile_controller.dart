@@ -67,6 +67,7 @@ class ProfileController extends GetxController{
         List<dynamic> reviewsList = data['reviewsList'] ?? [];
 
         for (var reviewData in reviewsList) {
+          print("-------------------------------------Reviews $reviewData");
           reviews.add(ReviewModel.fromMap(reviewData));
         }
       } else {

@@ -46,7 +46,8 @@ class HomeController extends GetxController {
       "reviewName" : "$reviewerName",
       "rating" : "$rating",
       "feeling" : "$feeling",
-      "reviewId" : "$senderId"
+      "reviewId" : "$senderId",
+      "time" : DateTime.now().toString()
     };
     firebaseService.appendReviewToList("$senderId", body, collectionName: "reviews");
 

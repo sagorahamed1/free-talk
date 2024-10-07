@@ -7,7 +7,6 @@ class ReviewModel {
   String time;
   String image;
 
-
   ReviewModel({
     this.description,
     required this.feeling,
@@ -15,8 +14,7 @@ class ReviewModel {
     required this.reviewId,
     required this.reviewName,
     required this.time,
-    required this.image
-
+    required this.image,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,13 +31,13 @@ class ReviewModel {
 
   factory ReviewModel.fromMap(Map<String, dynamic> map) {
     return ReviewModel(
-      description: map['description'],
-      feeling: map['feeling'],
-      rating: map['rating'],
-      reviewId: map['reviewId'],
-      reviewName: map['reviewName'],
-      time: map['time'],
-      image: map['image'],
+      description: map['description'] ?? '', // Default to empty string if null
+      feeling: map['feeling'] ?? '',         // Default to empty string if null
+      rating: map['rating'] ?? '0',           // Default rating to '0' if null
+      reviewId: map['reviewId'] ?? '',       // Default to empty string if null
+      reviewName: map['reviewName'] ?? '',   // Default to empty string if null
+      time: map['time'] ?? DateTime.now().toString(), // Default to now if null
+      image: map['image'] ?? '',              // Default to empty string if null
     );
   }
 }
