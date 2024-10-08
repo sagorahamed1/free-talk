@@ -203,7 +203,7 @@ class FirebaseService {
 
 
 
-  Future<void> startGroupCall(BuildContext context, String currentUserId, String name) async {
+  Future<void> startGroupCall(BuildContext context, String currentUserId, String name, String image) async {
     const int roomIdLength = 6; // Define the desired length of roomId with leading zeros
     DateTime? callStartTime;
 
@@ -317,10 +317,46 @@ class FirebaseService {
                 appID: Config.appId,
                 appSign: Config.appSign,
                 userID: currentUserId,
-                userName: currentUserId,
+                userName: "",
                 plugins: [ZegoUIKitSignalingPlugin()],
                 callID: newRoomId,
-                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+                  ..avatarBuilder = (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+                    return user != null
+                        ? Column(
+                          children: [
+                            // Avatar Image with 200x200 size
+                            Container(
+                              height: 80,
+                              width: 80,  // Setting width and height to 200
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(image),
+                                  fit: BoxFit.cover,  // Ensures the image fits within the circle
+                                ),
+                              ),
+                            ),
+
+                            // Caller Name Below the Image with Overflow Handling
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                user.name,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,  // Handles name overflow
+                                maxLines: 1,  // Restricts to one line
+                                textAlign: TextAlign.center,  // Aligns name to center
+                              ),
+                            ),
+                          ],
+                        )
+                        : const SizedBox();
+                  },
                 onDispose: () {
                   DateTime callEndTime = DateTime.now();
                   Duration callDuration = callEndTime.difference(callStartTime!);

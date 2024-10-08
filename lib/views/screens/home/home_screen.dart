@@ -8,6 +8,7 @@ import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:get/get.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../helpers/prefs_helper.dart';
+import '../../../helpers/toast_message_helper.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/firebase_services.dart';
 import '../../../services/theme_manager.dart';
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       currectUser = userId;
       currectName.value = userName;
-      userImage= image;
+      userImage = image;
     });
   }
 
@@ -107,7 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: CallInvitation(
-        userName: "$currectUser",
+        userId: "$currectUser",
+        userName: "$currectName",
         child: SafeArea(
           child: Stack(
             children: [
@@ -246,15 +248,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             Obx(
                               () => GestureDetector(
-                                onTap: () {
-                                  homeController.startTimer();
-                                  if (homeController.isCalling.value) {
-                                    FirebaseService().startGroupCall(
-                                        context, '$currectUser', currectName.value);
-                                    homeController.isCalling(true);
-                                  }
+                                // onTap: () {
+                                //    homeController.startTimer();
+                                //   if (homeController.isCalling.value) {
+                                //       FirebaseService().startGroupCall(context, '$currectUser', currectName.value);
+                                //   }
+                                // },
 
-                                  // startGroupCall(context, roomIdController.text, userNameController.text);
+                                onTap: () {
+                                  if (!homeController.isCalling.value) {
+                                    homeController.startTimer();
+                                    if (homeController.isCalling.value) {
+                                      FirebaseService().startGroupCall(context, '$currectUser', currectName.value, "$userImage");
+                                    }
+                                  } else {
+                                    print("You can't make a call within 20 seconds of the last call.");
+                                    ToastMessageHelper.showToastMessage("Please wait 20 seconds before making another call.");
+                                  }
                                 },
                                 child: Container(
                                   width: double.infinity,

@@ -49,11 +49,11 @@ class HomeController extends GetxController {
       "reviewId" : "$senderId",
       "time" : DateTime.now().toString()
     };
-    firebaseService.appendReviewToList("$senderId", body, collectionName: "reviews");
+    firebaseService.appendReviewToList("$receverId", body, collectionName: "reviews");
 
 
     // Get the current user data
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(senderId).get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(receverId).get();
     if (userDoc.exists) {
       var userData = userDoc.data() as Map<String, dynamic>;
 
@@ -71,7 +71,7 @@ class HomeController extends GetxController {
 
       // Update user data in Firestore
       await firebaseService.updateData(
-        userId: senderId,
+        userId: receverId,
         collection: "users",
         updatedData: updatedBody,
       );
@@ -107,8 +107,8 @@ class HomeController extends GetxController {
 
 
 
-  var secondsRemaining = 30.obs;  // Observable for the timer
-  var buttonLabel = "Start Call".obs;  // Observable for the button label
+  var secondsRemaining = 20.obs;  // Timer for 20 seconds
+  var buttonLabel = "Start Call".obs;  // Observable for button label
   late Timer _timer;
   var isCalling = false.obs; // Track call state
 
@@ -128,10 +128,9 @@ class HomeController extends GetxController {
         if (secondsRemaining.value > 0) {
           secondsRemaining.value--;
         } else {
-          // Reset after 50 seconds
           buttonLabel.value = "Start Call";  // Reset button label
           isCalling.value = false;  // Reset call state
-          secondsRemaining.value = 50;  // Reset the timer
+          secondsRemaining.value = 20;  // Reset the timer
           _timer.cancel();
         }
       });

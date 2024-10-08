@@ -7,14 +7,15 @@ import '../../utils/Config.dart';
 class CallInvitation extends StatelessWidget {
   final Widget child;
   final String userName;
-  const CallInvitation({super.key, required this.child, required this.userName});
+  final String userId;
+  const CallInvitation({super.key, required this.child, required this.userName, required this.userId});
 
   @override
   Widget build(BuildContext context) {
     ZegoUIKitPrebuiltCallInvitationService().init(
       appID: Config.appId,
       appSign: Config.appSign,
-      userID: userName,
+      userID: userId,
       userName: userName,
       plugins: [ZegoUIKitSignalingPlugin()],
     );
