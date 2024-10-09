@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:free_talk/controllers/auth_controller.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
+import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/utils/app_icons.dart';
 import 'package:free_talk/views/base/custom_botton.dart';
 import 'package:free_talk/views/base/custom_text_field.dart';
@@ -157,6 +158,15 @@ class LogInScreen extends StatelessWidget {
 
 
 
+                  CustomBotton(title: "facebook login", onpress: (){
+                    FirebaseService.signInWithFacebook();
+                  }),
+
+
+
+                  CustomBotton(title: "facebook sign out", onpress: (){
+                    FirebaseService.signOutFromFacebook();
+                  }),
 
 
                   // Divider with OR

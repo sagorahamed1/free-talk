@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="facebook_app_id">959735992582314</string>
+<string name="fb_login_protocol_scheme">fb959735992582314</string>
+<string name="facebook_client_token">22cc9b1fa1bcb6f708ddb3a48da870fa</string>
+<string name="app_name">"free talk"</string>
+</resources>
