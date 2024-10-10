@@ -55,7 +55,6 @@ class CustomNetworkImage extends StatelessWidget {
             borderRadius:borderRadius,
             shape: boxShape,
           ),
-          child: const Icon(Icons.error),
         )
     );
   }

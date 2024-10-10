@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -307,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       () => ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: homeController.users.length,
+                          itemCount: min(homeController.users.length, 4),
                           itemBuilder: (context, index) {
                             var user = homeController.users[index];
 
@@ -435,7 +437,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             } else if(2 == 2) {
                                 currectName.value = user.name;
-
                               saveName(user.name);
                               return const SizedBox.shrink();
                             }

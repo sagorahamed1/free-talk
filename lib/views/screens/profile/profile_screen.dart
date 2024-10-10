@@ -106,7 +106,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     Get.parameters["screenType"] == 'home' ? const SizedBox.shrink() :  GestureDetector(
                       onTap: (){
-                        Get.toNamed(AppRoutes.editProfileScreen, arguments:  "$currectUser");
+                        Get.toNamed(AppRoutes.editProfileScreen, arguments:  {
+                          "id" : '${"$currectUser"}',
+                          "gender" : profileController.userData.value.gender,
+                          "image" : "${profileController.userData.value.image}"
+                        });
                       },
                       child: Container(
                         width: 130.w,
