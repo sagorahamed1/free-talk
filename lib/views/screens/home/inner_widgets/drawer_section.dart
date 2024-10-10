@@ -161,7 +161,9 @@ class _DrawerSectionState extends State<DrawerSection> {
                                         await PrefsHelper.remove(AppConstants.name);
                                         await PrefsHelper.remove(AppConstants.email);
                                         await PrefsHelper.remove(AppConstants.isLogged);
-                                        FirebaseService().signOut();
+                                        await FirebaseService().signOut();
+                                       await FirebaseService.signOutFromFacebook();
+                                        await FirebaseService.googleSignOut();
                                          Get.toNamed(AppRoutes.logInScreen);
                                       },
                                     )),

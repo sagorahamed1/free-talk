@@ -6,6 +6,7 @@ import 'package:free_talk/helpers/toast_message_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import '../firebase_options.dart';
@@ -26,24 +27,19 @@ class FirebaseService {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
   }
-  //
-  // ///==============google sign in================>
-  // Future<UserCredential> signInWithGoogle() async {
-  //   // Trigger the authentication flow
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //
-  //   // Obtain the auth details from the request
-  //   final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-  //
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth?.accessToken,
-  //     idToken: googleAuth?.idToken,
-  //   );
-  //
-  //   // Once signed in, return the UserCredential
-  //   return await FirebaseAuth.instance.signInWithCredential(credential);
-  // }
+
+  ///==============google sign in================>
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+
 
   ///====================facebook sign out================>
   static Future<void> signOutFromFacebook() async {
@@ -61,29 +57,33 @@ class FirebaseService {
   }
 
 
-  ///====================facebook sign in================>
-  static Future<UserCredential?> signInWithFacebook() async {
+  static Future<void> googleSignOut() async {
     try {
-      // Trigger the Facebook sign-in flow
+      // Google Sign-In থেকে সাইন আউট
+      await GoogleSignIn().signOut();
+      // Firebase Authentication থেকে সাইন আউট
+      await FirebaseAuth.instance.signOut();
+      print("User signed out from Google and Firebase");
+    } catch (e) {
+      print("Error signing out: $e");
+    }
+  }
+
+
+  ///====================facebook sign in================>
+   Future<UserCredential?> signInWithFacebook() async {
+    try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
-
-      // If the login was successful
       if (loginResult.status == LoginStatus.success) {
-        // Create a credential from the access token
         final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential("${loginResult.accessToken?.tokenString}");
-
-        // Try signing in to Firebase with the Facebook credential
         UserCredential userCredential;
         try {
           userCredential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
           print('User signed in: ${userCredential.user?.email}');
           return userCredential;
         } on FirebaseAuthException catch (e) {
-          // If the account already exists with different credential
           if (e.code == 'account-exists-with-different-credential') {
             final List<String> userSignInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(e.email!);
-
-            // You can now prompt the user to use the correct sign-in method
             print('The user has already signed in with one of the following methods: $userSignInMethods');
           }
           throw e;
@@ -112,7 +112,6 @@ class FirebaseService {
        if (e.code == 'email-already-in-use') {
          ToastMessageHelper.showToastMessage('The email address is already in use by another account.');
          debugPrint("The email address is already in use by another account.");
-         // You can show a message to the user here
        } else {
          debugPrint("Registration Error: $e");
        }

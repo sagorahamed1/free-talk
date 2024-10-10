@@ -133,7 +133,7 @@ class LogInScreen extends StatelessWidget {
                   ///===========log in button======>
                   CustomBotton(
                     loading: authController.loginLoading.value,
-                      title: 'Log In', onpress: (){
+                      title: 'Sign In', onpress: (){
                     if(_formKey.currentState!.validate()){
                       ///======log in code
                       authController.logIn(
@@ -156,19 +156,58 @@ class LogInScreen extends StatelessWidget {
 
                   SizedBox(height: 24.h),
 
+                  // Divider with OR
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                          thickness: 1.2,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        child: Text(
+                          "Or Sign In With",
+                          style: TextStyle(
+                            color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                          thickness: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 18.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+
+                      ///***********facebook**************/
+                      GestureDetector(
+                          onTap: (){
+                            authController.facebookSign();
+                          },
+                          child: SvgPicture.asset(AppIcons.facebook)),
+
+                      SizedBox(width: 20.w),
+                      ///****************google ************.
+                      GestureDetector(
+                          onTap: (){
+                            authController.googleLogin();
+                          },
+                          child: SvgPicture.asset(AppIcons.google)),
+
+                    ],
+                  ),
 
 
-                  CustomBotton(title: "facebook login", onpress: (){
-                    FirebaseService.signInWithFacebook();
-                  }),
-
-
-
-                  CustomBotton(title: "facebook sign out", onpress: (){
-                    FirebaseService.signOutFromFacebook();
-                  }),
-
-
+                  SizedBox(height: 18.h),
                   // Divider with OR
                   Row(
                     children: [
@@ -195,7 +234,7 @@ class LogInScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 16.h),
 
 
 

@@ -18,4 +18,6 @@ class AppIcons{
   static const String man = "$path/man.svg";
   static const String manWoman = "$path/Man-and-woman-icon.svg";
   static const String logOut = "$path/logOut.svg";
+  static const String facebook = "$path/facebook.svg";
+  static const String google = "$path/google.svg";
 }
