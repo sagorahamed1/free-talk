@@ -15,7 +15,7 @@
 
 
     <application
-        android:label="Free Talk"
+        android:label="SayHi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
