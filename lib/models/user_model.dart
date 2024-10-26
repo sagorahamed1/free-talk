@@ -8,6 +8,7 @@ class UserProfileModel {
   final String image;
   final String label;
   final String name;
+  final String isActive;
   final String totalCall;
   final String totalTalkTime;
   final String totalReviews;
@@ -22,6 +23,7 @@ class UserProfileModel {
     this.image = '',
     this.label = '',
     this.name = '',
+    this.isActive = '',
     this.totalCall = '',
     this.totalTalkTime = '',
     this.totalReviews = '',
@@ -38,6 +40,7 @@ class UserProfileModel {
       image: map['image'] ?? '',
       label: map['label'] ?? '',
       name: map['name'] ?? '',
+      isActive: map['isActive'] ?? '',
       totalCall: map['total_call'] ?? '',
       totalTalkTime: map['total_talk_time'] ?? '',
       totalReviews: map['total_review'] ?? '',
@@ -55,6 +58,7 @@ class UserProfileModel {
       'image': image,
       'label': label,
       'name': name,
+      'isActive': isActive,
       'total_call': totalCall,
       'total_talk_time': totalTalkTime,
       'total_review': totalReviews,

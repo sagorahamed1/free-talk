@@ -13,15 +13,21 @@ import '../profile/profile_screen.dart';
 
 
 
-class BottomMenu extends StatelessWidget {
+class BottomMenu extends StatefulWidget {
   final int menuIndex;
 
   const BottomMenu(this.menuIndex, {super.key});
 
-  Color colorByIndex(ThemeData theme, int index) {
-    return index == menuIndex ? Colors.blueAccent : theme.disabledColor;
-  }
+  @override
+  State<BottomMenu> createState() => _BottomMenuState();
+}
 
+class _BottomMenuState extends State<BottomMenu> {
+
+
+  Color colorByIndex(ThemeData theme, int index) {
+    return index == widget.menuIndex ? Colors.blueAccent : theme.disabledColor;
+  }
 
   BottomNavigationBarItem getItem(
       String image, String title, ThemeData theme, int index) {
@@ -39,12 +45,11 @@ class BottomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeController themeController = Get.find<ThemeController>();
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(0 == menuIndex ? AppIcons.home : AppIcons.home2, 'Home',
+      getItem(0 == widget.menuIndex ? AppIcons.home : AppIcons.home2, 'Home',
           theme, 0),
-      getItem(1 == menuIndex ? AppIcons.profile : AppIcons.profile,
+      getItem(1 == widget.menuIndex ? AppIcons.profile : AppIcons.profile,
           'Profile', theme, 1),
     ];
 
@@ -67,7 +72,7 @@ class BottomMenu extends StatelessWidget {
             selectedItemColor: Colors.lightBlue,
             selectedIconTheme: const IconThemeData(color: Colors.lightBlue),
             // unselectedIconTheme: IconThemeData(color: isDark ?? false ? Colors.white : Colors.black),
-            currentIndex: menuIndex,
+            currentIndex: widget.menuIndex,
             onTap: (value) {
               FocusScope.of(context).unfocus();
               switch (value) {

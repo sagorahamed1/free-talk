@@ -8,6 +8,7 @@ import 'package:free_talk/utils/app_colors.dart';
 import 'package:free_talk/views/base/call_invitation.dart';
 import 'package:free_talk/views/base/custom_network_image.dart';
 import 'package:get/get.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../helpers/prefs_helper.dart';
 import '../../../helpers/toast_message_helper.dart';
@@ -393,43 +394,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                         SizedBox(width: 10.w),
 
-                                        GestureDetector(
-                                          onTap: (){
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                      contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          horizontal: 16.w,
-                                                          vertical: 10.h),
-                                                      content: const CustomDialog(),
-                                                      elevation: 12.0,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(12.r),
-                                                          side: BorderSide(
-                                                              width: 1.w,
-                                                              color: Colors
-                                                                  .blueAccent)));
-                                                });
-                                          },
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: themeController
-                                                          .isDarkTheme.value
-                                                      ? AppColors.backGroundDark
-                                                      : AppColors
-                                                          .backGroundLight,
-                                                  shape: BoxShape.circle),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(6.r),
-                                                child: const Icon(Icons.call,
-                                                    color: AppColors
-                                                        .textColorGreen),
-                                              )),
-                                        )
+                                        callBtn(context, email: user.email, name: user.name, isActive : user.isActive),
+
+                                        // SizedBox(
+                                        //     height: 40,
+                                        //     width: 40,
+                                        //     child: Center(child: actionButton(context, email: user.email, name: user.name, isActive : user.isActive))),
+
+
+                                        // GestureDetector(
+                                        //   onTap: (){
+                                        //     showDialog(
+                                        //         context: context,
+                                        //         builder: (context) {
+                                        //           return AlertDialog(
+                                        //               contentPadding:
+                                        //               EdgeInsets.symmetric(
+                                        //                   horizontal: 16.w,
+                                        //                   vertical: 10.h),
+                                        //               content: const CustomDialog(),
+                                        //               elevation: 12.0,
+                                        //               shape: RoundedRectangleBorder(
+                                        //                   borderRadius:
+                                        //                   BorderRadius
+                                        //                       .circular(12.r),
+                                        //                   side: BorderSide(
+                                        //                       width: 1.w,
+                                        //                       color: Colors
+                                        //                           .blueAccent)));
+                                        //         });
+                                        //   },
+                                        //   child: Container(
+                                        //       decoration: BoxDecoration(
+                                        //           color: themeController
+                                        //                   .isDarkTheme.value
+                                        //               ? AppColors.backGroundDark
+                                        //               : AppColors
+                                        //                   .backGroundLight,
+                                        //           shape: BoxShape.circle),
+                                        //       child: Padding(
+                                        //         padding: EdgeInsets.all(6.r),
+                                        //         child: const Icon(Icons.call,
+                                        //             color: AppColors
+                                        //                 .textColorGreen),
+                                        //       )),
+                                        // )
                                       ],
                                     ),
                                   ),
@@ -451,6 +460,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+
+  Widget callBtn(BuildContext context, {String? name, String? email, isActive}){
+    if(isActive == "true"){
+      return   SizedBox(
+          height: 40,
+          width: 40,
+          child: Center(child: actionButton(context, email: email, name: name, isActive : isActive)));
+    }else{
+      ToastMessageHelper.showToastMessage("$name is offline now!");
+      return const SizedBox();
+    }
   }
 
   Widget _seeAll(String leftText, String seeAllText, VoidCallback onTap) {
@@ -487,6 +509,41 @@ class _HomeScreenState extends State<HomeScreen> {
   saveName(String name)async{
     await PrefsHelper.setString(AppConstants.name, name);
   }
+
+  ZegoSendCallInvitationButton? actionButton(BuildContext context, {String? name, String? email, isActive}) {
+      return ZegoSendCallInvitationButton(
+        buttonSize: const Size(40, 40),
+        iconSize: const Size(40, 40),
+        icon: ButtonIcon(icon: const Icon(Icons.call, color: AppColors.textColorGreen, size: 16)),
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        clickableBackgroundColor: themeController.isDarkTheme.value
+            ? AppColors.backGroundDark
+            : AppColors.backGroundLight,
+        invitees: [
+          ZegoUIKitUser(
+            id: email ?? '',
+            name: name ?? 'Guest',
+          )
+        ],
+        resourceID: 'zegouikit_call',
+        isVideoCall: false,
+      );
+  }
+
+
+
+// call({String? name, email}){
+//     return   ZegoSendCallInvitationButton(
+//       isVideoCall: false,
+//       invitees: [
+//         ZegoUIKitUser(
+//           id: "$email",
+//           name: "$name",
+//         ),
+//       ],
+//     );
+// }
 }
 
 ///ads
@@ -497,4 +554,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //                     child: AdWidget(ad: _bannerAd!),
 //                   ),
 //                 SizedBox(height: 12.h),
+
+
 

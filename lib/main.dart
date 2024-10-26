@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/services/firebase_services.dart';
 import 'package:free_talk/services/theme_manager.dart';
+import 'package:free_talk/utils/app_constants.dart';
 import 'package:free_talk/views/screens/splash/splash_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -43,8 +45,44 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
   ThemeController themeController = Get.find<ThemeController>();
+  FirebaseService firebase =  FirebaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("*********************************************************************user in to this app1");
+    activeCall();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  activeCall()async{
+    var id = await PrefsHelper.getString(AppConstants.currentUser);
+    firebase.updateData(userId: "$id" , collection: "users", updatedData: {"isActive" : "true"});
+  }
+
+  @override
+  void dispose() {
+    debugPrint("*********************************************************************user in to this app2");
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async{
+    var id = await PrefsHelper.getString(AppConstants.currentUser);
+    super.didChangeAppLifecycleState(state); // This line is important
+    if (state == AppLifecycleState.paused) {
+      firebase.updateData(userId: "$id" , collection: "users", updatedData: {"isActive" : "false"});
+      debugPrint("*********************************************************************user in to this app5");
+      debugPrint("App is going to background");
+    } else if (state == AppLifecycleState.resumed) {
+      firebase.updateData(userId: "$id" , collection: "users", updatedData: {"isActive" : "true"});
+      debugPrint("*********************************************************************user back to this app");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
