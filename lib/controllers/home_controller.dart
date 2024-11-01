@@ -7,24 +7,51 @@ import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
 import 'package:free_talk/utils/app_constants.dart';
 import 'package:free_talk/utils/app_icons.dart';
+import 'package:free_talk/views/screens/call/voice_call_screen.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import '../services/firebase_services.dart';
+import '../utils/utils.dart';
 
 class HomeController extends GetxController {
   FirebaseService firebaseService = FirebaseService();
   var users = <UserProfileModel>[].obs;
   RxBool userGetLoading = false.obs;
-  // RxString currectUser = ''.obs;
 
+
+
+  ///******************Create Room***************...
+  void createRoom(String roomId) async {
+    await Utils.signaling.openUserMedia(Utils.localRenderer, Utils.remoteRenderer).then((_) async {
+      update();
+    });
+    Utils.roomId = await Utils.signaling.createRoom(Utils.remoteRenderer, roomId.toString());
+    Get.to(const VoiceCallScreen());
+    // Get.to(const VoiceCallScreen());
+  }
+
+  void joinRoom(String roomId) async {
+    await Utils.signaling
+        .openUserMedia(Utils.localRenderer, Utils.remoteRenderer)
+        .then((_) async {
+      update();
+    });
+    Utils.signaling.joinRoom(
+      "$roomId",
+      Utils.remoteRenderer,
+    );
+    // Utils.roomId = roomCtrl.text.trim();
+    Get.to(const VoiceCallScreen());
+    // Get.to(const VoiceCallScreen());
+  }
 
 
   ///===== Fetch all users data ===>
   Future<void> fetchAllUsers() async {
     userGetLoading(true);
-    // currectUser.value = await PrefsHelper.getString(AppConstants.currentUser);
     try {
-      QuerySnapshot snapshot = await firebaseService.getAllData(collection: 'users');
+      QuerySnapshot snapshot =
+          await firebaseService.getAllData(collection: 'users');
 
       users.value = snapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
@@ -36,24 +63,30 @@ class HomeController extends GetxController {
     }
   }
 
-
-
-
-
-  review({required String senderId, receverId, description, reviewerName, rating, feeling, talkTime})async{
+  review(
+      {required String senderId,
+      receverId,
+      description,
+      reviewerName,
+      rating,
+      feeling,
+      talkTime}) async {
     var body = {
-      "description" : "$description",
-      "reviewName" : "$reviewerName",
-      "rating" : "$rating",
-      "feeling" : "$feeling",
-      "reviewId" : "$senderId",
-      "time" : DateTime.now().toString()
+      "description": "$description",
+      "reviewName": "$reviewerName",
+      "rating": "$rating",
+      "feeling": "$feeling",
+      "reviewId": "$senderId",
+      "time": DateTime.now().toString()
     };
-    firebaseService.appendReviewToList("$receverId", body, collectionName: "reviews");
-
+    firebaseService.appendReviewToList("$receverId", body,
+        collectionName: "reviews");
 
     // Get the current user data
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(receverId).get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(receverId)
+        .get();
     if (userDoc.exists) {
       var userData = userDoc.data() as Map<String, dynamic>;
 
@@ -62,11 +95,10 @@ class HomeController extends GetxController {
       int totalReview = (userData['total_review'] as String).isEmpty ? 0 : int.parse(userData['total_review']);
       int totalCall = (userData['total_call'] as String).isEmpty ? 0 : int.parse(userData['total_call']);
 
-      // Create the updated body for Firestore
       var updatedBody = {
         "total_talk_time": totalTalkTime.toString(),
-        "total_review": (totalReview+1).toString(),
-        "total_call": (totalCall+1).toString(),
+        "total_review": (totalReview + 1).toString(),
+        "total_call": (totalCall + 1).toString(),
       };
 
       // Update user data in Firestore
@@ -77,60 +109,40 @@ class HomeController extends GetxController {
       );
     }
 
-
     Get.offNamed(AppRoutes.homeScreen);
   }
 
-
-
-
   RxInt availeGenderSelectedIndex = 0.obs;
   RxList availeGenderList = [
-    {
-      'title' : 'any',
-      'icon' : AppIcons.manWoman
-    },
-    {
-      'title' : 'girl',
-      'icon' : AppIcons.girl
-    },
-    {
-      'title' : 'boy',
-      'icon' : AppIcons.man
-    }
+    {'title': 'any', 'icon': AppIcons.manWoman},
+    {'title': 'girl', 'icon': AppIcons.girl},
+    {'title': 'boy', 'icon': AppIcons.man}
   ].obs;
 
-
-
-
-
-
-
-
-  var secondsRemaining = 20.obs;  // Timer for 20 seconds
-  var buttonLabel = "Start Call".obs;  // Observable for button label
+  var secondsRemaining = 20.obs; // Timer for 20 seconds
+  var buttonLabel = "Start Call".obs; // Observable for button label
   late Timer _timer;
   var isCalling = false.obs; // Track call state
 
   @override
   void onInit() {
     super.onInit();
-    buttonLabel.value = "Start Call";  // Initial button label
+    buttonLabel.value = "Start Call"; // Initial button label
   }
 
   void startTimer() {
     if (!isCalling.value) {
       // Start the call
       isCalling.value = true;
-      buttonLabel.value = "Calling";  // Change button label to "Calling"
+      buttonLabel.value = "Calling"; // Change button label to "Calling"
 
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (secondsRemaining.value > 0) {
           secondsRemaining.value--;
         } else {
-          buttonLabel.value = "Start Call";  // Reset button label
-          isCalling.value = false;  // Reset call state
-          secondsRemaining.value = 20;  // Reset the timer
+          buttonLabel.value = "Start Call"; // Reset button label
+          isCalling.value = false; // Reset call state
+          secondsRemaining.value = 20; // Reset the timer
           _timer.cancel();
         }
       });

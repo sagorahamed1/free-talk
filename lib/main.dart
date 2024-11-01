@@ -10,8 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'helpers/dependancy_injaction.dart';
 import 'helpers/device_utils.dart';
 
@@ -21,18 +19,22 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await FirebaseService.setUpFirebase();
-  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  DeviceUtils.lockDevicePortrait();
+  DependencyInjection di = DependencyInjection();
+  di.dependencies();
+  runApp(MyApp(navigatorKey: navigatorKey));
 
-  // call the useSystemCallingUI
-  ZegoUIKit().initLog().then((value) {
-    ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
-      [ZegoUIKitSignalingPlugin()],
-    );
-    DeviceUtils.lockDevicePortrait();
-    DependencyInjection di = DependencyInjection();
-    di.dependencies();
-    runApp(MyApp(navigatorKey: navigatorKey));
-  });
+  //
+  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  //
+  // // call the useSystemCallingUI
+  // ZegoUIKit().initLog().then((value) {
+  //   ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
+  //     [ZegoUIKitSignalingPlugin()],
+  //   );
+  //
+  //   runApp(MyApp(navigatorKey: navigatorKey));
+  // });
 }
 
 

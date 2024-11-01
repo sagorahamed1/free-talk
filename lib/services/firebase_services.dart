@@ -2,18 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:free_talk/controllers/home_controller.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
-import 'package:free_talk/routes/app_routes.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-import '../firebase_options.dart';
-import '../utils/Config.dart';
-import '../views/screens/review/review_screen.dart';
 
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import '../firebase_options.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+import '../utils/utils.dart';
+import '../views/screens/call/voice_call_screen.dart';
 
 
 
@@ -350,7 +348,7 @@ class FirebaseService {
       'userIds': userIds, // Save the list of user IDs
     }, SetOptions(merge: true));
 
-    debugPrint('Updated room ID: $newRoomId with ${userCount + 1} user(s)');
+    debugPrint('*************************Updated room ID: $newRoomId with ${userCount + 1} user(s)');
 
     // Listen to changes in the room's userCount in real-time
     roomDoc.snapshots().listen((snapshot) {
@@ -359,8 +357,12 @@ class FirebaseService {
         bool isActive = snapshot['isActive'] ?? true;
         List<String> fetchedUserIds = List<String>.from(snapshot['userIds'] ?? []);
 
-        debugPrint('Real-time update: Room $newRoomId has $updatedUserCount user(s)');
-        debugPrint('Fetched User IDs: $fetchedUserIds');
+        ///******************Create Room***************...
+        HomeController homeController = Get.put(HomeController());
+        print("=====================================================================================werbrtc call create room");
+        homeController.createRoom(newRoomId);
+        debugPrint('*************************Real-time update: Room $newRoomId has $updatedUserCount user(s)');
+        debugPrint('*************************Fetched User IDs: $fetchedUserIds');
 
         // Determine sender and receiver based on currentUserId
         String senderId = '';
@@ -384,69 +386,75 @@ class FirebaseService {
           debugPrint('Sender ID: $senderId, Receiver ID: $receiverId');
 
 
-          // Navigate to the call screen for a 2-person group call
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ZegoUIKitPrebuiltCall(
-                appID: Config.appId,
-                appSign: Config.appSign,
-                userID: currentUserId,
-                userName: "",
-                plugins: [ZegoUIKitSignalingPlugin()],
-                callID: newRoomId,
-                config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
-                  ..avatarBuilder = (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
-                    return user != null
-                        ? Column(
-                          children: [
-                            // Avatar Image with 200x200 size
-                            Container(
-                              height: 80,
-                              width: 80,  // Setting width and height to 200
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: NetworkImage(image),
-                                  fit: BoxFit.cover,  // Ensures the image fits within the circle
-                                ),
-                              ),
-                            ),
 
-                            // Caller Name Below the Image with Overflow Handling
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                user.name,
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,  // Handles name overflow
-                                maxLines: 1,  // Restricts to one line
-                                textAlign: TextAlign.center,  // Aligns name to center
-                              ),
-                            ),
-                          ],
-                        )
-                        : const SizedBox();
-                  },
-                onDispose: () {
-                  DateTime callEndTime = DateTime.now();
-                  Duration callDuration = callEndTime.difference(callStartTime!);
-                  int durationInMinutes = callDuration.inMinutes;
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    Get.toNamed(AppRoutes.reviewScreen, arguments: {
-                      'senderId': senderId,
-                      'receiverId': receiverId,
-                      'name' : name,
-                      "time" : durationInMinutes
-                    });
-                  });
-                },
-              ),
-            ),
-          );
+          print("=====================================================================================werbrtc call joint room");
+          homeController.joinRoom(newRoomId);
+
+
+
+          // Navigate to the call screen for a 2-person group call
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => ZegoUIKitPrebuiltCall(
+          //       appID: Config.appId,
+          //       appSign: Config.appSign,
+          //       userID: currentUserId,
+          //       userName: "",
+          //       plugins: [ZegoUIKitSignalingPlugin()],
+          //       callID: newRoomId,
+          //       config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+          //         ..avatarBuilder = (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+          //           return user != null
+          //               ? Column(
+          //                 children: [
+          //                   // Avatar Image with 200x200 size
+          //                   Container(
+          //                     height: 80,
+          //                     width: 80,  // Setting width and height to 200
+          //                     decoration: BoxDecoration(
+          //                       shape: BoxShape.circle,
+          //                       image: DecorationImage(
+          //                         image: NetworkImage(image),
+          //                         fit: BoxFit.cover,  // Ensures the image fits within the circle
+          //                       ),
+          //                     ),
+          //                   ),
+          //
+          //                   // Caller Name Below the Image with Overflow Handling
+          //                   Padding(
+          //                     padding: const EdgeInsets.only(top: 8.0),
+          //                     child: Text(
+          //                       user.name,
+          //                       style: const TextStyle(
+          //                         fontSize: 18.0,
+          //                         fontWeight: FontWeight.bold,
+          //                         color: Colors.white,
+          //                       ),
+          //                       overflow: TextOverflow.ellipsis,  // Handles name overflow
+          //                       maxLines: 1,  // Restricts to one line
+          //                       textAlign: TextAlign.center,  // Aligns name to center
+          //                     ),
+          //                   ),
+          //                 ],
+          //               )
+          //               : const SizedBox();
+          //         },
+          //       onDispose: () {
+          //         DateTime callEndTime = DateTime.now();
+          //         Duration callDuration = callEndTime.difference(callStartTime!);
+          //         int durationInMinutes = callDuration.inMinutes;
+          //         Future.delayed(const Duration(milliseconds: 100), () {
+          //           Get.toNamed(AppRoutes.reviewScreen, arguments: {
+          //             'senderId': senderId,
+          //             'receiverId': receiverId,
+          //             'name' : name,
+          //             "time" : durationInMinutes
+          //           });
+          //         });
+          //       },
+          //     ),
+          //   ),
+          // );
         }
         // Handle the case where a user leaves the room
         else if (updatedUserCount < 2 && isActive) {
