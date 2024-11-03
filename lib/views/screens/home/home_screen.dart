@@ -133,8 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Hello $currectName,',
                             style: TextStyle(
                               fontSize: 16.h,
-                              color:
-                              Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onBackground,
                             ),
                           ),
                           Text(
@@ -142,8 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontSize: 20.h,
                               fontWeight: FontWeight.bold,
-                              color:
-                              Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onBackground,
                             ),
                           ),
                         ],
@@ -177,42 +175,39 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.horizontal,
-                              itemCount:
-                              homeController.availeGenderList.length,
+                              itemCount: homeController.availeGenderList.length,
                               itemBuilder: (context, index) {
                                 var data =
-                                homeController.availeGenderList[index];
+                                    homeController.availeGenderList[index];
                                 return GestureDetector(
                                   onTap: () {
                                     index == 0
                                         ? const SizedBox()
                                         : showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                              contentPadding:
-                                              EdgeInsets.symmetric(
-                                                  horizontal: 16.w,
-                                                  vertical: 10.h),
-                                              content:
-                                              const CustomDialog(),
-                                              elevation: 12.0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(12.r),
-                                                  side: BorderSide(
-                                                      width: 1.w,
-                                                      color: Colors
-                                                          .blueAccent)));
-                                        });
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 16.w,
+                                                          vertical: 10.h),
+                                                  content: const CustomDialog(),
+                                                  elevation: 12.0,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12.r),
+                                                      side: BorderSide(
+                                                          width: 1.w,
+                                                          color: Colors
+                                                              .blueAccent)));
+                                            });
                                   },
                                   child: Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 12.w),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 12.w),
                                     decoration: BoxDecoration(
-                                        color:
-                                        themeController.isDarkTheme.value
+                                        color: themeController.isDarkTheme.value
                                             ? AppColors.backGroundDark
                                             : AppColors.backGroundLight,
                                         shape: BoxShape.circle),
@@ -225,8 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               width: 32.w,
                                               fit: BoxFit.cover,
                                               color: homeController
-                                                  .availeGenderSelectedIndex ==
-                                                  index
+                                                          .availeGenderSelectedIndex ==
+                                                      index
                                                   ? AppColors.textColorGreen
                                                   : Colors.white),
                                           SizedBox(height: 10.h),
@@ -235,8 +230,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             style: TextStyle(
                                                 fontSize: 10.h,
                                                 color: homeController
-                                                    .availeGenderSelectedIndex ==
-                                                    index
+                                                            .availeGenderSelectedIndex ==
+                                                        index
                                                     ? AppColors.textColorGreen
                                                     : Colors.white),
                                           ),
@@ -252,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // SizedBox(height: 16.h),
 
                           Obx(
-                                () => GestureDetector(
+                            () => GestureDetector(
                               // onTap: () {
                               //    homeController.startTimer();
                               //   if (homeController.isCalling.value) {
@@ -315,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
 
                   Obx(
-                        () => ListView.builder(
+                    () => ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: min(homeController.users.length, 4),
@@ -344,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       SizedBox(width: 10.w),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             user.name,
@@ -381,22 +376,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 70.w,
                                           decoration: BoxDecoration(
                                               color: themeController
-                                                  .isDarkTheme.value
+                                                      .isDarkTheme.value
                                                   ? AppColors.backGroundDark
                                                   : AppColors.backGroundLight,
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  24.r)),
+                                                  BorderRadius.circular(24.r)),
                                           padding:
-                                          EdgeInsetsDirectional.all(10.r),
+                                              EdgeInsetsDirectional.all(10.r),
                                           child: Center(
                                             child: Text(
                                               'View',
                                               style: TextStyle(
                                                 fontSize: 14.h,
                                                 fontWeight: FontWeight.bold,
-                                                color:
-                                                AppColors.textColorGreen,
+                                                color: AppColors.textColorGreen,
                                               ),
                                             ),
                                           ),
@@ -409,49 +402,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           email: user.email,
                                           name: user.name,
                                           isActive: user.isActive),
-
-                                      // SizedBox(
-                                      //     height: 40,
-                                      //     width: 40,
-                                      //     child: Center(child: actionButton(context, email: user.email, name: user.name, isActive : user.isActive))),
-
-                                      // GestureDetector(
-                                      //   onTap: (){
-                                      //     showDialog(
-                                      //         context: context,
-                                      //         builder: (context) {
-                                      //           return AlertDialog(
-                                      //               contentPadding:
-                                      //               EdgeInsets.symmetric(
-                                      //                   horizontal: 16.w,
-                                      //                   vertical: 10.h),
-                                      //               content: const CustomDialog(),
-                                      //               elevation: 12.0,
-                                      //               shape: RoundedRectangleBorder(
-                                      //                   borderRadius:
-                                      //                   BorderRadius
-                                      //                       .circular(12.r),
-                                      //                   side: BorderSide(
-                                      //                       width: 1.w,
-                                      //                       color: Colors
-                                      //                           .blueAccent)));
-                                      //         });
-                                      //   },
-                                      //   child: Container(
-                                      //       decoration: BoxDecoration(
-                                      //           color: themeController
-                                      //                   .isDarkTheme.value
-                                      //               ? AppColors.backGroundDark
-                                      //               : AppColors
-                                      //                   .backGroundLight,
-                                      //           shape: BoxShape.circle),
-                                      //       child: Padding(
-                                      //         padding: EdgeInsets.all(6.r),
-                                      //         child: const Icon(Icons.call,
-                                      //             color: AppColors
-                                      //                 .textColorGreen),
-                                      //       )),
-                                      // )
                                     ],
                                   ),
                                 ),
@@ -477,17 +427,34 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget callBtn(BuildContext context,
       {String? name, String? email, isActive}) {
     if (isActive == "true") {
-      return SizedBox(
-          height: 40,
-          width: 40,
-          child: BackButton()
-          // Center(
-          //     child: actionButton(context,
-          //         email: email, name: name, isActive: isActive))
-      );
+      return   Container(
+          decoration: BoxDecoration(
+              color: themeController.isDarkTheme.value
+                  ? AppColors.backGroundDark
+                  : AppColors.backGroundLight,
+              shape: BoxShape.circle),
+          child: Padding(
+            padding: EdgeInsets.all(6.r),
+            child: const Icon(Icons.call, color: AppColors.textColorGreen),
+          ));
     } else {
-      ToastMessageHelper.showToastMessage("$name is offline now!");
-      return const SizedBox();
+      return GestureDetector(
+        onTap: (){
+          ToastMessageHelper.showToastMessage("This user is offline!");
+        },
+        child: Container(
+            decoration: BoxDecoration(
+                color: themeController.isDarkTheme.value
+                    ? AppColors.backGroundDark
+                    : AppColors.backGroundLight,
+                shape: BoxShape.circle),
+            child: Padding(
+              padding: EdgeInsets.all(6.r),
+              child: const Icon(Icons.call, color: Colors.white),
+            )),
+      );
+      // ToastMessageHelper.showToastMessage("$name is offline now!");
+      // return const SizedBox();
     }
   }
 
@@ -525,39 +492,6 @@ class _HomeScreenState extends State<HomeScreen> {
   saveName(String name) async {
     await PrefsHelper.setString(AppConstants.name, name);
   }
-
-// ZegoSendCallInvitationButton? actionButton(BuildContext context, {String? name, String? email, isActive}) {
-//     return ZegoSendCallInvitationButton(
-//       buttonSize: const Size(40, 40),
-//       iconSize: const Size(40, 40),
-//       icon: ButtonIcon(icon: const Icon(Icons.call, color: AppColors.textColorGreen, size: 16)),
-//       margin: EdgeInsets.zero,
-//       padding: EdgeInsets.zero,
-//       clickableBackgroundColor: themeController.isDarkTheme.value
-//           ? AppColors.backGroundDark
-//           : AppColors.backGroundLight,
-//       invitees: [
-//         ZegoUIKitUser(
-//           id: email ?? '',
-//           name: name ?? 'Guest',
-//         )
-//       ],
-//       resourceID: 'zegouikit_call',
-//       isVideoCall: false,
-//     );
-// }
-
-// call({String? name, email}){
-//     return   ZegoSendCallInvitationButton(
-//       isVideoCall: false,
-//       invitees: [
-//         ZegoUIKitUser(
-//           id: "$email",
-//           name: "$name",
-//         ),
-//       ],
-//     );
-// }
 }
 
 ///ads

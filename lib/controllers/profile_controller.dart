@@ -39,6 +39,7 @@ class ProfileController extends GetxController{
         if (data != null) {
           userData.value = UserProfileModel.fromMap(data);
           await PrefsHelper.setString(AppConstants.image, userData.value.image);
+          // await PrefsHelper.setString(AppConstants.name, userData.value.name);
           print("User data fetched: ${userData.value}");
         }
       } else {

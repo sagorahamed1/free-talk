@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:free_talk/controllers/profile_controller.dart';
 import 'package:free_talk/helpers/prefs_helper.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
 import 'package:free_talk/routes/app_routes.dart';
@@ -69,7 +70,7 @@ class AuthController extends GetxController{
 
       await PrefsHelper.setString(AppConstants.currentUser,"${data.user?.uid}");
       await PrefsHelper.setString(AppConstants.name, "${data.user?.displayName}");
-      firebaseService.postData(data.user?.uid ?? '', body);
+      firebaseService.postDataIfNotExists(data.user?.uid ?? '', body);
       await PrefsHelper.setString(AppConstants.email, data.user?.email);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       ToastMessageHelper.showToastMessage("sign in successful");
@@ -105,7 +106,7 @@ class AuthController extends GetxController{
       await PrefsHelper.setString(AppConstants.name, "${data?.user?.displayName}");
       await PrefsHelper.setString(AppConstants.email, "${data?.user?.email}" ?? '');
       await PrefsHelper.setBool(AppConstants.isLogged, true);
-      firebaseService.postData(data?.user?.uid ?? '', body);
+      firebaseService.postDataIfNotExists(data?.user?.uid ?? '', body);
       ToastMessageHelper.showToastMessage("sign in successful");
 
     }
@@ -118,11 +119,12 @@ class AuthController extends GetxController{
   logIn({String? email, String? password})async{
     loginLoading(true);
     User? user = await firebaseService.signInWithEmailPassword(email ?? '', password ?? '');
-    print("=================================================log in done : ${user?.uid} \n ${user?.email}");
+    print("=================================================log in done : ${user?.uid} \n ${user?.email} ");
     if(user?.uid != null){
       await PrefsHelper.setString(AppConstants.currentUser, "${user?.uid}");
       await PrefsHelper.setString(AppConstants.email, email);
-
+      ProfileController profileController = Get.put(ProfileController());
+      profileController.getProfileData("${user?.uid}");
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.offAllNamed(AppRoutes.homeScreen);
       loginLoading(false);

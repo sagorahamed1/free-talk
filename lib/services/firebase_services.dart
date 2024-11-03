@@ -162,6 +162,28 @@ class FirebaseService {
     }
   }
 
+  ///=======Store Data if Not Exists======
+  Future<void> postDataIfNotExists(String userId, Map<String, dynamic> data, {String? collectionName}) async {
+    try {
+      // Reference to the document
+      final docRef = fireStore.collection(collectionName ?? 'users').doc(userId);
+
+      // Check if the document exists
+      final docSnapshot = await docRef.get();
+
+      // If the document does not exist, add the new data
+      if (!docSnapshot.exists) {
+        await docRef.set(data);
+        debugPrint("Data posted successfully for user ID: $userId");
+      } else {
+        debugPrint("Document with user ID $userId already exists. Data not posted.");
+      }
+    } catch (e) {
+      debugPrint("Save Data Error: $e");
+    }
+  }
+
+
 
 
   /// Store Data: Update list in Firestore

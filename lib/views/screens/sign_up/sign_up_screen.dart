@@ -228,7 +228,7 @@ class SignUpScreen extends StatelessWidget {
                           Text(
                             " ${AppStrings.login}",
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16.h,
                               color:  Colors.blueAccent,
                             ),
                           ),
