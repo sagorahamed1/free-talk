@@ -2,6 +2,7 @@
 import 'package:free_talk/views/screens/splash/splash_screen.dart';
 import 'package:get/get.dart';
 import '../views/screens/all_user/all_user_screen.dart';
+import '../views/screens/call/voice_call_screen.dart';
 import '../views/screens/change_password/change_password_screen.dart';
 import '../views/screens/edit_profile/edit_profile_screen.dart';
 import '../views/screens/home/home_screen.dart';
@@ -23,6 +24,7 @@ class AppRoutes {
   static const String editProfileScreen = "/EditProfileScreen.dart";
   static const String privacyPolicyAllScreen = "/PrivacyPolicyAllScreen.dart";
   static const String changePasswordScreen = "/ChangePasswordScreen.dart";
+  static const String voiceCallScreen = "/VoiceCallScreen.dart";
 
 
   static List<GetPage> get routes => [
@@ -36,5 +38,6 @@ class AppRoutes {
     GetPage(name: editProfileScreen, page: () => EditProfileScreen()),
     GetPage(name: privacyPolicyAllScreen, page: () => PrivacyPolicyAllScreen()),
     GetPage(name: changePasswordScreen, page: () => ChangePasswordScreen()),
+    GetPage(name: voiceCallScreen, page: () => VoiceCallScreen()),
   ];
 }

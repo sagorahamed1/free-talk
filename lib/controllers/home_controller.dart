@@ -26,7 +26,7 @@ class HomeController extends GetxController {
       update();
     });
     Utils.roomId = await Utils.signaling.createRoom(Utils.remoteRenderer, roomId.toString());
-    Get.to(const VoiceCallScreen());
+    // Get.to(const VoiceCallScreen());
     // Get.to(const VoiceCallScreen());
   }
 
@@ -41,7 +41,7 @@ class HomeController extends GetxController {
       Utils.remoteRenderer,
     );
     // Utils.roomId = roomCtrl.text.trim();
-    Get.to(const VoiceCallScreen());
+    // Get.to(const VoiceCallScreen());
     // Get.to(const VoiceCallScreen());
   }
 
@@ -63,54 +63,67 @@ class HomeController extends GetxController {
     }
   }
 
-  review(
-      {required String senderId,
-      receverId,
-      description,
-      reviewerName,
-      rating,
-      feeling,
-      talkTime}) async {
-    var body = {
-      "description": "$description",
-      "reviewName": "$reviewerName",
-      "rating": "$rating",
-      "feeling": "$feeling",
-      "reviewId": "$senderId",
-      "time": DateTime.now().toString()
-    };
-    firebaseService.appendReviewToList("$receverId", body,
-        collectionName: "reviews");
-
-    // Get the current user data
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(receverId)
-        .get();
-    if (userDoc.exists) {
-      var userData = userDoc.data() as Map<String, dynamic>;
-
-      // Calculate updated values
-      int totalTalkTime = (userData['total_talk_time'] as String).isEmpty ? 0 : int.parse(userData['total_talk_time']) + int.parse(talkTime);
-      int totalReview = (userData['total_review'] as String).isEmpty ? 0 : int.parse(userData['total_review']);
-      int totalCall = (userData['total_call'] as String).isEmpty ? 0 : int.parse(userData['total_call']);
-
-      var updatedBody = {
-        "total_talk_time": totalTalkTime.toString(),
-        "total_review": (totalReview + 1).toString(),
-        "total_call": (totalCall + 1).toString(),
+  review({
+    required String senderId,
+    required String receiverId,
+    required String description,
+    required String reviewerName,
+    required int rating,
+    required String feeling,
+    required int talkTime,
+  }) async {
+    try {
+      var body = {
+        "description": description,
+        "reviewName": reviewerName,
+        "rating": rating.toString(),
+        "feeling": feeling,
+        "reviewId": senderId,
+        "time": DateTime.now().toString(),
       };
 
-      // Update user data in Firestore
-      await firebaseService.updateData(
-        userId: receverId,
-        collection: "users",
-        updatedData: updatedBody,
-      );
-    }
+      await firebaseService.appendReviewToList(receiverId, body, collectionName: "reviews");
 
-    Get.offNamed(AppRoutes.homeScreen);
+      // Get the current user data
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(receiverId)
+          .get();
+
+      if (userDoc.exists) {
+        var userData = userDoc.data() as Map<String, dynamic>;
+
+        // Safely parse integers from Firestore data
+        int totalTalkTime = int.tryParse(userData['total_talk_time'] ?? '0') ?? 0;
+        int totalReview = int.tryParse(userData['total_review'] ?? '0') ?? 0;
+        int totalCall = int.tryParse(userData['total_call'] ?? '0') ?? 0;
+
+        // Update values with new data
+        totalTalkTime += talkTime.toInt();
+        totalReview += 1;
+        totalCall += 1;
+
+        var updatedBody = {
+          "total_talk_time": totalTalkTime.toString(),
+          "total_review": totalReview.toString(),
+          "total_call": totalCall.toString(),
+        };
+
+        // Update user data in Firestore
+        await firebaseService.updateData(
+          userId: receiverId,
+          collection: "users",
+          updatedData: updatedBody,
+        );
+      }
+
+      Get.offAllNamed(AppRoutes.homeScreen);
+    } catch (e) {
+      print("Error in review submission: $e");
+      // Optionally, show an error message to the user here
+    }
   }
+
 
   RxInt availeGenderSelectedIndex = 0.obs;
   RxList availeGenderList = [

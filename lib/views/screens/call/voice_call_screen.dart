@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/call_controller.dart';
+import '../../../routes/app_routes.dart';
 import '../../../utils/utils.dart';
 
 class VoiceCallScreen extends StatefulWidget {
@@ -13,6 +14,13 @@ class VoiceCallScreen extends StatefulWidget {
 
 class _VoiceCallScreenState extends State<VoiceCallScreen> {
   final CallController controller = Get.put(CallController());
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +54,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
                   left: (MediaQuery.of(context).size.width - 120) / 2,
                   child: Text(
                     "Room ID: ${Utils.roomId.toString()}",
-                    style: TextStyle(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
                   ),
                 );
               },
@@ -85,7 +93,13 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
                     backgroundColor: Colors.red,
                     onPressed: () {
                       Utils.signaling.hangUp(Utils.localRenderer);
-                      Get.back();
+                      Get.toNamed(AppRoutes.reviewScreen, arguments: {
+                                  'senderId': "${Get.arguments["senderId"]}",
+                                  'receiverId': "${Get.arguments["receiverId"]}",
+                                  'name' : "${Get.arguments["name"]}",
+                                  "time" : Get.arguments['time']
+                                });
+                      // Get.back();
                     },
                     child: const Icon(Icons.call_end, color: Colors.white),
                   ),

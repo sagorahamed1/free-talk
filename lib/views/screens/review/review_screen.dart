@@ -137,12 +137,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 CustomBotton(title: 'Review', onpress: (){
                   homeController.review(
                     senderId: "${data['senderId']}",
-                    receverId: "${data['receiverId']}",
+                      receiverId: "${data['receiverId']}",
                     description: reviewCtrl.text,
                     feeling: selectedButton,
                     rating: rating.value,
                     reviewerName: "${data['name']}",
-                    talkTime: "${data['time']}"
+                    talkTime: data['time']
                   );
                   // Get.offNamed(AppRoutes.homeScreen);
                 }),

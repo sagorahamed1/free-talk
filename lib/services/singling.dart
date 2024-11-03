@@ -23,8 +23,13 @@ class Signaling {
       {
         'urls': [
           'stun:stun1.l.google.com:19302',
-          'stun:stun2.l.google.com:19302'
+          'stun:stun2.l.google.com:19302',
         ]
+      },
+      {
+        'urls': 'turn:relay1.expressturn.com:3478',
+        'username': 'efQ5Z1Z2HISFM0DBH4', // Replace with your TURN server username
+        'credential': 'IaKY93w8vuGWrgda', // Replace with your TURN server password
       }
     ]
   };

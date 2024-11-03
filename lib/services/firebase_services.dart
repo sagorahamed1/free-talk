@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:free_talk/controllers/home_controller.dart';
 import 'package:free_talk/helpers/toast_message_helper.dart';
+import 'package:free_talk/routes/app_routes.dart';
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -389,7 +390,12 @@ class FirebaseService {
 
           print("=====================================================================================werbrtc call joint room");
           homeController.joinRoom(newRoomId);
-
+          Get.toNamed(AppRoutes.voiceCallScreen,arguments: {
+            'senderId': senderId,
+            'receiverId': receiverId,
+            'name' : name,
+            "time" : 10
+          });
 
 
           // Navigate to the call screen for a 2-person group call
