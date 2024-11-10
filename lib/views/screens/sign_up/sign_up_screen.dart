@@ -42,14 +42,14 @@ class SignUpScreen extends StatelessWidget {
                   children: [
               
               
-                    SizedBox(height: 40.h),
+                    SizedBox(height: 25.h),
               
                     SizedBox(
-                        height: 90.h,
-                        child: Image.asset('assets/images/logo.png')),
+                        height: 150.h,
+                        child: Image.asset('assets/images/logo2.png', fit: BoxFit.cover)),
               
               
-                    SizedBox(height: 50.h),
+                    SizedBox(height: 35.h),
                     // Sign In Text
                     Text(
                       "Sign In",

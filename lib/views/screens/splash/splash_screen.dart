@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ///========logo======
 
             SizedBox(
-                child: Image.asset('assets/images/logo.png')),
+                child: Image.asset('assets/images/logo2.png', fit: BoxFit.cover)),
           ],
         ),
       ),

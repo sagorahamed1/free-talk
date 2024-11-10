@@ -17,9 +17,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-
-
-
   String? selectedAvatarUrl;
   var data = Get.arguments;
 
@@ -36,31 +33,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:  Text(
+        title: Text(
           'Select Avatar',
           style: TextStyle(
             fontSize: 20.h,
             fontWeight: FontWeight.bold,
-            color:
-            Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
       ),
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 15.w),
+        padding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Top Image Display
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomNetworkImage(
-                  boxShape: BoxShape.circle,
-                  border: Border.all(color: Colors.greenAccent, width: 0.5),
-                  imageUrl:  selectedAvatarUrl != null
-                      ?  selectedAvatarUrl.toString()  : data['gender'] == "Male" ?   AppImages.maleAvatars.first : AppImages.femaleAvatars.first, height: 150.h, width: 150.w)
-            ),
-
+                padding: const EdgeInsets.all(16.0),
+                child: CustomNetworkImage(
+                    boxShape: BoxShape.circle,
+                    border: Border.all(color: Colors.greenAccent, width: 0.5),
+                    imageUrl: selectedAvatarUrl != null
+                        ? selectedAvatarUrl.toString()
+                        : data['gender'] == "Male"
+                            ? AppImages.maleAvatars.first
+                            : AppImages.femaleAvatars.first,
+                    height: 150.h,
+                    width: 150.w)),
 
             Align(
               alignment: Alignment.centerLeft,
@@ -69,8 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 style: TextStyle(
                   fontSize: 20.h,
                   fontWeight: FontWeight.bold,
-                  color:
-                  Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ),
@@ -85,11 +83,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: data['gender'] == "Male" ? AppImages. maleAvatars.length
-                    :AppImages.  femaleAvatars.length,
+                itemCount: data['gender'] == "Male"
+                    ? AppImages.maleAvatars.length
+                    : AppImages.femaleAvatars.length,
                 itemBuilder: (context, index) {
-                  final avatarUrl = data['gender'] == "Male" ? AppImages.  maleAvatars[index]
-                      : AppImages. femaleAvatars[index];
+                  final avatarUrl = data['gender'] == "Male"
+                      ? AppImages.maleAvatars[index]
+                      : AppImages.femaleAvatars[index];
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -116,15 +116,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             // Save Profile Button
 
-
-            CustomBotton(title: "Save Avatar", onpress: ()async{
-            FirebaseService firebase =  FirebaseService();
-
-            var body = {"image" : selectedAvatarUrl.toString()};
-            firebase.updateData(userId: "${data["id"].toString()}" , collection: "users", updatedData: body);
-            await PrefsHelper.setString(AppConstants.image, selectedAvatarUrl.toString());
-            })
-
+            CustomBotton(
+                title: "Save Avatar",
+                onpress: () async {
+                  FirebaseService firebase = FirebaseService();
+                  var body = {"image": selectedAvatarUrl.toString()};
+                  firebase.updateData(
+                      userId: "${data["id"].toString()}",
+                      collection: "users",
+                      updatedData: body);
+                  await PrefsHelper.setString(AppConstants.image, selectedAvatarUrl.toString());
+                })
           ],
         ),
       ),

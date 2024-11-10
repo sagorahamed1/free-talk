@@ -232,14 +232,19 @@ class FirebaseService {
     }
   }
 
+
+  RxBool updataLoading = false.obs;
   ///=======Update Data======>
    Future<void> updateData(
       {required String userId,required String collection, required Map<String, dynamic> updatedData}) async {
+     updataLoading(true);
     try {
       await fireStore.collection(collection).doc(userId).update(updatedData);
       debugPrint('Data updated successfully!');
+      updataLoading(false);
     } catch (e) {
       debugPrint("Update Data Error: $e");
+      updataLoading(false);
     }
   }
 
