@@ -26,6 +26,9 @@ ThemeData darkTheme = ThemeData(
       hintStyle: TextStyle(color: Colors.white24)
     ),
 
+
+
+
 );
 
 ThemeData lightTheme = ThemeData(

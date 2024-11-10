@@ -76,7 +76,7 @@ class LogInScreen extends StatelessWidget {
                       hintText: 'Enter your email',
                       prefixIcon: Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.email),
+                        child: SvgPicture.asset(AppIcons.email, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -98,7 +98,7 @@ class LogInScreen extends StatelessWidget {
                       hintText: 'Enter your email',
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.lock),
+                        child: SvgPicture.asset(AppIcons.lock, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

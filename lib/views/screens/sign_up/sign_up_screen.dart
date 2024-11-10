@@ -82,7 +82,7 @@ class SignUpScreen extends StatelessWidget {
                       hintText: 'Enter your name',
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.profile),
+                        child: SvgPicture.asset(AppIcons.profile, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -97,7 +97,7 @@ class SignUpScreen extends StatelessWidget {
                     CustomTextField(
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.email),
+                        child: SvgPicture.asset(AppIcons.email,color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       isDark: themeController.isDarkTheme.value,
                       controller: emailController,
@@ -120,14 +120,15 @@ class SignUpScreen extends StatelessWidget {
                       readOnly: true,
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.manWoman, height: 22.h,),
+                        child: SvgPicture.asset(AppIcons.manWoman, height: 22.h, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       isDark: themeController.isDarkTheme.value,
                       controller: genderController,
                       hintText: 'Enter your gender',
                       suffixIcon: PopUpMenu(
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color:  themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                         items: popUpLists,
+                        iconColor:  themeController.isDarkTheme.value ? Colors.white70 : Colors.black54,
                         selectedItem: selectedPopUp.value,
                         onTap: (int index) {
                           genderController.text = popUpLists[index].toString();
@@ -150,7 +151,7 @@ class SignUpScreen extends StatelessWidget {
                     CustomTextField(
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.flag),
+                        child: SvgPicture.asset(AppIcons.flag, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       isDark: themeController.isDarkTheme.value,
                       controller: countryController,
@@ -169,7 +170,7 @@ class SignUpScreen extends StatelessWidget {
                     CustomTextField(
                       prefixIcon:  Padding(
                         padding:  EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SvgPicture.asset(AppIcons.lock),
+                        child: SvgPicture.asset(AppIcons.lock, color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black54),
                       ),
                       isDark: themeController.isDarkTheme.value,
                       controller: passWordController,
